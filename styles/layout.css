@@ -1,0 +1,162 @@
+body,html { min-width: 320px;height: 100vh;
+    height: -webkit-fill-available;
+    height: fill-available;
+    height: calc(var(--vh, 1vh) * 100); }
+   
+/*safearea full screen*/
+body {
+padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
+padding-top: env(safe-area-inset-top); /* iOS 11.2 */
+padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+padding-bottom: env(safe-area-inset-bottom); 
+padding-right:constant(safe-area-inset-right);
+padding-left:constant(safe-area-inset-left);
+padding-right:env(safe-area-inset-right);
+padding-left:env(safe-area-inset-left);
+}
+
+
+
+#wrap{margin: 0 auto;position:relative; width:100%;min-height: 100%;}
+
+#header{}
+#header .inner {}
+
+#footer {position: relative;}
+#footer .inner {}
+
+/*하단고정*/
+.tabbar {width: 100%;position: fixed;bottom:0px;background: #fff;margin: 0 auto;left: 0;right: 0;border-top: 1px solid #e0e0e0;}
+.tabbar {padding: 0px 0 calc(constant(safe-area-inset-bottom) + 3px);
+    padding: 0px 0 calc(env(safe-area-inset-bottom) + 3px);}
+.tabbar:afrer {content: "";display: inline-block;clear: both}
+.tabbar ul {margin: 0 16px;text-align: center;}
+.tabbar li {display: inline-block;width: 32%;height: 45px;font-family: AppleSDGothicNeo-SemiBold;margin-top: 3px;}
+.tabbar li img {width: 28px;height: 28px;}
+.tabbar li div.on {background: #115b40;display: inline-block;width: 72px;height: 45px;border-radius: 4px;}
+.tabbar li div.on span {color: #fff}
+.tabbar li span {display:block;color: #323233;font-weight: 600;line-height: 1.3;font-size: 13px;}
+
+
+#container {height: 100%;min-height: 100%;position: relative;}
+
+
+
+/* 상단 키워드검색 */
+.SearchWrap {margin: 0 auto;position: relative;height: 47px;background: #f5f5f5;text-align: center;padding:15px 16px 0;}
+.SearchWrap.bd {height: auto;border-bottom: 2px solid rgba(120, 128, 128, 0.16);padding: 15px 16px 13px;}
+.search_top {position:relative;height:32px; width: 100%;}
+.search_top .search_input{border:0; margin:0;height: 24px;width: 100%;
+  -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:10px;padding: 4px 0;background: #ebebeb;}
+.search_top .search_btn{position:absolute; top:4px; left:8px; width:24px; height:24px; background:url("../../../images/Icon_Search.svg") no-repeat; border:0; cursor:pointer;}
+
+/*상단타이틀*/
+.Top_title {height: 40px;padding: 4px 0;position: relative;}
+.Top_title h1 {height: 21px;font-size: 16px;font-weight: 600;font-style: normal; line-height:21px;text-align: center;color: #323233;padding: 9.5px 0;}
+.close_btn {display: inline-block;width: 24px;height: 24px;background: url("../../../images/Icon_Close-Large.svg") center center no-repeat;text-indent: -99999px;position: absolute;left: 8px;top:9.5px}
+
+
+
+/* 지역선택 tzapp.css중복사용건*/
+.SecArea {height: 30px;padding: 8px 0;font-family: SFPro}
+.nav_scroll_wrap {width: 100%;}
+.tablist {margin-left: 16px;overflow: hidden;overflow-x: auto;white-space: nowrap;-ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */font-size: 0;}
+.tablist::-webkit-scrollbar {display: none; /* Chrome, Safari, Opera*/}
+.tablist li {display: inline-block;margin-right: 16px;}
+.tablist li a {display: flex; height:30px;padding:5px 8px;border-radius: 16px;font-size: 14px;background:#e0e0e0;
+  color: #000;text-align: center;}
+.tablist .nav_item .nav_item_txt {padding-right: 4px;float:left;}
+/*line-height값이 일정하지 않음 강제 조절*/
+.tablist .nav_item .nav_item_txt:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: -0.38em;
+}
+.tablist .nav_item .num {float:left;display:inline-block;width: 20px;height:20px;border-radius:50%;
+  text-align: center;color: #323233;font-size: 12px;line-height:20px;
+  background-color: rgba(255, 255, 255, 0.75);}
+/*line-height값이 일정하지 않음 강제 조절*/
+.tablist .nav_item .num:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: -0.5em;
+}
+
+/*2022.03.24 추가 : tzapp.css 와 app.css 충돌로 사용불가 그로인한 부분추가*/
+.list_AreaTop {padding:11px 16px;height: 38px;}
+.list_AreaTop span {font-size: 14px;line-height: 1.36;line-height: 19px;letter-spacing: 0.25px;font-weight: 600;color: #323233;}
+.list_AreaTop span > b {padding-left: 4px;} 
+.list_AreaTop .fr {display: inline-block;font-family: NanumGothic;
+  font-size: 14px;
+  font-weight: normal;}
+.list_AreaTop .fr b {font-weight: normal;}
+
+.tabbar div {position: relative;}
+.tabbar .dotted {display: inline-block;width: 11px;height: 11px;border-radius: 50px;background: #fcdb39;position: absolute;top: 0;right:28%}
+
+.area_tablist {margin-left: 16px;margin-top: 15px;overflow: hidden;overflow-x: auto;white-space: nowrap;-ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */font-size: 0;}
+.area_tablist::-webkit-scrollbar {display: none; /* Chrome, Safari, Opera*/}}
+
+.area_tablist:after {content: "";display: block; clear: both;}
+.area_tablist li {display: inline-block;}
+.area_tablist li > div {display: table;width: 66px;height: 117px;border-radius: 8px;border: solid 0.5px var(--alpha-black-20);margin-right: 4px;position: relative;background: #f9eff1;}
+.area_tablist .area_bg {width: 66px;height: 54px;}
+.area_tablist .area_info {}
+.area_tablist .area_info span {font-family: SFPro;display: block;padding: 0 4px;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing:-0.5px;}
+.area_tablist .area_info span.open_date {text-align: center;position: absolute;bottom:7px ;}
+.area_tablist .check-box {position: absolute;top:16px;left:40%;transform: translate( -40%,-10%);}
+.area_tablist .check-box.round input[type=checkbox] { border:5px solid var(--neutrals-grey-5); border-radius: 20px;width:30px;height:30px; } 
+.area_tablist .check-box.round input[type=checkbox]:checked { border:5px solid #d4d4d1;} 
+.area_tablist .linebar {display: inline-block;width: 22px;height: 117px;border-radius: 18px; background: url(../images/temp/Checkbox_Atoms_V3.svg) center center no-repeat;margin: 0 4px 0 0;}
+#Shade:checked~div{background-color:#f9eff1;}
+
+.area_tablist .cap01 {background: url(../images/temp/Cap01.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap02 {background: url(../images/temp/Cap02.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap03 {background: url(../images/temp/Cap03.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap04 {background: url(../images/temp/Cap04.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap05 {background: url(../images/temp/Cap05.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap06 {background: url(../images/temp/Cap06.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap07 {background: url(../images/temp/Cap07.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap08 {background: url(../images/temp/Cap08.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap09 {background: url(../images/temp/Cap09.svg) no-repeat;text-indent: -9999px;}
+.area_tablist .cap10 {background: url(../images/temp/Cap10.svg) no-repeat;text-indent: -9999px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*알림창 하단 TeeZZim텍스트*/
+.TeeZZim {text-align: center;font-family: NanumGothic-Regular;font-size: 12px;color: #343434;line-height: 1.33;
+  position: absolute;bottom:44px;left:50%;transform: translate( -50%,-50%);}
+
+
+
+/*search검색창 설명*/
+.Info_wrap {position: relative;width: 100%;}
+.point {position: absolute;right: 0;top:-66px;z-index:100;}
+.Info_wrap_inner {width: 262px;height:150px;padding: 16px 16px;background: #fff;border-radius: 8px;border:1px solid #d4d4d1;
+  box-shadow:0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 6px 10px 0 rgba(0, 0, 0, 0.14);position: absolute;right:7px;top:0px;z-index: 50;z-index: 50;}
+.Info_wrap_inner .s_tit {font-size: 16px;font-weight: 600;padding-bottom: 16px;}
+.Info_wrap_inner .btn {display: inline-block;width: 51px;height: 14px;padding: 10px 10px;border-radius: 69px;font-size: 14px;
+  font-weight: 600;text-align: center;line-height: 1;position: absolute;bottom: 16px;right: 16px;}
+
+
