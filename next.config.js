@@ -2,6 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   basePath: '/teezzim',
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
