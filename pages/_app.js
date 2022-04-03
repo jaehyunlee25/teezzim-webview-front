@@ -5,8 +5,10 @@ import '@/styles/layout.scss';
 import '@/styles/tzapp.scss';
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
+import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   // 주입할 전역 MobX Store들
   const initStores = {
     globalStore,

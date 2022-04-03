@@ -8,8 +8,7 @@ export default function Loading() {
   useEffect(() => {
     // 설계서에 따르면, 초기 사용자에게만 /splash로 이동하고
     // 아닌경우 기존 정보를 받아서 예약대기 만료 확인 화면으로 이동
-
-    // 아래는 Native 서버 연결 시도 코드 및 서비스 상태를 확인하는 코드가 들어갈 예정
+    // 임시로 초기사용자임을 가정하고 2초 후 화면 이동
     setTimeout(() => {
       router.push('/splash');
     }, 2000);
@@ -28,7 +27,7 @@ export default function Loading() {
             {/*  main-top */}
             <div className='main-top'>
               <h1 className='logo'>
-                <Image src='../assets/images/Symbol_Logotypo.svg' alt='logo' />
+                <Image src={SymbolLogoTypeLogo} alt='logo' />
               </h1>
             </div>
             {/*  //main-top */}

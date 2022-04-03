@@ -11,8 +11,10 @@ import Account6 from '@/assets/images/carousel/account_06.svg';
 import Arrow from '@/assets/images/carousel/Arrow.svg';
 import CarouselTemplate from '@/assets/images/carousel/carousel_template.svg';
 import SymbolLogoTypeLogo from '@/assets/images/Symbol_Logotype.svg';
+import { useRouter } from 'next/router';
 
 export default function Splash() {
+  const router = useRouter();
   const [carouselPage, setCarouselPage] = useState(0);
 
   const handleCarouselPage = page => {
@@ -182,7 +184,10 @@ export default function Splash() {
           <div className='btn-apply btn-apply_fix'>
             <div className='Buttonwrap'>
               <span className='fl bg-shade2 text-white'>복원</span>
-              <span className='fl bg-action text-white'>
+              <span
+                className='fl bg-action text-white'
+                onClick={() => router.push('/home')}
+              >
                 골프장 계정 등록하기
               </span>
             </div>

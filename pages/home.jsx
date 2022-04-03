@@ -1,3 +1,4 @@
+import BottomMenu from '@/components/layouts/BottomMenu';
 import useStores from '@/stores/useStores';
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <div className='container'>
         <main className='main'>Hello TeeZZim {globalStore.isTest}</main>
       </div>
+      <BottomMenu />
       <style jsx>
         {`
           .container {
