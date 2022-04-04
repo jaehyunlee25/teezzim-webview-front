@@ -1,3 +1,7 @@
+import SearchContainer from '@/components/book/Panel/SearchContainer';
+import SearchBar from '@/components/common/SearchBar';
+import Toast from '@/components/common/Toast';
+import BottomMenu from '@/components/layouts/BottomMenu';
 import useStores from '@/stores/useStores';
 
 export default function Home() {
@@ -8,6 +12,11 @@ export default function Home() {
       <div className='container'>
         <main className='main'>Hello TeeZZim {globalStore.isTest}</main>
       </div>
+
+      <Toast message='골프장을 1개 이상 선택해 주세요.' />
+      <BottomMenu />
+
+      <SearchContainer />
       <style jsx>
         {`
           .container {

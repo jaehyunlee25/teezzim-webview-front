@@ -45,6 +45,8 @@ a {
   box-sizing: border-box;
 }
 
+/* -- Reset End -- */
+
 /* CSS Document */
 
 * {
@@ -96,7 +98,8 @@ html {
   font-size: 1rem;
 }
 
-body {
+body,
+#__next {
   margin: 0px;
   padding: 0px;
   height: 100%;
@@ -311,33 +314,31 @@ legend {
   overflow: hidden;
 }
 
-/* Noto Sans KR (korean) http://www.google.com/fonts/earlyaccess */
-
 @font-face {
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 300;
-  src: url(/assets/fonts/NotoSansKr/NotoSansKR-Regular.woff2) format('woff2'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Regular.woff) format('woff'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Regular.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff2) format('woff2'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff) format('woff'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 500;
-  src: url(/assets/fonts/NotoSansKr/NotoSansKR-Medium.woff2) format('woff2'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Medium.woff) format('woff'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Medium.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff2) format('woff2'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff) format('woff'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 600;
-  src: url(/assets/fonts/NotoSansKr/NotoSansKR-Bold.woff2) format('woff2'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Bold.woff) format('woff'),
-    url(/assets/fonts/NotoSansKr/NotoSansKR-Bold.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff2) format('woff2'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff) format('woff'),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.otf) format('opentype');
 }
 
 /*나눔 고딕 글꼴*/
@@ -345,63 +346,77 @@ legend {
   font-family: 'Nanum Gothic';
   font-style: normal;
   font-weight: 400;
-  src: url('/assets/fonts/NanumGothic/NanumGothic-Regular.eot');
-  src: url('/assets/fonts/NanumGothic/NanumGothic-Regular.eot?#iefix')
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot');
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot?#iefix')
       format('embedded-opentype'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Regular.woff2') format('woff2'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Regular.woff') format('woff'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff2') format('woff2'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff') format('woff'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Nanum Gothic';
   font-style: normal;
   font-weight: 700;
-  src: url('/assets/fonts/NanumGothic/NanumGothic-Bold.eot');
-  src: url('/assets/fonts/NanumGothic/NanumGothic-Bold.eot?#iefix')
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot');
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot?#iefix')
       format('embedded-opentype'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Bold.woff2') format('woff2'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Bold.woff') format('woff'),
-    url('/assets/fonts/NanumGothic/NanumGothic-Bold.ttf') format('truetype');
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff2') format('woff2'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff') format('woff'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Nanum Gothic';
   font-style: normal;
   font-weight: 800;
-  src: url('/assets/fonts/NanumGothic/NanumGothic-ExtraBold.eot');
-  src: url('/assets/fonts/NanumGothic/NanumGothic-ExtraBold.eot?#iefix')
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot');
+  src: url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot?#iefix')
       format('embedded-opentype'),
-    url('/assets/fonts/NanumGothic/NanumGothic-ExtraBold.woff2') format('woff2'),
-    url('/assets/fonts/NanumGothic/NanumGothic-ExtraBold.woff') format('woff'),
-    url('/assets/fonts/NanumGothic/NanumGothic-ExtraBold.ttf')
+    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff2')
+      format('woff2'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff') format('woff'),
+    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.ttf')
       format('truetype');
 }
 
 /*
-
 font
-@font-face {font-family: 'Noto Sans KR';
-font-style: normal;font-weight: 400;
-src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2)
-format('woff2'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff)
-format('woff'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf)
-format('opentype');}
-@font-face {font-family: 'Noto Sans KR';
-font-style: normal;
-font-weight: 500;src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2)
-format('woff2'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff)
-format('woff'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.otf)
-format('opentype');}
-@font-face {font-family: 'Noto Sans KR';
-font-style: normal;
-font-weight: 700;src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2)
-format('woff2'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff)
-format('woff'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.otf)
-format('opentype');}
 
-
-
+/* Noto Sans KR (korean) http://www.google.com/fonts/earlyaccess */
+// @font-face {
+//   font-family: 'Noto Sans KR';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2)
+//       format('woff2'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff)
+//       format('woff'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf)
+//       format('opentype');
+// }
+// @font-face {
+//   font-family: 'Noto Sans KR';
+//   font-style: normal;
+//   font-weight: 500;
+//   src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2)
+//       format('woff2'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff)
+//       format('woff'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.otf)
+//       format('opentype');
+// }
+// @font-face {
+//   font-family: 'Noto Sans KR';
+//   font-style: normal;
+//   font-weight: 700;
+//   src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2)
+//       format('woff2'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff)
+//       format('woff'),
+//     url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.otf)
+//       format('opentype');
+// }
 
 /* iOS 11.0 버전
 constant(safe-area-inset-top)
