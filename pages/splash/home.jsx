@@ -3,7 +3,7 @@ import SymbolLogoType from '@/assets/images/Symbol_Logotype.svg';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Splash() {
+export default function Home() {
   const router = useRouter();
   // [Todo] 임시 데이터 Bridge 또는 Custom Event 등록을 통해 업데이트 내용 받아와서 state 변동시키기
   const [totalItems, setTotalItems] = useState(40);

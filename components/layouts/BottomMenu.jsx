@@ -89,6 +89,9 @@ const BottomMenu = () => {
       </div>
       <style jsx>
         {`
+          #myNav {
+            z-index: 400;
+          }
           #footer {
             position: relative;
           }
