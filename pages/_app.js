@@ -3,6 +3,7 @@ import Head from 'next/head';
 import '@/styles/globals.scss';
 import '@/styles/layout.scss';
 import '@/styles/tzapp.scss';
+import '@/styles/app.scss';
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
 import { useRouter } from 'next/router';
