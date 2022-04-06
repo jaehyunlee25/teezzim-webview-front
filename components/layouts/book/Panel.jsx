@@ -89,10 +89,7 @@ const PanelComponent = props => {
                 {/* <span className='fr'>전체선택</span> */}
               </div>
               {/*//list_AreaTop  */}
-              <TeeListArea
-                teeList={panelStore.unregisteredTeeList}
-                registered
-              />
+              <TeeListArea teeList={panelStore.unregisteredTeeList} />
 
               {/* bookingwrap 예약/대기/알림 */}
               <div className='bookingwrap'>

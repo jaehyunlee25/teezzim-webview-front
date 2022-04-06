@@ -58,9 +58,11 @@ export function TeeItem({ img, id, name, registered, location }) {
         <div className='list-detail'>
           <Image className='tee-icon' src={img} width={56} height={56} alt='' />
           <div>
-            <p>{name}</p>
-            <span>
-              {!registered && <b className='bg-shade1'>{badgeMsg}</b>}
+            <p className='tee-name'>{name}</p>
+            <span className='tee-detail'>
+              {!registered ? (
+                <span className='badge bg-shade1'>{badgeMsg}</span>
+              ) : null}
               {location}
             </span>
           </div>
@@ -81,10 +83,14 @@ export function TeeItem({ img, id, name, registered, location }) {
         {/*//btn_check_box  */}
       </li>
       <style jsx>{`
-        .bg-shade1 {
+        .badge {
           background-color: ${badgeMsg === '미등록'
             ? 'var(--warning-shade-1)'
             : ' var(--warning-surface-2)'};
+          margin-right: 4px;
+          line-height: 1.67;
+          border-radius: 4px;
+          padding: 1px 8px;
         }
         ul {
           width: 100%;
@@ -99,6 +105,14 @@ export function TeeItem({ img, id, name, registered, location }) {
           display: flex;
           align-items: center;
           gap: 16px;
+        }
+        .tee-name {
+          font-size: 16px;
+          padding-top: 6.5px;
+          line-height: 1.31;
+        }
+        .tee-detail {
+          font-size: 12px;
         }
         .btn_check_box {
           position: absolute;
