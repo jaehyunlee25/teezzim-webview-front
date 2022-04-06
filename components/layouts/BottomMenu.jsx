@@ -109,8 +109,8 @@ const BottomMenu = () => {
             border-top: 1px solid #e0e0e0;
           }
           .tabbar {
-            padding: 0px 0 calc(constant(safe-area-inset-bottom) + 3px);
-            padding: 0px 0 calc(env(safe-area-inset-bottom) + 3px);
+            padding: 4px 0 calc(constant(safe-area-inset-bottom) + 8px);
+            padding: 4px 0 calc(env(safe-area-inset-bottom) + 8px);
           }
           .tabbar:afrer {
             content: '';
