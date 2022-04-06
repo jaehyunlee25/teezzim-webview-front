@@ -6,6 +6,7 @@ import '@/styles/tzapp.scss';
 import '@/styles/app.scss';
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
+import panelStore from '@/stores/panelStore';
 import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
@@ -13,6 +14,7 @@ export default function MyApp({ Component, pageProps }) {
   // 주입할 전역 MobX Store들
   const initStores = {
     globalStore,
+    panelStore,
   };
 
   return (

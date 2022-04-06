@@ -63,6 +63,10 @@ export default function SearchBar({ textButton, formProps, inputProps }) {
         button.search_btn.bg-grey4 {
           padding: 1px 6px;
         }
+
+        .SearchWrap.bd {
+          border-bottom: unset;
+        }
       `}</style>
     </>
   );

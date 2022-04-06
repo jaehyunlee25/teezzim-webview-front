@@ -6,7 +6,12 @@ export default function SearchContainer() {
   const [hidden, setHidden] = useState(true);
   return (
     <>
-      <SearchBar inputProps={{ onFocus: () => setHidden(false) }} />
+      <SearchBar
+        inputProps={{
+          onFocus: () => setHidden(false),
+          onBlur: () => setHidden(true),
+        }}
+      />
       <div className='wrapper' hidden={hidden}>
         <div className='container'>
           <span className='basic_txt medium-Emphasis01'>
@@ -16,19 +21,19 @@ export default function SearchContainer() {
       </div>
       <style jsx>{`
         .wrapper {
-          position: absolute;
+          position: fixed;
           top: 0;
-          height: 80%;
+          height: 90%;
           width: 100%;
-          z-index: 200;
+          z-index: 250;
         }
 
         .container {
           overflow-y: auto;
           display: flex;
           background-color: var(--neutrals-white);
-          padding-top: 62px;
-          height: 100%;
+          padding-top: 60px;
+          height: calc(100% - 60px);
         }
       `}</style>
     </>
