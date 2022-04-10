@@ -22,7 +22,7 @@ export default function SearchContainer() {
       <style jsx>{`
         .wrapper {
           position: fixed;
-          top: 0;
+          top: 0px;
           height: 90%;
           width: 100%;
           z-index: 250;
@@ -33,7 +33,7 @@ export default function SearchContainer() {
           display: flex;
           background-color: var(--neutrals-white);
           padding-top: 60px;
-          height: calc(100% - 60px);
+          height: calc(100% - 75px);
         }
       `}</style>
     </>

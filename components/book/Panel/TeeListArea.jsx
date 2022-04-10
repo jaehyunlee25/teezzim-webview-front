@@ -8,7 +8,8 @@ import ImgGolf4 from '@/assets/images/IMG_Golf_04.png';
 import ImgGolf5 from '@/assets/images/IMG_Golf_05.png';
 import ImgGolf6 from '@/assets/images/IMG_Golf_06.png';
 import ImgGolf7 from '@/assets/images/IMG_Golf_07.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useStores from '@/stores/useStores';
 
 export default function TeeListArea({ teeList, registered }) {
   // [Todo] 전체 선택 Toggle Action Handler(모든 item checkedList에 넣었다가 빼기)
@@ -44,12 +45,20 @@ export default function TeeListArea({ teeList, registered }) {
 
 // [Todo] 등록하기 API 결과 여부를 전달해 status로 전달한다.
 export function TeeItem({ img, id, name, registered, location }) {
+  const { panelStore } = useStores();
   const [badgeMsg, setBadgeMsg] = useState(!registered ? '미등록' : null);
   const [checked, setChecked] = useState(false);
 
+  const { pushCheckedTeeList, popCheckedTeeList, checkedTeeList } = panelStore;
   const handleChecked = e => {
-    setChecked(!checked);
+    const id = e.target.htmlFor || e.target.id;
+    if (checkedTeeList.includes(id)) pushCheckedTeeList(id);
+    else popCheckedTeeList(id);
+    // console.log(panelStore.checkedTeeList);
   };
+  useEffect(() => {
+    panelStore.initTee();
+  }, []);
   return (
     <>
       <li>
@@ -72,12 +81,13 @@ export function TeeItem({ img, id, name, registered, location }) {
         <div className='btn_check_box'>
           <span className='checkbox'>
             <input
-              id={`${name}${id}`}
+              id={id}
               type='checkbox'
               name={name}
-              defaultChecked={false}
+              checked={panelStore.checkedTeeList.includes(id)}
+              onChange={() => {}}
             />
-            <label htmlFor={`${name}${id}`} onClick={handleChecked}></label>
+            <label htmlFor={id} onClick={handleChecked}></label>
           </span>
         </div>
         {/*//btn_check_box  */}

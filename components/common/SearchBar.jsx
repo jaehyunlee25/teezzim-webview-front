@@ -31,6 +31,7 @@ export default function SearchBar({ textButton, formProps, inputProps }) {
                 name='keyword'
                 value={keyword}
                 onChange={handleChange}
+                autoComplete='off'
                 {...inputProps}
               />
               {textButton && <span className='search_icon'></span>}

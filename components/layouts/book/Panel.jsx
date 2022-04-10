@@ -46,15 +46,27 @@ const PanelComponent = props => {
       region: '수도권',
     },
   ];
-
+  panelStore.setTeeList([...dummy1, ...dummy2]);
   panelStore.setRegisteredTeeList(dummy2);
-  panelStore.setTeeList(dummy1);
-
-  console.log(panelStore.teeList);
 
   useEffect(() => {
     panelStore.initTee();
   }, []);
+
+  const handleClick = e => {
+    const { id } = e.target;
+    console.log(id);
+    if (id === 'registered') {
+      if (panelStore.isAllChecked.registered)
+        panelStore.popCheckedTeeList(panelStore.registeredTeeList);
+      else panelStore.pushCheckedTeeList(panelStore.registeredTeeList);
+    } else if (id === 'unregistered') {
+      if (panelStore.isAllChecked.unregistered)
+        panelStore.popCheckedTeeList(panelStore.unregisteredTeeList);
+      else panelStore.pushCheckedTeeList(panelStore.unregisteredTeeList);
+      console.log(panelStore.checkedTeeList);
+    }
+  };
   return (
     <>
       <SearchContainer />
@@ -70,10 +82,15 @@ const PanelComponent = props => {
                 <span>
                   등록:<b>{panelStore.totalRegisteredTee}</b>
                 </span>
-                <ChipButton color='dark' padding='4px 12px' radius={30}>
-                  전체선택
+                <ChipButton
+                  id='registered'
+                  color='dark'
+                  padding='4px 12px'
+                  radius={30}
+                  onClick={handleClick}
+                >
+                  {panelStore.isAllChecked.registered ? '전체해제' : '전체선택'}
                 </ChipButton>
-                {/* <span className='fr'>전체선택</span> */}
               </div>
               {/*//list_AreaTop  */}
               <TeeListArea teeList={panelStore.registeredTeeList} registered />
@@ -83,10 +100,17 @@ const PanelComponent = props => {
                   미등록:
                   <b>{panelStore.totalUnregisteredTee}</b>
                 </span>
-                <ChipButton color='dark' padding='4px 12px' radius={30}>
-                  전체선택
+                <ChipButton
+                  id='unregistered'
+                  color='dark'
+                  padding='4px 12px'
+                  radius={30}
+                  onClick={handleClick}
+                >
+                  {panelStore.isAllChecked.unregistered
+                    ? '전체해제'
+                    : '전체선택'}
                 </ChipButton>
-                {/* <span className='fr'>전체선택</span> */}
               </div>
               {/*//list_AreaTop  */}
               <TeeListArea teeList={panelStore.unregisteredTeeList} />
@@ -140,8 +164,9 @@ const PanelComponent = props => {
           scrollbar-width: none;
         }
         .bookingwrap {
-          position: sticky;
-          bottom: 0;
+          position: absolute;
+          bottom: 4px;
+          width: 100%;
           height: auto;
         }
         .button-list {
