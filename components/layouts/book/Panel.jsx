@@ -48,7 +48,6 @@ const PanelComponent = props => {
   ];
   panelStore.setTeeList([...dummy1, ...dummy2]);
   panelStore.setRegisteredTeeList(dummy2);
-
   useEffect(() => {
     panelStore.initTee();
   }, []);
@@ -157,6 +156,7 @@ const PanelComponent = props => {
           position: relative;
           overflow: auto;
           height: 100%;
+          background-color: var(--white);
         }
         .list_Areawrap_inner::-webkit-scrollbar {
           display: none;

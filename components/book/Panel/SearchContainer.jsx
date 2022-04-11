@@ -1,6 +1,5 @@
 import SearchBar from '@/components/common/SearchBar';
 import { useState } from 'react';
-
 // [Todo] 검색 결과가 저장된 stores에서 결과 container에 뿌려주기
 export default function SearchContainer() {
   const [hidden, setHidden] = useState(true);
@@ -9,8 +8,12 @@ export default function SearchContainer() {
       <SearchBar
         inputProps={{
           onFocus: () => setHidden(false),
-          onBlur: () => setHidden(true),
         }}
+        formProps={{
+          onSubmit: e => e.preventDefault(),
+        }}
+        hasCloseBtn={!hidden}
+        handleCloseBtn={() => setHidden(true)}
       />
       <div className='wrapper' hidden={hidden}>
         <div className='container'>

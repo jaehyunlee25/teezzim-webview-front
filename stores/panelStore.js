@@ -50,12 +50,10 @@ class PanelStore {
     return {
       registered:
         [...new Set([...this.registeredTeeList, ...this.checkedTeeList])]
-          .length ===
-        this.teeList.length - this.totalRegisteredTee,
+          .length === this.checkedTeeList.length,
       unregistered:
         [...new Set([...this.unregisteredTeeList, ...this.checkedTeeList])]
-          .length ===
-        this.teeList.length - this.totalUnregisteredTee,
+          .length === this.checkedTeeList.length,
     };
   }
 
@@ -72,21 +70,20 @@ class PanelStore {
   }
 
   pushCheckedTeeList = tid => {
-    console.log(this.checkedTeeList);
+    console.log(`push ${tid}`);
     if (Array.isArray(tid))
       this.checkedTeeList = [...new Set([...this.checkedTeeList, ...tid])];
-    else this.checkedTeeList = [...new Set([...this.checkedTeeList, tid])];
-    console.log(this.checkedTeeList);
+    else this.checkedTeeList.push(tid);
   };
 
   popCheckedTeeList = tid => {
+    console.log(`pop ${tid}`);
     if (Array.isArray(tid))
       this.checkedTeeList = this.checkedTeeList.filter(
         ({ id }) => !tid.includes(id),
       );
     else
       this.checkedTeeList = this.checkedTeeList.filter(({ id }) => tid !== id);
-    console.log(this.checkedTeeList);
   };
 
   initTee() {

@@ -52,8 +52,9 @@ export function TeeItem({ img, id, name, registered, location }) {
   const { pushCheckedTeeList, popCheckedTeeList, checkedTeeList } = panelStore;
   const handleChecked = e => {
     const id = e.target.htmlFor || e.target.id;
-    if (checkedTeeList.includes(id)) pushCheckedTeeList(id);
-    else popCheckedTeeList(id);
+    console.log(checkedTeeList.includes(id));
+    if (checkedTeeList.includes(id)) popCheckedTeeList(id);
+    else pushCheckedTeeList(id);
     // console.log(panelStore.checkedTeeList);
   };
   useEffect(() => {
@@ -85,7 +86,10 @@ export function TeeItem({ img, id, name, registered, location }) {
               type='checkbox'
               name={name}
               checked={panelStore.checkedTeeList.includes(id)}
-              onChange={() => {}}
+              onChange={() => {
+                setChecked(!checked);
+                console.log(checkedTeeList);
+              }}
             />
             <label htmlFor={id} onClick={handleChecked}></label>
           </span>

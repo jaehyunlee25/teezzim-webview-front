@@ -8,6 +8,8 @@ import MenuIcon from '@/assets/images/frame/bottom/Icon_Menu.svg';
 
 const BottomMenu = () => {
   const router = useRouter();
+  const { tab } = router?.query;
+  console.log(tab);
   const ref = useRef(null);
 
   const handleOpen = e => {
@@ -64,15 +66,23 @@ const BottomMenu = () => {
         <div className='inner'>
           <div className='tabbar'>
             <ul>
-              <li>
+              <li className={tab !== 'my_book' ? 'icon-tab on' : 'icon-tab'}>
                 <div>
-                  <Image src={CalenderIcon} alt='예약하기' />
+                  <Image
+                    src={CalenderIcon}
+                    alt='예약하기'
+                    className={tab !== 'my_book' ? 'menu-icon on' : 'menu-icon'}
+                  />
                   <span>예약하기</span>
                 </div>
               </li>
-              <li>
+              <li className={tab === 'my_book' ? 'icon-tab on' : 'icon-tab'}>
                 <div>
-                  <Image src={CheckedOutlineIcon} alt='나의 예약' />
+                  <Image
+                    src={CheckedOutlineIcon}
+                    alt='나의 예약'
+                    className={tab === 'my_book' ? 'menu-icon on' : 'menu-icon'}
+                  />
                   <span>나의 예약</span>
                 </div>
               </li>
@@ -128,10 +138,6 @@ const BottomMenu = () => {
             font-family: AppleSDGothicNeo-SemiBold;
             margin-top: 3px;
           }
-          .tabbar li img {
-            width: 28px;
-            height: 28px;
-          }
           .tabbar li div.on {
             background: #115b40;
             display: inline-block;
@@ -149,8 +155,23 @@ const BottomMenu = () => {
             line-height: 1.3;
             font-size: 13px;
           }
+          .tabbar li.icon-tab.on > div {
+            width: fit-content;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 auto;
+            background-color: var(--brand-primary);
+          }
+          .tabbar li.icon-tab.on span {
+            color: var(--neutrals-white);
+          }
         `}
       </style>
+      <style jsx global>{`
+        img.menu-icon {
+          filter: brightness(0) invert(1);
+        }
+      `}</style>
     </>
   );
 };
