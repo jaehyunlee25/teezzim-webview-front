@@ -29,7 +29,9 @@ export default function MyApp({ Component, pageProps }) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <MobXStoresContext.Provider value={initStores}>
-        <Component {...pageProps} />
+        <div id='app' className='wrap'>
+          <Component {...pageProps} />
+        </div>
       </MobXStoresContext.Provider>
     </>
   );
