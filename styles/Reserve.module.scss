@@ -1,0 +1,37 @@
+@import "./common.scss";
+
+.topNav {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    padding: 0 2rem;
+    background-color: var(--grey1);
+
+    .centerMenu {
+        button {
+            width: 100px;
+            padding: 0.5rem 1.5rem;
+            margin: 1rem;
+            color: var(--white);
+            background-color: var(--grey6);
+            border-radius: 0.5rem;
+        }
+    }
+
+    .sideBtn {
+        width: 46px;
+        height: 32px;
+        border-radius: 8px;
+        background-color: var(--white);
+        border: 1px solid var(--white);
+        box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%), 0 1px 0 0 rgb(0 0 0 / 14%);
+    }
+}
+
+.reserveContainer {
+    margin-top: 5rem;
+    padding: 0 2rem;
+}

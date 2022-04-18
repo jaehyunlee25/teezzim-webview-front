@@ -3,7 +3,7 @@ import ChipButton from '@/components/common/ChipButton';
 import SearchBar from '@/components/common/SearchBar';
 import Toast from '@/components/common/Toast';
 import Panel from '@/components/layouts/book/Panel';
-import BottomMenu from '@/components/layouts/BottomMenu';
+import BottomMenu from '@/components/layouts/BottomMenu.js';
 import useStores from '@/stores/useStores';
 
 export default function Home() {
