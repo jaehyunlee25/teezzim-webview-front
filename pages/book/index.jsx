@@ -26,7 +26,6 @@ export default function Book() {
     now.getMonth() + 1, // returns 0 - 11
     now.getDate(),
   ];
-
   const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
     tdate < 10 ? '0' + tdate : tdate
   }`;
