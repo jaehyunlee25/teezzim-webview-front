@@ -11,26 +11,36 @@
     background-color: var(--grey1);
 
     .centerMenu {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+
         button {
             width: 50px;
             height: 32px;
             padding: 0.3rem;
-            margin: 0.5rem;
+            margin: 0 0.5rem;
             font-size: 0.8rem;
             color: var(--white);
             background-color: var(--grey6);
             border-radius: 0.5rem;
         }
     }
+}
+.sideBtn {
+    width: 46px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%), 0 1px 0 0 rgb(0 0 0 / 14%);
+}
 
-    .sideBtn {
-        width: 46px;
-        height: 32px;
-        border-radius: 8px;
-        background-color: var(--white);
-        border: 1px solid var(--white);
-        box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%), 0 1px 0 0 rgb(0 0 0 / 14%);
-    }
+.reserveTitle {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+    margin: 0.5rem 1rem;
 }
 
 .reserveState {
