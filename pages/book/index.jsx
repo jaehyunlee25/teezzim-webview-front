@@ -11,12 +11,15 @@ export default function Book() {
     query: { tab = 'tabContent01', container = 'Book' },
   } = router;
   const [date, setDate] = useState(null);
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const KST_TIME_DIFF = 9 * 60 * 60 * 1000;
+  const kst = new Date(utc + KST_TIME_DIFF);
 
-  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
   const [tyear, tmonth, tdate] = [
-    now.getFullYear(),
-    now.getMonth() + 1, // returns 0 - 11
-    now.getDate(),
+    kst.getFullYear(),
+    kst.getMonth() + 1, // returns 0 - 11
+    kst.getDate(),
   ];
   const tYearMonth = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}`;
   const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
@@ -129,6 +132,7 @@ export default function Book() {
             <Calender
               hidden={tab !== 'tabContent01'}
               handleDate={handleDate}
+              yearMonth={tYearMonth}
               today={today}
             />
             <Filter hidden={tab !== 'tabContent02'} />
