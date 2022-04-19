@@ -3,18 +3,20 @@
 .topNav {
     @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
 
-    position: absolute;
-    top: 0;
-    right: 0;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
     width: 100%;
-    padding: 0 2rem;
+    padding: 0 1rem;
     background-color: var(--grey1);
 
     .centerMenu {
         button {
-            width: 100px;
-            padding: 0.5rem 1.5rem;
-            margin: 1rem;
+            width: 50px;
+            height: 32px;
+            padding: 0.3rem;
+            margin: 0.5rem;
+            font-size: 0.8rem;
             color: var(--white);
             background-color: var(--grey6);
             border-radius: 0.5rem;
@@ -31,7 +33,18 @@
     }
 }
 
+.reserveState {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: flex-start);
+    height: 30px;
+    background-color: var(--grey4);
+    color: var(--primary);
+
+    p {
+        margin-left: 1rem;
+        font-weight: 600;
+    }
+}
+
 .reserveContainer {
-    margin-top: 5rem;
     padding: 0 2rem;
 }

@@ -22,7 +22,37 @@ const Reserve = () => {
         <button className={styles.sideBtn}>편집</button>
       </div>
 
+      <div className={styles.reserveState}>
+        <p>예약 확정</p>
+      </div>
       <div className={styles.reserveContainer}>
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+      </div>
+
+      <div className={styles.reserveState}>
+        <p>예약 대기</p>
+      </div>
+      <div className={styles.reserveContainer}>
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+        <ReserveTap />
+      </div>
+
+      <div className={styles.reserveState}>
+        <p>예약오픈 알림</p>
+      </div>
+      <div className={styles.reserveContainer}>
+        <ReserveTap />
+        <ReserveTap />
         <ReserveTap />
         <ReserveTap />
         <ReserveTap />

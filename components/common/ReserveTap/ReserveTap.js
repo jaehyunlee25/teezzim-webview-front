@@ -8,10 +8,12 @@ const ReserveTap = () => {
   return (
     <>
       <div className={styles.reserveTapContainer}>
-        <span>D-7</span>
         <div className={styles.dateInfo}>
-          <span>4월 4일(월요일)</span>
-          <span>06:30 | 남춘천 | East코스</span>
+          <span>D-7</span>
+          <div>
+            <span>4월 4일(월요일)</span>
+            <span>06:30 | 남춘천 | East코스</span>
+          </div>
         </div>
 
         <Image src={Arrow} alt='arrow' width={5} height={26} />
