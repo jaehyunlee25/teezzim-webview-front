@@ -1,6 +1,6 @@
 import { getTotalDate, getOffsetFirstDay } from '@/lib/DateUtils';
 import axios from 'axios';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 
 const Calender = ({ date, handleDate, yearMonth, today, ...others }) => {
   const [schedule, setSchedule] = useState({});
@@ -12,34 +12,41 @@ const Calender = ({ date, handleDate, yearMonth, today, ...others }) => {
     );
   }, [yearMonth]);
 
-  useEffect(() => {
-    const getSchedule = async () => {
-      const {
-        status,
-        data: { resultCode, message, data },
-      } = await axios.get('/teezzim/teeapi/v1/schedule', {
-        params: { date: `${yearMonth}-01` },
-      });
-      if (status === 200) {
-        if (resultCode === 1) {
-          // console.log(data);
-          setSchedule({
-            ...schedule,
-            [yearMonth]: data.reduce(
-              (acc, { date, count }) => ({ ...acc, [date]: count }),
-              {},
-            ),
-          });
-          // console.log(schedule);
-        } else {
-          console.warn(message);
-        }
+  const mountRef = useRef(true);
+  const getSchedule = useCallback(async () => {
+    const {
+      status,
+      data: { resultCode, message, data },
+    } = await axios.get('/teezzim/teeapi/v1/schedule', {
+      params: { date: `${yearMonth}-01` },
+    });
+    if (status === 200) {
+      if (resultCode === 1) {
+        // console.log(data, mountRef.current);
+        if (!mountRef.current) return;
+        setSchedule({
+          ...schedule,
+          [yearMonth]: data.reduce(
+            (acc, { date, count }) => ({ ...acc, [date]: count }),
+            {},
+          ),
+        });
+        // console.log(schedule);
       } else {
-        console.warn(`[error code ${status}] : ${message}`);
+        console.warn(message);
       }
-    };
+    } else {
+      console.warn(`[error code ${status}] : ${message}`);
+    }
+  }, [yearMonth, schedule, setSchedule]);
+
+  useEffect(() => {
+    mountRef.current = true;
     if (!schedule?.[yearMonth]) getSchedule();
-  }, [yearMonth, today, schedule, setSchedule]);
+    return () => {
+      mountRef.current = false;
+    };
+  }, [getSchedule, yearMonth, schedule]);
 
   return (
     <>

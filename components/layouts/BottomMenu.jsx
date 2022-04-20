@@ -8,7 +8,7 @@ import MenuIcon from '@/assets/images/frame/bottom/Icon_Menu.svg';
 
 const BottomMenu = () => {
   const router = useRouter();
-  const { tab } = router?.query;
+  const { tab, ...others } = router?.query;
   const ref = useRef(null);
 
   const handleOpen = e => {
@@ -32,15 +32,14 @@ const BottomMenu = () => {
     }
   }, [router]);
 
-
   const openNativePage = name => {
     console.log(name);
-    if( window && window.BRIDGE && window.BRIDGE.openNativePage ) {
+    if (window && window.BRIDGE && window.BRIDGE.openNativePage) {
       window.BRIDGE.openNativePage(name);
     } else {
-      alert("이 기능은 앱에서만 수행 가능합니다.");
+      alert('이 기능은 앱에서만 수행 가능합니다.');
     }
-  }
+  };
 
   return (
     <>
@@ -50,10 +49,18 @@ const BottomMenu = () => {
         </a>
         <div className='overlay-content'>
           <h1 className='logo'>티찜</h1>
-          <a href='#' onClick={e=>openNativePage("MyScore")}>나의기록</a>
-          <a href='#' onClick={e=>openNativePage("ScreenLock")}>화면잠금</a>
-          <a href='#' onClick={e=>openNativePage("Notification")}>알림</a>
-          <a href='#' onClick={e=>openNativePage("Backup")}>백업</a>
+          <a href='#' onClick={e => openNativePage('MyScore')}>
+            나의기록
+          </a>
+          <a href='#' onClick={e => openNativePage('ScreenLock')}>
+            화면잠금
+          </a>
+          <a href='#' onClick={e => openNativePage('Notification')}>
+            알림
+          </a>
+          <a href='#' onClick={e => openNativePage('Backup')}>
+            백업
+          </a>
           <ul>
             <li>
               ÷<Link href='#'>골프장 홈페이지 바로가기</Link>
@@ -76,7 +83,10 @@ const BottomMenu = () => {
           <div className='tabbar'>
             <ul>
               <li className={tab !== 'my_book' ? 'icon-tab on' : 'icon-tab'}>
-                <Link href='?tab=book' passHref>
+                <Link
+                  href={{ href: '/home', query: { ...others, tab: 'book' } }}
+                  passHref
+                >
                   <div>
                     <Image
                       src={CalenderIcon}
@@ -90,7 +100,10 @@ const BottomMenu = () => {
                 </Link>
               </li>
               <li className={tab === 'my_book' ? 'icon-tab on' : 'icon-tab'}>
-                <Link href='?tab=my_book' passHref>
+                <Link
+                  href={{ href: '/home', query: { ...others, tab: 'my_book' } }}
+                  passHref
+                >
                   <div>
                     <Image
                       src={CheckedOutlineIcon}

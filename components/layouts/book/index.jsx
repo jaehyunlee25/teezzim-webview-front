@@ -11,12 +11,13 @@ import axios from 'axios';
 import Calender from '@/components/layouts/book/Calender';
 import Filter from '@/components/layouts/book/Filter';
 import BookContainer from '@/components/layouts/book/BookContainer';
+import Panel from '@/components/layouts/book/Panel';
 
 export default function Book() {
   const router = useRouter();
   const { teeScheduleStore, loadStore } = useStores();
   const {
-    query: { tab = 'tabContent01', container = 'Book' },
+    query: { subTab = 'tabContent01', container, ...others },
   } = router;
 
   /** Calender Component */
@@ -28,6 +29,7 @@ export default function Book() {
     now.getMonth() + 1, // returns 0 - 11
     now.getDate(),
   ];
+
   const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
     tdate < 10 ? '0' + tdate : tdate
   }`;
@@ -40,7 +42,6 @@ export default function Book() {
       }`,
     [yearMonth],
   );
-
   const handleDate = async e => {
     const { dateTime } = e.target;
     setDate(dateTime);
@@ -71,23 +72,36 @@ export default function Book() {
   const renderContainer = () => {
     if (!date) return;
     switch (container) {
-      case 'Book':
+      case 'book':
         return <BookContainer />;
-      case 'Wait':
-        return;
-      case 'Alarm':
-        return;
+      case 'wait':
+        return 'Wait Tab';
+      case 'alarm':
+        return 'Alarm Tab';
       default:
         return <BookContainer />;
     }
   };
+
+  // TODO rollsheet-wrap component 분리하기
+  // TODO panelStore에 있는 checked list 전달하기
   return (
     <>
-      <div className='filter-wrap' onClick={() => setPanelHidden(false)}>
+      <Panel hidden={panelHidden} setHidden={setPanelHidden} />
+      <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
+        <div className='rollsheet-container'>
+          <div className='rollsheet'>
+            <h1 className='head-headline text-primary'>예약오픈 알림(1):</h1>
+            <p className='text-sub'>더플레이어스GC</p>
+            <div className='handle'></div>
+          </div>
+        </div>
+      </div>
+      <div className='filter-wrap'>
         <div className='filter-container'>
           <div className='title-group'>
             <h1 className='filter-title'>
-              {tab === 'tabContent01' ? (
+              {subTab === 'tabContent01' ? (
                 <time dateTime={yearMonthStr}>
                   {yearMonth.year}년 {yearMonth.month}월
                 </time>
@@ -95,7 +109,7 @@ export default function Book() {
                 '고급필터'
               )}
             </h1>
-            {tab === 'tabContent01' && (
+            {subTab === 'tabContent01' && (
               <div className='date_area'>
                 <button
                   type='button'
@@ -130,14 +144,14 @@ export default function Book() {
               <ul role='tablist'>
                 <li
                   role='none'
-                  className={tab === 'tabContent01' ? 'is-selected' : null}
+                  className={subTab === 'tabContent01' ? 'is-selected' : null}
                 >
                   <Link
                     href={{
-                      pathname: '/book',
-                      query: { tab: 'tabContent01', container },
+                      pathname: '/home',
+                      query: { subTab: 'tabContent01', container, ...others },
                     }}
-                    as='/book'
+                    // as='/home'
                   >
                     <a
                       id='tabNav01'
@@ -151,20 +165,21 @@ export default function Book() {
                 </li>
                 <li
                   role='none'
-                  className={tab === 'tabContent02' ? 'is-selected' : null}
+                  className={subTab === 'tabContent02' ? 'is-selected' : null}
                 >
                   <Link
                     href={{
-                      pathname: '/book',
+                      pathname: '/home',
                       query: {
-                        tab:
-                          container === 'Book'
+                        subTab:
+                          container === 'book'
                             ? 'tabContent02'
                             : 'tabContent01',
                         container,
+                        ...others,
                       },
                     }}
-                    as='/book'
+                    // as='/home'
                   >
                     <a
                       id='tabNav02'
@@ -181,13 +196,13 @@ export default function Book() {
           </div>
           <div className='filter-content'>
             <Calender
-              hidden={tab !== 'tabContent01'}
+              hidden={subTab !== 'tabContent01'}
               date={date}
               handleDate={handleDate}
               yearMonth={yearMonthStr}
               today={today}
             />
-            <Filter hidden={tab !== 'tabContent02'} />
+            <Filter hidden={subTab !== 'tabContent02'} />
           </div>
         </div>
       </div>
