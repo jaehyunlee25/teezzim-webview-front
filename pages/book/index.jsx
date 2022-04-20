@@ -1,37 +1,62 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
+import useStores from '@/stores/useStores';
+import {
+  getPrevYearMonth,
+  getNextYearMonth,
+  getTodayKST,
+} from '@/lib/DateUtils';
+import axios from 'axios';
 import Calender from '@/components/layouts/book/Calender';
 import Filter from '@/components/layouts/book/Filter';
 import BookContainer from '@/components/layouts/book/BookContainer';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 export default function Book() {
   const router = useRouter();
+  const { teeScheduleStore } = useStores();
   const {
     query: { tab = 'tabContent01', container = 'Book' },
   } = router;
   const [date, setDate] = useState(null);
-  const now = new Date();
-  const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-  const KST_TIME_DIFF = 9 * 60 * 60 * 1000;
-  const kst = new Date(utc + KST_TIME_DIFF);
+  const now = getTodayKST();
 
   const [tyear, tmonth, tdate] = [
-    kst.getFullYear(),
-    kst.getMonth() + 1, // returns 0 - 11
-    kst.getDate(),
+    now.getFullYear(),
+    now.getMonth() + 1, // returns 0 - 11
+    now.getDate(),
   ];
-  const tYearMonth = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}`;
+
   const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
     tdate < 10 ? '0' + tdate : tdate
   }`;
 
-  const handleDate = e => {
+  const [yearMonth, setYearMonth] = useState({ year: tyear, month: tmonth });
+  const yearMonthStr = useMemo(
+    () =>
+      `${yearMonth.year}-${
+        yearMonth.month < 10 ? '0' + yearMonth.month : yearMonth.month
+      }`,
+    [yearMonth],
+  );
+  const handleDate = async e => {
     const { dateTime } = e.target;
     setDate(dateTime);
-
-    // TODO /schedule/show 연동
-    // TODO TeeSchedule Store에 저장
+    console.log(dateTime);
+    const {
+      status,
+      data: { resultCode, message, data },
+    } = await axios.get('/teezzim/teeapi/v1/schedule/show', {
+      params: { date: dateTime },
+    });
+    if (status === 200) {
+      if (resultCode === 1) {
+        console.log(data);
+        teeScheduleStore.setTeeScheduleList(data);
+      } else console.warn(message);
+    } else {
+      console.warn(`error code: ${status}`);
+    }
   };
 
   const renderContainer = () => {
@@ -54,8 +79,8 @@ export default function Book() {
           <div className='title-group'>
             <h1 className='filter-title'>
               {tab === 'tabContent01' ? (
-                <time dateTime={tYearMonth}>
-                  {tyear}년 {tmonth}월
+                <time dateTime={yearMonthStr}>
+                  {yearMonth.year}년 {yearMonth.month}월
                 </time>
               ) : (
                 '고급필터'
@@ -65,12 +90,29 @@ export default function Book() {
               <div className='date_area'>
                 <button
                   type='button'
-                  className='                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        btn-mon-prev'
-                  disabled
+                  className='btn-mon-prev'
+                  disabled={tmonth === yearMonth.month}
+                  onClick={() => {
+                    const [year, month] = getPrevYearMonth(
+                      yearMonth.year,
+                      yearMonth.month,
+                    );
+                    setYearMonth({ year, month });
+                  }}
                 >
                   <span className='offscreen'>이전달</span>
                 </button>
-                <button type='button' className='btn-mon-next'>
+                <button
+                  type='button'
+                  className='btn-mon-next'
+                  onClick={() => {
+                    const [year, month] = getNextYearMonth(
+                      yearMonth.year,
+                      yearMonth.month,
+                    );
+                    setYearMonth({ year, month });
+                  }}
+                >
                   <span className='offscreen'>다음달</span>
                 </button>
               </div>
@@ -131,8 +173,9 @@ export default function Book() {
           <div className='filter-content'>
             <Calender
               hidden={tab !== 'tabContent01'}
+              date={date}
               handleDate={handleDate}
-              yearMonth={tYearMonth}
+              yearMonth={yearMonthStr}
               today={today}
             />
             <Filter hidden={tab !== 'tabContent02'} />

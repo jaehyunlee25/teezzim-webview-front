@@ -2,15 +2,13 @@ import { getTotalDate, getOffsetFirstDay } from '@/lib/DateUtils';
 import axios from 'axios';
 import { useEffect, useState, useMemo } from 'react';
 
-const Calender = ({ handleDate, yearMonth, today, ...others }) => {
+const Calender = ({ date, handleDate, yearMonth, today, ...others }) => {
   const [schedule, setSchedule] = useState({});
   const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
   const dates = useMemo(() => {
-    const [year, month] = yearMonth.split('-');
-    return Array.from(
-      { length: getTotalDate(Number(year), Number(month)) },
-      (_, i) =>
-        i + 1 < 10 ? `${yearMonth}-0${i + 1}` : `${yearMonth}-${i + 1}`,
+    const [year, month] = yearMonth.split('-').map(v => Number(v));
+    return Array.from({ length: getTotalDate(year, month) }, (_, i) =>
+      i + 1 < 10 ? `${yearMonth}-0${i + 1}` : `${yearMonth}-${i + 1}`,
     );
   }, [yearMonth]);
 
@@ -18,26 +16,31 @@ const Calender = ({ handleDate, yearMonth, today, ...others }) => {
     const getSchedule = async () => {
       const {
         status,
-        data: { message, data },
+        data: { resultCode, message, data },
       } = await axios.get('/teezzim/teeapi/v1/schedule', {
-        params: { date: today },
+        params: { date: `${yearMonth}-01` },
       });
-      if (message === 'OK') {
-        // console.log(data);
-        setSchedule({
-          ...schedule,
-          [yearMonth]: data.reduce(
-            (acc, { date, count }) => ({ ...acc, [date]: count }),
-            {},
-          ),
-        });
-        // console.log(schedule);
+      if (status === 200) {
+        if (resultCode === 1) {
+          // console.log(data);
+          setSchedule({
+            ...schedule,
+            [yearMonth]: data.reduce(
+              (acc, { date, count }) => ({ ...acc, [date]: count }),
+              {},
+            ),
+          });
+          // console.log(schedule);
+        } else {
+          console.warn(message);
+        }
       } else {
-        console.warn(`error code: ${status}`);
+        console.warn(`[error code ${status}] : ${message}`);
       }
     };
     if (!schedule?.[yearMonth]) getSchedule();
   }, [yearMonth, today, schedule, setSchedule]);
+
   return (
     <>
       <div
@@ -64,10 +67,12 @@ const Calender = ({ handleDate, yearMonth, today, ...others }) => {
             {dates?.map(v => (
               <DateButton
                 key={v}
+                className={`${
+                  v === today ? 'today' : v < today ? 'prev-mon' : ''
+                }${v === date ? ' on' : ' '}`}
                 date={v}
                 count={schedule?.[yearMonth]?.[v] ?? 0}
-                className={v < today ? 'prev-mon' : v === today ? 'today' : ''}
-                disabled={v < today}
+                onClick={v >= today ? handleDate : null}
               />
             ))}
           </div>
@@ -79,14 +84,16 @@ const Calender = ({ handleDate, yearMonth, today, ...others }) => {
 
 export default Calender;
 
-const DateButton = ({ date, count, className, ...others }) => {
+const DateButton = ({ date, count, className, onClick, ...others }) => {
   const dateText = date?.split('-')[2];
   const day = new Date(date).getUTCDay();
   const classes = className ?? '';
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time dateTime={date ?? ''}>{dateText ?? <>&nbsp;</>}</time>
+        <time dateTime={date ?? ''} onClick={onClick}>
+          {dateText ?? <>&nbsp;</>}
+        </time>
         <p className='number'>
           {count ? (
             <>

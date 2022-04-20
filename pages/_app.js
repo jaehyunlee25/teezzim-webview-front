@@ -7,6 +7,7 @@ import '@/styles/app.scss';
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
 import panelStore from '@/stores/panelStore';
+import teeScheduleStore from '@/stores/teeScheduleStore';
 import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
@@ -15,6 +16,7 @@ export default function MyApp({ Component, pageProps }) {
   const initStores = {
     globalStore,
     panelStore,
+    teeScheduleStore,
   };
 
   return (
