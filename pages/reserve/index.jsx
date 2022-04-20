@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
-import BottomMenu from '@/components/layouts/BottomMenu.js';
+import BottomMenu from '@/components/layouts/BottomMenu';
 
 import IconImport from '/assets/images/Icon_Import.svg';
 
