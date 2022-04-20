@@ -7,6 +7,8 @@ import '@/styles/app.scss';
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
 import panelStore from '@/stores/panelStore';
+import teeScheduleStore from '@/stores/teeScheduleStore';
+import loadStore from '@/stores/loadStore';
 import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
@@ -15,6 +17,8 @@ export default function MyApp({ Component, pageProps }) {
   const initStores = {
     globalStore,
     panelStore,
+    teeScheduleStore,
+    loadStore,
   };
 
   return (
@@ -29,7 +33,9 @@ export default function MyApp({ Component, pageProps }) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <MobXStoresContext.Provider value={initStores}>
-        <Component {...pageProps} />
+        <div id='app' className='wrap'>
+          <Component {...pageProps} />
+        </div>
       </MobXStoresContext.Provider>
     </>
   );
