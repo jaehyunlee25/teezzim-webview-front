@@ -10,6 +10,7 @@ import panelStore from '@/stores/panelStore';
 import teeScheduleStore from '@/stores/teeScheduleStore';
 import loadStore from '@/stores/loadStore';
 import { useRouter } from 'next/router';
+import { SWRConfig } from 'swr';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -32,11 +33,14 @@ export default function MyApp({ Component, pageProps }) {
         <title>TeeZZim</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <MobXStoresContext.Provider value={initStores}>
-        <div id='app' className='wrap'>
-          <Component {...pageProps} />
-        </div>
-      </MobXStoresContext.Provider>
+
+      <SWRConfig value={{ fetcher: url => fetch(url).then(res => res.json()) }}>
+        <MobXStoresContext.Provider value={initStores}>
+          <div id='app' className='wrap'>
+            <Component {...pageProps} />
+          </div>
+        </MobXStoresContext.Provider>
+      </SWRConfig>
     </>
   );
 }

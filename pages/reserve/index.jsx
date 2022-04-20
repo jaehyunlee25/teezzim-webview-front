@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import useSWR from 'swr';
 import Image from 'next/image';
 
 import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
@@ -5,7 +7,7 @@ import BottomMenu from '@/components/layouts/BottomMenu';
 
 import IconImport from '/assets/images/Icon_Import.svg';
 
-import styles from '../../styles/Reserve.module.scss';
+import styles from '@/styles/Reserve.module.scss';
 
 const Reserve = () => {
   return (
