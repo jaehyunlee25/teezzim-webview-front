@@ -31,6 +31,16 @@ const BottomMenu = () => {
     }
   }, [router]);
 
+
+  const openNativePage = name => {
+    console.log(name);
+    if( window && window.BRIDGE && window.BRIDGE.openNativePage ) {
+      window.BRIDGE.openNativePage(name);
+    } else {
+      alert("이 기능은 앱에서만 수행 가능합니다.");
+    }
+  }
+
   return (
     <>
       <div id='myNav' className='overlay' ref={ref}>
@@ -39,10 +49,10 @@ const BottomMenu = () => {
         </a>
         <div className='overlay-content'>
           <h1 className='logo'>티찜</h1>
-          <Link href='#'>나의기록</Link>
-          <Link href='#'>화면잠금</Link>
-          <Link href='#'>알림</Link>
-          <Link href='#'>백업</Link>
+          <a href='#' onClick={e=>openNativePage("MyScore")}>나의기록</a>
+          <a href='#' onClick={e=>openNativePage("ScreenLock")}>화면잠금</a>
+          <a href='#' onClick={e=>openNativePage("Notification")}>알림</a>
+          <a href='#' onClick={e=>openNativePage("Backup")}>백업</a>
           <ul>
             <li>
               <Link href='#'>골프장 홈페이지 바로가기</Link>
