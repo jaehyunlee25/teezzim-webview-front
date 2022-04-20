@@ -14,7 +14,7 @@ import BookContainer from '@/components/layouts/book/BookContainer';
 
 export default function Book() {
   const router = useRouter();
-  const { teeScheduleStore } = useStores();
+  const { teeScheduleStore, loadStore } = useStores();
   const {
     query: { tab = 'tabContent01', container = 'Book' },
   } = router;
@@ -43,18 +43,22 @@ export default function Book() {
     const { dateTime } = e.target;
     setDate(dateTime);
     console.log(dateTime);
+    loadStore.reset();
+    loadStore.setLoading(true);
     const {
       status,
       data: { resultCode, message, data },
     } = await axios.get('/teezzim/teeapi/v1/schedule/show', {
       params: { date: dateTime },
     });
+    loadStore.setLoading(false);
     if (status === 200) {
       if (resultCode === 1) {
         console.log(data);
         teeScheduleStore.setTeeScheduleList(data);
       } else console.warn(message);
     } else {
+      loadStore.setError(true);
       console.warn(`error code: ${status}`);
     }
   };

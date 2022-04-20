@@ -3,26 +3,37 @@ import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 const BookContainer = observer(() => {
-  // TODO TeeSchedule Store에 저장된 Schedule List 가져와서 렌더링하기
   // 일단 다 미등록으로 띄움
-  const { teeScheduleStore } = useStores();
+  const { teeScheduleStore, loadStore } = useStores();
   // useEffect(() => {
 
   // })
   return (
     <>
       {/** 데이터가 없을 때 */}
-      {teeScheduleStore.isEmpty ? (
-        <div className='inner-container'>
+      <div className='inner-container'>
+        {loadStore.isLoading ? (
+          <div className='loading-icon'></div>
+        ) : teeScheduleStore.isEmpty ? (
           <div className='no-data mt-50'>
             <p className='text-main'>예약 가능한 Tee-off가 없습니다.</p>
           </div>
-        </div>
-      ) : (
-        teeScheduleStore.teeScheduleList?.map(v => (
-          <TeeItem key={v.id} {...v} />
-        ))
-      )}
+        ) : (
+          teeScheduleStore.teeScheduleList?.map(v => (
+            <TeeItem key={v.id} {...v} />
+          ))
+        )}
+      </div>
+      <style jsx>{`
+        .loading-icon {
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%, 0);
+          margin-top: 60px;
+          width: 40px;
+          height: 40px;
+        }
+      `}</style>
     </>
   );
 });
@@ -43,18 +54,17 @@ const TeeItem = ({ id, name, course, GolfSchedules }) => {
   }));
 
   return (
-    <div className='inner-container'>
+    <>
       <div className='time-head title-group'>
         <h1 className='head-headline'>
           {name}
           <span className='bar'>{course}</span>
         </h1>
       </div>
-      {/** TODO 해당 Tee의 GolfSchedule에서 시간대별 배열 필요 */}
       {schedulesOnHour.map(v => (
         <TeeSchedule key={v.hour} {...v} />
       ))}
-    </div>
+    </>
   );
 };
 
