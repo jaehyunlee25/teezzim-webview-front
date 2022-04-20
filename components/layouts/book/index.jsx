@@ -17,7 +17,7 @@ export default function Book() {
   const router = useRouter();
   const { teeScheduleStore, loadStore } = useStores();
   const {
-    query: { subTab = 'tabContent01', container, ...others },
+    query: { subTab = 'tabContent01', container = 'book', ...others },
   } = router;
 
   /** Calender Component */
@@ -114,7 +114,9 @@ export default function Book() {
                 <button
                   type='button'
                   className='btn-mon-prev'
-                  disabled={tmonth === yearMonth.month}
+                  disabled={
+                    tyear == yearMonth.year && tmonth === yearMonth.month
+                  }
                   onClick={() => {
                     const [year, month] = getPrevYearMonth(
                       yearMonth.year,
