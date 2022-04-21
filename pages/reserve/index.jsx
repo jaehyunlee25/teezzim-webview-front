@@ -7,9 +7,13 @@ import BottomMenu from '@/components/layouts/BottomMenu';
 
 import IconImport from '/assets/images/Icon_Import.svg';
 
-import styles from '@/styles/Reserve.module.scss';
+import styles from '../../styles/Reserve.module.scss';
 
 const Reserve = () => {
+  const { data } = useSWR(`/teezzim/teeapi/v1/schedule`);
+
+  console.log('🚀 - data', data);
+
   return (
     <>
       <div className={styles.topNav}>
