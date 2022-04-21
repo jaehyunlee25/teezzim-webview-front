@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import useInput from '@/lib/hooks/useInput';
-import CloseBtnMedium from '@/assets/images/Icon_Close-Medium.svg';
+import CloseBtnMedium from '@/assets/images/Icon_Close-Medium2.svg';
 
 // MyStory, Panel 페이지에서 사용
 // [Todo] form, onClick Event를 통해 stores에 검색 데이터 fetch 해오기
