@@ -1,0 +1,110 @@
+@import "./common.scss";
+
+.topNav {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+
+    // position: absolute;
+    // top: 0;
+    // right: 0;
+    width: 100%;
+    padding: 0 1rem;
+    background-color: var(--grey1);
+
+    .centerMenu {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+
+        button {
+            width: 50px;
+            height: 32px;
+            padding: 0.3rem;
+            margin: 0 0.5rem;
+            font-size: 0.8rem;
+            color: var(--white);
+            background-color: var(--grey6);
+            border-radius: 0.5rem;
+        }
+    }
+}
+
+.sideBtn {
+    width: 46px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%), 0 1px 0 0 rgb(0 0 0 / 14%);
+}
+
+.reserveTitle {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+    margin: 0 1rem;
+    padding-top: 1rem;
+}
+
+.reserveState {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: flex-start);
+    height: 30px;
+    background-color: var(--grey4);
+    color: var(--primary);
+
+    p {
+        margin-left: 1rem;
+        font-weight: 600;
+    }
+}
+
+.reserveContainer {
+    padding: 0 2rem;
+}
+
+.ruleContainer {
+    margin: 0 1rem;
+    padding-top: 2rem;
+
+    h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    ul {
+        li:before {
+            content: "·";
+            font-weight: bold;
+            margin-right: 0.3rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        li:first-child {
+            color: var(--warning-surface2);
+        }
+
+        li:nth-child(2) {
+            color: var(--warning-surface2);
+        }
+
+        li:last-child {
+            color: var(--link);
+        }
+    }
+}
+
+.btnContainer {
+    margin: 60px 0 38px;
+    text-align: center;
+
+    button {
+        width: 160px;
+        height: 48px;
+        padding: 0.5rem 0;
+        border-radius: 8px;
+        color: var(--neutrals-white);
+        background-color: var(--warning-surface-1);
+        box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%);
+    }
+}

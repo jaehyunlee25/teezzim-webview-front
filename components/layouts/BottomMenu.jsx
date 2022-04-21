@@ -8,6 +8,7 @@ import MenuIcon from '@/assets/images/frame/bottom/Icon_Menu.svg';
 
 const BottomMenu = () => {
   const router = useRouter();
+  const { tab, ...others } = router?.query;
   const ref = useRef(null);
 
   const handleOpen = e => {
@@ -31,15 +32,14 @@ const BottomMenu = () => {
     }
   }, [router]);
 
-
   const openNativePage = name => {
     console.log(name);
-    if( window && window.BRIDGE && window.BRIDGE.openNativePage ) {
+    if (window && window.BRIDGE && window.BRIDGE.openNativePage) {
       window.BRIDGE.openNativePage(name);
     } else {
-      alert("이 기능은 앱에서만 수행 가능합니다.");
+      alert('이 기능은 앱에서만 수행 가능합니다.');
     }
-  }
+  };
 
   return (
     <>
@@ -49,13 +49,21 @@ const BottomMenu = () => {
         </a>
         <div className='overlay-content'>
           <h1 className='logo'>티찜</h1>
-          <a href='#' onClick={e=>openNativePage("MyScore")}>나의기록</a>
-          <a href='#' onClick={e=>openNativePage("ScreenLock")}>화면잠금</a>
-          <a href='#' onClick={e=>openNativePage("Notification")}>알림</a>
-          <a href='#' onClick={e=>openNativePage("Backup")}>백업</a>
+          <a href='#' onClick={e => openNativePage('MyScore')}>
+            나의기록
+          </a>
+          <a href='#' onClick={e => openNativePage('ScreenLock')}>
+            화면잠금
+          </a>
+          <a href='#' onClick={e => openNativePage('Notification')}>
+            알림
+          </a>
+          <a href='#' onClick={e => openNativePage('Backup')}>
+            백업
+          </a>
           <ul>
             <li>
-              <Link href='#'>골프장 홈페이지 바로가기</Link>
+              ÷<Link href='#'>골프장 홈페이지 바로가기</Link>
             </li>
             <li>
               <Link href='#'>이 앱 평가하기</Link>
@@ -74,17 +82,39 @@ const BottomMenu = () => {
         <div className='inner'>
           <div className='tabbar'>
             <ul>
-              <li>
-                <div>
-                  <Image src={CalenderIcon} alt='예약하기' />
-                  <span>예약하기</span>
-                </div>
+              <li className={tab !== 'my_book' ? 'icon-tab on' : 'icon-tab'}>
+                <Link
+                  href={{ href: '/home', query: { ...others, tab: 'book' } }}
+                  passHref
+                >
+                  <div>
+                    <Image
+                      src={CalenderIcon}
+                      alt='예약하기'
+                      className={
+                        tab !== 'my_book' ? 'menu-icon on' : 'menu-icon'
+                      }
+                    />
+                    <span>예약하기</span>
+                  </div>
+                </Link>
               </li>
-              <li>
-                <div>
-                  <Image src={CheckedOutlineIcon} alt='나의 예약' />
-                  <span>나의 예약</span>
-                </div>
+              <li className={tab === 'my_book' ? 'icon-tab on' : 'icon-tab'}>
+                <Link
+                  href={{ href: '/home', query: { ...others, tab: 'my_book' } }}
+                  passHref
+                >
+                  <div>
+                    <Image
+                      src={CheckedOutlineIcon}
+                      alt='나의 예약'
+                      className={
+                        tab === 'my_book' ? 'menu-icon on' : 'menu-icon'
+                      }
+                    />
+                    <span>나의 예약</span>
+                  </div>
+                </Link>
               </li>
               {/* menu button 누르면 navigation menu 열기 */}
               <li onClick={handleOpen}>
@@ -138,10 +168,6 @@ const BottomMenu = () => {
             font-family: AppleSDGothicNeo-SemiBold;
             margin-top: 3px;
           }
-          .tabbar li img {
-            width: 28px;
-            height: 28px;
-          }
           .tabbar li div.on {
             background: #115b40;
             display: inline-block;
@@ -159,8 +185,27 @@ const BottomMenu = () => {
             line-height: 1.3;
             font-size: 13px;
           }
+          li div {
+            cursor: pointer;
+          }
+          li.icon-tab.on div {
+            width: fit-content;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 auto;
+            background-color: var(--brand-primary);
+          }
+
+          li.icon-tab.on span {
+            color: var(--neutrals-white);
+          }
         `}
       </style>
+      <style jsx global>{`
+        img.menu-icon.on {
+          filter: brightness(0) invert(1);
+        }
+      `}</style>
     </>
   );
 };

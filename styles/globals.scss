@@ -32,8 +32,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, Roboto, 'Noto Sans KR', 'Apple SD Gothic Neo',
-    'Malgun Gothic', 'BaseLine', Tahoma, Dotum, sans-serif;
+  font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma, Dotum,
+    sans-serif;
 }
 
 a {
@@ -91,9 +91,8 @@ canvas {
 
 html {
   height: 100%;
-  font-family: -apple-system, Roboto, 'Noto Sans KR', 'Apple SD Gothic Neo',
-    'Malgun Gothic', 'BaseLine', Tahoma, Dotum, sans-serif, Gulim, '굴림',
-    sans-serif;
+  font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma, Dotum,
+    sans-serif, Gulim, "굴림", sans-serif;
   font-size: 16px;
   font-size: 1rem;
 }
@@ -194,7 +193,7 @@ button {
   -webkit-appearance: none;
 }
 
-input[type='radio'] {
+input[type="radio"] {
   padding: 0;
   vertical-align: middle;
 }
@@ -208,9 +207,8 @@ button,
 input,
 select,
 textarea {
-  font-family: -apple-system, Roboto, 'Noto Sans KR', 'Apple SD Gothic Neo',
-    'Malgun Gothic', 'BaseLine', Tahoma, Dotum, sans-serif, Gulim, '굴림',
-    sans-serif;
+  font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma, Dotum,
+    sans-serif, Gulim, "굴림", sans-serif;
   font-weight: 300;
 }
 
@@ -219,9 +217,8 @@ input {
   &:-ms-input-placeholder,
   &:-moz-placeholder,
   &::-moz-placeholder {
-    font-family: -apple-system, Roboto, 'Noto Sans KR', 'Apple SD Gothic Neo',
-      'Malgun Gothic', 'BaseLine', Tahoma, Dotum, sans-serif, Gulim, '굴림',
-      sans-serif;
+    font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma,
+      Dotum, sans-serif, Gulim, "굴림", sans-serif;
   }
 }
 
@@ -290,7 +287,7 @@ legend {
 
 .cboth {
   display: block;
-  content: '';
+  content: "";
   clear: both;
 }
 
@@ -315,69 +312,64 @@ legend {
 }
 
 @font-face {
-  font-family: 'Noto Sans KR';
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 300;
-  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff2) format('woff2'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff) format('woff'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff2) format("woff2"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.woff) format("woff"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Regular.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'Noto Sans KR';
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
-  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff2) format('woff2'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff) format('woff'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff2) format("woff2"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.woff) format("woff"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Medium.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'Noto Sans KR';
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 600;
-  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff2) format('woff2'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff) format('woff'),
-    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.otf) format('opentype');
+  src: url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff2) format("woff2"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.woff) format("woff"),
+    url(/teezzim/fonts/NotoSansKr/NotoSansKR-Bold.otf) format("opentype");
 }
 
 /*나눔 고딕 글꼴*/
 @font-face {
-  font-family: 'Nanum Gothic';
+  font-family: "Nanum Gothic";
   font-style: normal;
   font-weight: 400;
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot');
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot?#iefix')
-      format('embedded-opentype'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff2') format('woff2'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff') format('woff'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Regular.ttf') format('truetype');
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot");
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-Regular.eot?#iefix") format("embedded-opentype"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff2") format("woff2"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Regular.woff") format("woff"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Nanum Gothic';
+  font-family: "Nanum Gothic";
   font-style: normal;
   font-weight: 700;
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot');
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot?#iefix')
-      format('embedded-opentype'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff2') format('woff2'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff') format('woff'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-Bold.ttf') format('truetype');
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot");
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-Bold.eot?#iefix") format("embedded-opentype"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff2") format("woff2"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Bold.woff") format("woff"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-Bold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Nanum Gothic';
+  font-family: "Nanum Gothic";
   font-style: normal;
   font-weight: 800;
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot');
-  src: url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot?#iefix')
-      format('embedded-opentype'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff2')
-      format('woff2'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff') format('woff'),
-    url('/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.ttf')
-      format('truetype');
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot");
+  src: url("/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.eot?#iefix") format("embedded-opentype"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff2") format("woff2"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.woff") format("woff"),
+    url("/teezzim/fonts/NanumGothic/NanumGothic-ExtraBold.ttf") format("truetype");
 }
 
 /*

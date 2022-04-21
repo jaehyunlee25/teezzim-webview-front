@@ -1,8 +1,16 @@
+import Image from 'next/image';
 import useInput from '@/lib/hooks/useInput';
+import CloseBtnMedium from '@/assets/images/Icon_Close-Medium.svg';
 
 // MyStory, Panel 페이지에서 사용
 // [Todo] form, onClick Event를 통해 stores에 검색 데이터 fetch 해오기
-export default function SearchBar({ textButton, formProps, inputProps }) {
+export default function SearchBar({
+  textButton,
+  formProps,
+  inputProps,
+  hasCloseBtn,
+  handleCloseBtn,
+}) {
   /* 
     @Props
         textButton(boolean) : textButton이 true면 `검색 버튼` false면 `검색 아이콘` 렌더링
@@ -31,9 +39,11 @@ export default function SearchBar({ textButton, formProps, inputProps }) {
                 name='keyword'
                 value={keyword}
                 onChange={handleChange}
+                autoComplete='off'
                 {...inputProps}
               />
               {textButton && <span className='search_icon'></span>}
+
               <button
                 type='submit'
                 id=''
@@ -41,6 +51,13 @@ export default function SearchBar({ textButton, formProps, inputProps }) {
               >
                 <span className={textButton ? 'text-grey6' : 'ir'}>검색</span>
               </button>
+
+              <span
+                className='close-btn'
+                onClick={hasCloseBtn ? handleCloseBtn : () => {}}
+              >
+                <Image src={CloseBtnMedium} alt='X' />{' '}
+              </span>
             </form>
           </div>
         </div>
@@ -66,6 +83,14 @@ export default function SearchBar({ textButton, formProps, inputProps }) {
 
         .SearchWrap.bd {
           border-bottom: unset;
+        }
+
+        .close-btn {
+          position: absolute;
+          right: 4px;
+          top: 4px;
+          cursor: pointer;
+          opacity: ${hasCloseBtn ? 1 : 0};
         }
       `}</style>
     </>

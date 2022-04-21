@@ -1,0 +1,19 @@
+@import "@/styles/common.scss";
+
+.reserveTapContainer {
+    margin: 1rem 0;
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+}
+
+.dateInfo {
+    @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
+
+    div {
+        @include flex($flexDirection: column, $alignItems: flex-start, $justifyContent: space-between);
+        margin-left: 2rem;
+
+        span {
+            padding: 0.3rem;
+        }
+    }
+}
