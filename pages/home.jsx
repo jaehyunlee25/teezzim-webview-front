@@ -6,6 +6,7 @@ import Book from '@/components/layouts/book';
 import BottomMenu from '@/components/layouts/BottomMenu';
 import useStores from '@/stores/useStores';
 import { useRouter } from 'next/router';
+import Reserve from '@/pages/reserve';
 
 export default function Home() {
   const { globalStore } = useStores();
@@ -16,7 +17,7 @@ export default function Home() {
       case 'book':
         return <Book />;
       case 'my_book':
-        return '나의 예약 페이지';
+        return <Reserve />;
       default:
         return <Book />;
     }
