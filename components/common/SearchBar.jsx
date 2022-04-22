@@ -3,19 +3,22 @@ import useInput from '@/lib/hooks/useInput';
 import CloseBtnMedium from '@/assets/images/Icon_Close-Medium2.svg';
 
 // MyStory, Panel 페이지에서 사용
-// [Todo] form, onClick Event를 통해 stores에 검색 데이터 fetch 해오기
 export default function SearchBar({
   textButton,
   formProps,
   inputProps,
   hasCloseBtn,
   handleCloseBtn,
+  onChangeKeyword,
 }) {
   /* 
     @Props
         textButton(boolean) : textButton이 true면 `검색 버튼` false면 `검색 아이콘` 렌더링
   */
-  const { inputs, handleChange } = useInput({ keyword: '' });
+  const { inputs, handleChange } = useInput(
+    { keyword: '' },
+    { cb: onChangeKeyword },
+  );
   const { keyword } = inputs;
   return (
     <>
@@ -34,8 +37,6 @@ export default function SearchBar({
               <input
                 type='text'
                 className='search_input'
-                id=''
-                maxLength=''
                 name='keyword'
                 value={keyword}
                 onChange={handleChange}
@@ -91,6 +92,12 @@ export default function SearchBar({
           top: 4px;
           cursor: pointer;
           opacity: ${hasCloseBtn ? 1 : 0};
+        }
+        input {
+          -moz-user-select: auto;
+          -webkit-user-select: auto;
+          -ms-user-select: auto;
+          user-select: auto;
         }
       `}</style>
     </>

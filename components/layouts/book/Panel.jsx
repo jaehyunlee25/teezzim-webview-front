@@ -61,7 +61,10 @@ const Panel = observer(({ hidden, setHidden }) => {
                       <Counter type='registered' />
                       <CheckController type='registered' />
                     </div>
-                    <TeeListArea registered />
+                    <TeeListArea
+                      registered
+                      list={panelStore.registeredTeeList}
+                    />
                   </>
                 )}
 
@@ -72,63 +75,63 @@ const Panel = observer(({ hidden, setHidden }) => {
                       <Counter type='unregistered' />
                       <CheckController type='unregistered' />
                     </div>
-                    <TeeListArea />
+                    <TeeListArea list={panelStore.unregisteredTeeList} />
                   </>
                 )}
                 {/* bookingwrap 예약/대기/알림 */}
-                <div className='bookingwrap'>
-                  <Counter type='checked' />
-                  <ul className='button-list'>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'book',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>실시간 예약</a>
-                      </Link>
-                    </li>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'wait',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>예약대기</a>
-                      </Link>
-                    </li>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'alarm',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>예약오픈 알림</a>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                {/* //bookingwrap 예약/대기/알림 */}
               </div>
             </div>
             {/*//list_Areawrap 지역 골프장리스트  */}
           </div>
           {/* //container inner */}
+          <div className='bookingwrap'>
+            <Counter type='checked' />
+            <ul className='button-list'>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'book',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>실시간 예약</a>
+                </Link>
+              </li>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'wait',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>예약대기</a>
+                </Link>
+              </li>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'alarm',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>예약오픈 알림</a>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          {/* //bookingwrap 예약/대기/알림 */}
         </div>
       </div>
       <style jsx>{`
@@ -159,7 +162,7 @@ const Panel = observer(({ hidden, setHidden }) => {
           scrollbar-width: none;
         }
         .bookingwrap {
-          position: sticky;
+          position: absolute;
           bottom: 0px;
           width: 100%;
           height: auto;

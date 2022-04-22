@@ -8,7 +8,7 @@ import {
   getTodayKST,
 } from '@/lib/DateUtils';
 import axios from 'axios';
-import Calender from '@/components/layouts/book/Calender';
+import Calender from '@/components/layouts/book/Calendar';
 import Filter from '@/components/layouts/book/Filter';
 import BookContainer from '@/components/layouts/book/BookContainer';
 import Panel from '@/components/layouts/book/Panel';
@@ -83,11 +83,13 @@ export default function Book() {
     }
   };
 
+  const [test, setTest] = useState('');
   // TODO rollsheet-wrap component 분리하기
   // TODO panelStore에 있는 checked list 전달하기
   return (
     <>
       <Panel hidden={panelHidden} setHidden={setPanelHidden} />
+
       <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
         <div className='rollsheet-container'>
           <div className='rollsheet'>

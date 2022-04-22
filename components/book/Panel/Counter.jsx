@@ -16,9 +16,7 @@ export const Counter = observer(({ type }) => {
       break;
     default:
       name = '골프장';
-      count =
-        panelStore.registeredTeeList.length +
-        panelStore.unregisteredTeeList.length;
+      count = panelStore.checkedTeeList.size; // 기획서 상으로 선택한 골프장 수라고 되어있음
       break;
   }
   return (

@@ -44,35 +44,55 @@ const BottomMenu = () => {
   return (
     <>
       <div id='myNav' className='overlay' ref={ref}>
-        <a href='#' className='closebtn' onClick={handleClose}>
+        <a className='closebtn' onClick={handleClose}>
           &times;
         </a>
         <div className='overlay-content'>
           <h1 className='logo'>티찜</h1>
-          <a href='#' onClick={e => openNativePage('MyScore')}>
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openNativePage('MyScore');
+            }}
+          >
             나의기록
           </a>
-          <a href='#' onClick={e => openNativePage('ScreenLock')}>
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openNativePage('ScreenLock');
+            }}
+          >
             화면잠금
           </a>
-          <a href='#' onClick={e => openNativePage('Notification')}>
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openNativePage('Notification');
+            }}
+          >
             알림
           </a>
-          <a href='#' onClick={e => openNativePage('Backup')}>
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openNativePage('Backup');
+            }}
+          >
             백업
           </a>
           <ul>
             <li>
-              ÷<Link href='#'>골프장 홈페이지 바로가기</Link>
+              ÷<Link href='/teezzim/home'>골프장 홈페이지 바로가기</Link>
             </li>
             <li>
-              <Link href='#'>이 앱 평가하기</Link>
+              <Link href='/teezzim/home'>이 앱 평가하기</Link>
             </li>
             <li>
-              <Link href='#'>이 앱 추천하기</Link>
+              <Link href='/teezzim/home'>이 앱 추천하기</Link>
             </li>
             <li>
-              <Link href='#'>이 앱에 관하여...</Link>
+              <Link href='/teezzim/home'>이 앱에 관하여...</Link>
             </li>
           </ul>
         </div>
