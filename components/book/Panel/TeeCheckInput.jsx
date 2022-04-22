@@ -5,10 +5,8 @@ import { useMemo } from 'react';
 const TeeCheckInput = observer(({ id, name }) => {
   const { panelStore } = useStores();
   const isChecked = useMemo(
-    () =>
-      [...new Set([...panelStore.checkedTeeList, id])].length ===
-      panelStore.checkedTeeList.length,
-    [id, panelStore.checkedTeeList],
+    () => panelStore.checkedTeeList.has(id),
+    [panelStore.checkedTeeList, id],
   );
   const handleChecked = e => {
     const id = e.target.id;

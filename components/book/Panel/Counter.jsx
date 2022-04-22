@@ -16,7 +16,7 @@ export const Counter = observer(({ type }) => {
       break;
     case 'checked':
       name = '골프장';
-      count = panelStore.checkedTeeList.length;
+      count = panelStore.checkedTeeList.size;
       break;
   }
   return (

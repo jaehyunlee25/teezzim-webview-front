@@ -19,7 +19,7 @@ class PanelStore {
       updated_at: '2022-04-19T17:49:20.000Z',
     },
   ]; // 골프장 계정을 등록한 Tee List => 네이티브랑 통신헀다고 가정하고 임시로 데이터 한 개 넣어놓음
-  _checkedTeeList = []; // 체크박스를 클릭한 Tee List
+  _checkedTeeList = new Set(); // 체크박스를 클릭한 Tee List
   _teeListMap = {};
 
   constructor() {
@@ -33,6 +33,7 @@ class PanelStore {
         registeredTeeList: computed,
         registeredKeys: computed,
         unregisteredTeeList: computed,
+        unregisteredKeys: computed,
         checkedTeeList: computed,
         setTeeList: action,
         setRegisteredTeeList: action,
@@ -48,18 +49,37 @@ class PanelStore {
     return this._teeList;
   }
 
+  /**
+   * 등록된 TeeList의 객체 배열
+   */
   get registeredTeeList() {
     return this._registeredTeeList;
   }
 
+  /**
+   * 등록된 TeeList의 id 배열
+   */
   get registeredKeys() {
     return this._registeredTeeList.map(({ id }) => id);
   }
 
+  /**
+   * 미등록된 TeeList의 객체 배열
+   */
   get unregisteredTeeList() {
     return this._teeList.filter(({ id }) => !this.registeredKeys.includes(id));
   }
 
+  /**
+   * 미등록 TeeList의 id 배열
+   */
+  get unregisteredKeys() {
+    return this.unregisteredTeeList.map(({ id }) => id);
+  }
+
+  /**
+   * 사용자가 체크한 TeeList의 id 배열
+   */
   get checkedTeeList() {
     return this._checkedTeeList;
   }
@@ -76,29 +96,16 @@ class PanelStore {
     this._registeredTeeList = registeredTeeList;
   }
 
-  addChecked(id, obj = 'registered') {
-    console.log(id, obj);
-    if (!id)
-      this._checkedTeeList = [
-        ...this._checkedTeeList,
-        ...(obj === 'registered'
-          ? this._registeredTeeList
-          : this.unregisteredTeeList),
-      ];
-    else this._checkedTeeList = [...this._checkedTeeList, id];
+  addChecked(data) {
+    if (Array.isArray(data))
+      this._checkedTeeList = new Set([...this._checkedTeeList, ...data]);
+    else this._checkedTeeList = new Set([...this._checkedTeeList, data]);
   }
 
-  removeChecked(id, obj = 'registered') {
-    if (!id)
-      this._checkedTeeList = this._checkedTeeList.filter(
-        v =>
-          !(
-            obj === 'registered'
-              ? this._registeredTeeList
-              : this.unregisteredTeeList
-          ).includes(v),
-      );
-    else this._checkedTeeList = this._checkedTeeList.filter(v => v !== id);
+  removeChecked(data) {
+    if (Array.isArray(data)) data.forEach(v => this._checkedTeeList.delete(v));
+    else this._checkedTeeList.delete(data);
+    this._checkedTeeList = new Set([...this.checkedTeeList]);
   }
 
   initTee() {

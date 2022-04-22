@@ -11,7 +11,7 @@ import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 
-// [Todo] 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
+// TODO 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
 const Panel = ({ hidden, setHidden }) => {
   const router = useRouter();
   const { ...others } = router?.query;
@@ -210,25 +210,24 @@ const CheckController = observer(({ type }) => {
   const { panelStore } = useStores();
 
   const targetList = useMemo(() => {
-    if (type === 'registered') return panelStore.registeredTeeList;
-    else if (type === 'unregistered') return panelStore.unregisteredTeeList;
+    if (type === 'registered') return panelStore.registeredKeys;
+    else if (type === 'unregistered') return panelStore.unregisteredKeys;
     else return [];
-  }, [type, panelStore.registeredTeeList, panelStore.unregisteredTeeList]);
+  }, [type, panelStore.registeredKeys, panelStore.unregisteredKeys]);
 
   const isAllChecked = useMemo(() => {
-    if (panelStore.checkedTeeList.length === 0 || targetList?.length === 0)
+    if (panelStore.checkedTeeList.size === 0 || targetList?.length === 0)
       return false;
     return (
-      [...new Set([...panelStore.checkedTeeList, ...(targetList || [])])]
-        .length === panelStore.checkedTeeList.length
+      [...new Set([...panelStore.checkedTeeList, ...targetList])].length ===
+      panelStore.checkedTeeList.size
     );
   }, [targetList, panelStore.checkedTeeList]);
 
   const handleClick = () => {
     isAllChecked
-      ? panelStore.removeChecked(null, type)
-      : panelStore.addChecked(null, type);
-    console.log(panelStore.checkedTeeList);
+      ? panelStore.removeChecked(targetList)
+      : panelStore.addChecked(targetList);
   };
 
   return (
