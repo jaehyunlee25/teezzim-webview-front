@@ -14,9 +14,11 @@ export const Counter = observer(({ type }) => {
       name = '미등록';
       count = panelStore.unregisteredTeeList.length;
       break;
-    case 'checked':
+    default:
       name = '골프장';
-      count = panelStore.checkedTeeList.size;
+      count =
+        panelStore.registeredTeeList.length +
+        panelStore.unregisteredTeeList.length;
       break;
   }
   return (

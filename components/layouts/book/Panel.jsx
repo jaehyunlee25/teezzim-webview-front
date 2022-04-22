@@ -1,26 +1,20 @@
 import Link from 'next/link';
 import NavTab from '@/components/book/Panel/NavTab';
 import SearchContainer from '@/components/book/Panel/SearchContainer';
+import TeeListArea from '@/components/book/Panel/TeeListArea';
+import CheckController from '@/components/book/Panel/CheckController';
 
 import useStores from '@/stores/useStores';
-import ChipButton from '@/components/common/ChipButton';
-import TeeListArea from '@/components/book/Panel/TeeListArea';
-import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
-import { observer } from 'mobx-react-lite';
 
 // TODO 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
 const Panel = ({ hidden, setHidden }) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore } = useStores();
-
-  const handleClick = e => {
-    const { id } = e.target;
-    console.log(id);
-  };
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -63,15 +57,6 @@ const Panel = ({ hidden, setHidden }) => {
                 <div className='list_AreaTop'>
                   <Counter type='registered' />
                   <CheckController type='registered' />
-                  {/* <ChipButton
-                    id='registered'
-                    color='dark'
-                    padding='4px 12px'
-                    radius={30}
-                    onClick={handleClick}
-                  >
-                    전체선택
-                  </ChipButton> */}
                 </div>
                 {/*//list_AreaTop  */}
                 <TeeListArea registered />
@@ -79,15 +64,6 @@ const Panel = ({ hidden, setHidden }) => {
                 <div className='list_AreaTop'>
                   <Counter type='unregistered' />
                   <CheckController type='unregistered' />
-                  {/* <ChipButton
-                    id='unregistered'
-                    color='dark'
-                    padding='4px 12px'
-                    radius={30}
-                    onClick={handleClick}
-                  >
-                    전체선택
-                  </ChipButton> */}
                 </div>
                 {/*//list_AreaTop  */}
                 <TeeListArea />
@@ -205,39 +181,3 @@ const Panel = ({ hidden, setHidden }) => {
 };
 
 export default Panel;
-
-const CheckController = observer(({ type }) => {
-  const { panelStore } = useStores();
-
-  const targetList = useMemo(() => {
-    if (type === 'registered') return panelStore.registeredKeys;
-    else if (type === 'unregistered') return panelStore.unregisteredKeys;
-    else return [];
-  }, [type, panelStore.registeredKeys, panelStore.unregisteredKeys]);
-
-  const isAllChecked = useMemo(() => {
-    if (panelStore.checkedTeeList.size === 0 || targetList?.length === 0)
-      return false;
-    return (
-      [...new Set([...panelStore.checkedTeeList, ...targetList])].length ===
-      panelStore.checkedTeeList.size
-    );
-  }, [targetList, panelStore.checkedTeeList]);
-
-  const handleClick = () => {
-    isAllChecked
-      ? panelStore.removeChecked(targetList)
-      : panelStore.addChecked(targetList);
-  };
-
-  return (
-    <ChipButton
-      color='dark'
-      padding='4px 12px'
-      radius={30}
-      onClick={handleClick}
-    >
-      {isAllChecked ? '전체해제' : '전체선택'}
-    </ChipButton>
-  );
-});

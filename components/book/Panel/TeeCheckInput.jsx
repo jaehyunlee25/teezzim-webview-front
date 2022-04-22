@@ -2,15 +2,21 @@ import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
 import { useMemo } from 'react';
 
-const TeeCheckInput = observer(({ id, name }) => {
+const TeeCheckInput = observer(props => {
   const { panelStore } = useStores();
   const isChecked = useMemo(
-    () => panelStore.checkedTeeList.has(id),
-    [panelStore.checkedTeeList, id],
+    () =>
+      panelStore.checkedTeeList.has(
+        JSON.stringify(panelStore.teeListMap?.[props.id]),
+      ),
+    [panelStore.checkedTeeList, panelStore.teeListMap, props],
   );
   const handleChecked = e => {
     const id = e.target.id;
-    isChecked ? panelStore.removeChecked(id) : panelStore.addChecked(id);
+    const value = JSON.stringify(panelStore.teeListMap?.[id]);
+
+    if (!value) return;
+    isChecked ? panelStore.removeChecked(value) : panelStore.addChecked(value);
   };
   return (
     <>
@@ -18,13 +24,13 @@ const TeeCheckInput = observer(({ id, name }) => {
       <div className='btn_check_box'>
         <span className='checkbox'>
           <input
-            id={id}
+            id={props.id}
             type='checkbox'
-            name={name}
+            name={props.name}
             checked={isChecked}
             onChange={handleChecked}
           />
-          <label htmlFor={id}></label>
+          <label htmlFor={props.id}></label>
         </span>
       </div>
       {/*//btn_check_box  */}

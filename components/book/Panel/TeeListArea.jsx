@@ -32,11 +32,9 @@ export const TeeListArea = observer(({ registered }) => {
           )?.map(tee => (
             <TeeItem
               key={tee.id}
-              id={tee.id}
               img={TeeImages[Math.round(Math.random() * 10) % 7]}
-              name={tee.name}
-              location={tee.address}
               registered={registered}
+              {...tee}
             />
           ))}
         </ul>
