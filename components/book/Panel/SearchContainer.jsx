@@ -5,6 +5,7 @@ import TeeListArea from './TeeListArea';
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
 
+// TODO Debounce 적용하기
 const SearchContainer = observer(() => {
   const { panelStore } = useStores();
   const [hidden, setHidden] = useState(true);

@@ -8,7 +8,7 @@ import {
   getTodayKST,
 } from '@/lib/DateUtils';
 import axios from 'axios';
-import Calender from '@/components/layouts/book/Calender';
+import Calender from '@/components/layouts/book/Calendar';
 import Filter from '@/components/layouts/book/Filter';
 import BookContainer from '@/components/layouts/book/BookContainer';
 
