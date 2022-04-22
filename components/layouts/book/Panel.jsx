@@ -9,9 +9,10 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
+import { observer } from 'mobx-react-lite';
 
 // TODO 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
-const Panel = ({ hidden, setHidden }) => {
+const Panel = observer(({ hidden, setHidden }) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore } = useStores();
@@ -53,21 +54,27 @@ const Panel = ({ hidden, setHidden }) => {
             {/*list_Areawrap 지역 골프장리스트  */}
             <div className='list_Areawrap'>
               <div className='list_Areawrap_inner'>
-                {/*list_AreaTop  */}
-                <div className='list_AreaTop'>
-                  <Counter type='registered' />
-                  <CheckController type='registered' />
-                </div>
-                {/*//list_AreaTop  */}
-                <TeeListArea registered />
-                {/*list_AreaTop  */}
-                <div className='list_AreaTop'>
-                  <Counter type='unregistered' />
-                  <CheckController type='unregistered' />
-                </div>
-                {/*//list_AreaTop  */}
-                <TeeListArea />
+                {!panelStore.filter &&
+                panelStore.registeredTeeList.length <= 0 ? null : (
+                  <>
+                    <div className='list_AreaTop'>
+                      <Counter type='registered' />
+                      <CheckController type='registered' />
+                    </div>
+                    <TeeListArea registered />
+                  </>
+                )}
 
+                {!panelStore.filter &&
+                panelStore.unregisteredTeeList.length <= 0 ? null : (
+                  <>
+                    <div className='list_AreaTop'>
+                      <Counter type='unregistered' />
+                      <CheckController type='unregistered' />
+                    </div>
+                    <TeeListArea />
+                  </>
+                )}
                 {/* bookingwrap 예약/대기/알림 */}
                 <div className='bookingwrap'>
                   <Counter type='checked' />
@@ -178,6 +185,6 @@ const Panel = ({ hidden, setHidden }) => {
       `}</style>
     </>
   );
-};
+});
 
 export default Panel;

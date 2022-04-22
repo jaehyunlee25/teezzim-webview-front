@@ -15,7 +15,6 @@ const CheckController = observer(({ type }) => {
   }, [type, panelStore.registeredTeeList, panelStore.unregisteredTeeList]);
 
   const isAllChecked = useMemo(() => {
-    console.log(panelStore.checkedTeeList);
     if (panelStore.checkedTeeList.size === 0 || targetList?.length === 0)
       return false;
     return (
@@ -32,10 +31,11 @@ const CheckController = observer(({ type }) => {
 
   return (
     <ChipButton
-      color='dark'
+      color={targetList.length > 0 ? 'dark' : 'default'}
+      tColor={'var(--neutrals-white)'}
       padding='4px 12px'
       radius={30}
-      onClick={handleClick}
+      onClick={targetList.length > 0 ? handleClick : null}
     >
       {isAllChecked ? '전체해제' : '전체선택'}
     </ChipButton>

@@ -23,7 +23,13 @@ export const Counter = observer(({ type }) => {
   }
   return (
     <span>
-      {name}: <b>{count}</b>
+      {count > 0 || name === '골프장' ? (
+        <>
+          {name}: <b>{count}</b>
+        </>
+      ) : (
+        `${panelStore.filter}에는 ${name}한 골프장이 없습니다.`
+      )}
     </span>
   );
 });
