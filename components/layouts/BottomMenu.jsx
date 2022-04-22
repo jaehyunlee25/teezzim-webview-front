@@ -33,7 +33,7 @@ const BottomMenu = () => {
   }, [router]);
 
   const openNativePage = name => {
-    console.log(name);
+    // console.log(name);
     if (window && window.BRIDGE && window.BRIDGE.openNativePage) {
       window.BRIDGE.openNativePage(name);
     } else {
