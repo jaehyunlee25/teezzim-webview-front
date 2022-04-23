@@ -3,6 +3,7 @@ import useSWR from 'swr';
 import Image from 'next/image';
 import axios from 'axios';
 
+import { useMutation } from '@/lib/hooks/useMutation';
 import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
 import BottomMenu from '@/components/layouts/BottomMenu';
 
@@ -11,8 +12,20 @@ import IconImport from '/assets/images/Icon_Import.svg';
 import styles from '../../styles/Reserve.module.scss';
 
 const Reserve = () => {
+  const [deleteItem, setDeleteItem] = useState(false);
+
+  const [reserveConfirm, { data: reserveData, loading }] = useMutation(
+    `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
+  );
+  console.log('🚀 - reserveConfirm', reserveConfirm({}));
+
+  const { data } = useSWR(`/teezzim/teeapi/v1/schedule`);
+
+  console.log('🚀 - data', data);
+
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴(나의예약) 탭으로 이동했음을 App에 알렸는지 여부
   const [reservationList, setReservationList] = useState([]);
+  console.log('🚀 - reservationList', reservationList);
 
   /** APP->WEB 브릿지 함수 선언 */
   useEffect(() => {
