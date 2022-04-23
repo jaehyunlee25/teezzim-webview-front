@@ -8,10 +8,14 @@ import {
   getTodayKST,
 } from '@/lib/DateUtils';
 import axios from 'axios';
-import Calender from '@/components/layouts/book/Calender';
+import Calender from '@/components/layouts/book/Calendar';
 import Filter from '@/components/layouts/book/Filter';
-import BookContainer from '@/components/layouts/book/BookContainer';
 import Panel from '@/components/layouts/book/Panel';
+import { observer } from 'mobx-react-lite';
+
+import BookContainer from '@/components/layouts/book/BookContainer';
+import WaitContainer from '@/components/layouts/book/WaitContainer';
+import AlarmContainer from '@/components/layouts/book/AlarmContainer';
 
 export default function Book() {
   const router = useRouter();
@@ -75,20 +79,22 @@ export default function Book() {
       case 'book':
         return <BookContainer />;
       case 'wait':
-        return 'Wait Tab';
+        return <WaitContainer />;
       case 'alarm':
-        return 'Alarm Tab';
+        return <AlarmContainer />;
       default:
         return <BookContainer />;
     }
   };
 
+  const [test, setTest] = useState('');
   // TODO rollsheet-wrap component 분리하기
   // TODO panelStore에 있는 checked list 전달하기
   return (
     <>
       <Panel hidden={panelHidden} setHidden={setPanelHidden} />
-      <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
+
+      {/* <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
         <div className='rollsheet-container'>
           <div className='rollsheet'>
             <h1 className='head-headline text-primary'>예약오픈 알림(1):</h1>
@@ -96,7 +102,8 @@ export default function Book() {
             <div className='handle'></div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <MiniPanel setPanelHidden={setPanelHidden} />
       <div className='filter-wrap'>
         <div className='filter-container'>
           <div className='title-group'>
@@ -230,3 +237,42 @@ export default function Book() {
     </>
   );
 }
+
+const MiniPanel = observer(({ setPanelHidden }) => {
+  const router = useRouter();
+  const { container } = router.query;
+  const { panelStore } = useStores();
+
+  const panelName = () => {
+    if (container === 'book') return '실시간 예약';
+    else if (container === 'wait') return '예약대기';
+    else if (container === 'alarm') return '예약오픈 알림';
+  };
+
+  return (
+    <>
+      <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
+        <div className='rollsheet-container'>
+          <div className='rollsheet'>
+            <h1 className='head-headline text-primary'>
+              {panelName()}({panelStore.checkedTeeList.size}):
+            </h1>
+            <p className='text-sub'>
+              {[...panelStore.checkedTeeList]
+                ?.map(v => JSON.parse(v).name)
+                .join(', ')}
+            </p>
+            <div className='handle'></div>
+          </div>
+        </div>
+      </div>
+      <style jsx>{`
+        .text-sub {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      `}</style>
+    </>
+  );
+});

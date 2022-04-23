@@ -49,6 +49,7 @@ export default function ChipButton({
         .sub-chip {
           margin-left: 5px;
           padding: 4px 8px;
+
           border-radius: 50%;
           background-color: rgba(255, 255, 255, 0.75);
           color: var(--neutrals-black);

@@ -1,26 +1,21 @@
 import Link from 'next/link';
 import NavTab from '@/components/book/Panel/NavTab';
 import SearchContainer from '@/components/book/Panel/SearchContainer';
+import TeeListArea from '@/components/book/Panel/TeeListArea';
+import CheckController from '@/components/book/Panel/CheckController';
 
 import useStores from '@/stores/useStores';
-import ChipButton from '@/components/common/ChipButton';
-import TeeListArea from '@/components/book/Panel/TeeListArea';
-import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 
-// [Todo] 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
-const Panel = ({ hidden, setHidden }) => {
+// TODO 예약하기 탭이 활성화 되기 전에 서버사이드 렌더링을 통해 tee 정보 받아서 NavTab, tee 목록에 뿌려주기
+const Panel = observer(({ hidden, setHidden }) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore } = useStores();
-
-  const handleClick = e => {
-    const { id } = e.target;
-    console.log(id);
-  };
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -59,100 +54,91 @@ const Panel = ({ hidden, setHidden }) => {
             {/*list_Areawrap 지역 골프장리스트  */}
             <div className='list_Areawrap'>
               <div className='list_Areawrap_inner'>
-                {/*list_AreaTop  */}
-                <div className='list_AreaTop'>
-                  <Counter type='registered' />
-                  <CheckController type='registered' />
-                  {/* <ChipButton
-                    id='registered'
-                    color='dark'
-                    padding='4px 12px'
-                    radius={30}
-                    onClick={handleClick}
-                  >
-                    전체선택
-                  </ChipButton> */}
-                </div>
-                {/*//list_AreaTop  */}
-                <TeeListArea registered />
-                {/*list_AreaTop  */}
-                <div className='list_AreaTop'>
-                  <Counter type='unregistered' />
-                  <CheckController type='unregistered' />
-                  {/* <ChipButton
-                    id='unregistered'
-                    color='dark'
-                    padding='4px 12px'
-                    radius={30}
-                    onClick={handleClick}
-                  >
-                    전체선택
-                  </ChipButton> */}
-                </div>
-                {/*//list_AreaTop  */}
-                <TeeListArea />
+                {!panelStore.filter &&
+                panelStore.registeredTeeList.length <= 0 ? null : (
+                  <>
+                    <div className='list_AreaTop'>
+                      <Counter type='registered' />
+                      <CheckController type='registered' />
+                    </div>
+                    <TeeListArea
+                      registered
+                      list={panelStore.registeredTeeList}
+                    />
+                  </>
+                )}
 
+                {!panelStore.filter &&
+                panelStore.unregisteredTeeList.length <= 0 ? null : (
+                  <>
+                    <div className='list_AreaTop'>
+                      <Counter type='unregistered' />
+                      <CheckController type='unregistered' />
+                    </div>
+                    <TeeListArea list={panelStore.unregisteredTeeList} />
+                  </>
+                )}
                 {/* bookingwrap 예약/대기/알림 */}
-                <div className='bookingwrap'>
-                  <Counter type='checked' />
-                  <ul className='button-list'>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'book',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>실시간 예약</a>
-                      </Link>
-                    </li>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'wait',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>예약대기</a>
-                      </Link>
-                    </li>
-                    <li className='button'>
-                      <Link
-                        href={{
-                          href: '/home',
-                          query: {
-                            ...others,
-                            subTab: 'tabContent01',
-                            container: 'alarm',
-                          },
-                        }}
-                      >
-                        <a onClick={() => setHidden(true)}>예약오픈 알림</a>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                {/* //bookingwrap 예약/대기/알림 */}
               </div>
             </div>
             {/*//list_Areawrap 지역 골프장리스트  */}
           </div>
           {/* //container inner */}
+          <div className='bookingwrap'>
+            <Counter type='checked' />
+            <ul className='button-list'>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'book',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>실시간 예약</a>
+                </Link>
+              </li>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'wait',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>예약대기</a>
+                </Link>
+              </li>
+              <li className='button'>
+                <Link
+                  href={{
+                    href: '/home',
+                    query: {
+                      ...others,
+                      subTab: 'tabContent01',
+                      container: 'alarm',
+                    },
+                  }}
+                >
+                  <a onClick={() => setHidden(true)}>예약오픈 알림</a>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          {/* //bookingwrap 예약/대기/알림 */}
         </div>
       </div>
       <style jsx>{`
         .wrapper {
           position: fixed;
           top: 0;
-          height: 90%;
+          height: 80%;
           width: 100%;
           z-index: 200;
         }
@@ -167,8 +153,8 @@ const Panel = ({ hidden, setHidden }) => {
           overflow: auto;
           height: 100%;
           background-color: var(--white);
-          border-bottom-right-radius: 20px;
-          border-bottom-left-radius: 20px;
+          // border-bottom-right-radius: 20px;
+          // border-bottom-left-radius: 20px;
         }
         .list_Areawrap_inner::-webkit-scrollbar {
           display: none;
@@ -176,8 +162,8 @@ const Panel = ({ hidden, setHidden }) => {
           scrollbar-width: none;
         }
         .bookingwrap {
-          position: sticky;
-          bottom: 0px;
+          position: absolute;
+          bottom: -71px;
           width: 100%;
           height: auto;
         }
@@ -202,43 +188,6 @@ const Panel = ({ hidden, setHidden }) => {
       `}</style>
     </>
   );
-};
+});
 
 export default Panel;
-
-const CheckController = observer(({ type }) => {
-  const { panelStore } = useStores();
-
-  const targetList = useMemo(() => {
-    if (type === 'registered') return panelStore.registeredTeeList;
-    else if (type === 'unregistered') return panelStore.unregisteredTeeList;
-    else return [];
-  }, [type, panelStore.registeredTeeList, panelStore.unregisteredTeeList]);
-
-  const isAllChecked = useMemo(() => {
-    if (panelStore.checkedTeeList.length === 0 || targetList?.length === 0)
-      return false;
-    return (
-      [...new Set([...panelStore.checkedTeeList, ...(targetList || [])])]
-        .length === panelStore.checkedTeeList.length
-    );
-  }, [targetList, panelStore.checkedTeeList]);
-
-  const handleClick = () => {
-    isAllChecked
-      ? panelStore.removeChecked(null, type)
-      : panelStore.addChecked(null, type);
-    console.log(panelStore.checkedTeeList);
-  };
-
-  return (
-    <ChipButton
-      color='dark'
-      padding='4px 12px'
-      radius={30}
-      onClick={handleClick}
-    >
-      {isAllChecked ? '전체해제' : '전체선택'}
-    </ChipButton>
-  );
-});

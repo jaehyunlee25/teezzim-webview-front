@@ -2,7 +2,7 @@ import { getTotalDate, getOffsetFirstDay } from '@/lib/DateUtils';
 import axios from 'axios';
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 
-const Calender = ({ date, handleDate, yearMonth, today, ...others }) => {
+const Calendar = ({ date, handleDate, yearMonth, today, ...others }) => {
   const [schedule, setSchedule] = useState({});
   const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
   const dates = useMemo(() => {
@@ -89,7 +89,7 @@ const Calender = ({ date, handleDate, yearMonth, today, ...others }) => {
   );
 };
 
-export default Calender;
+export default Calendar;
 
 const DateButton = ({ date, count, className, onClick, ...others }) => {
   const dateText = date?.split('-')[2];

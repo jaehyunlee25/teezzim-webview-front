@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 const BookContainer = observer(() => {
   // 일단 다 미등록으로 띄움
-  const { teeScheduleStore, loadStore } = useStores();
+  const { teeScheduleStore, loadStore, panelStore } = useStores();
   // useEffect(() => {
 
   // })
