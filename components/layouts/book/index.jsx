@@ -10,9 +10,12 @@ import {
 import axios from 'axios';
 import Calender from '@/components/layouts/book/Calendar';
 import Filter from '@/components/layouts/book/Filter';
-import BookContainer from '@/components/layouts/book/BookContainer';
 import Panel from '@/components/layouts/book/Panel';
 import { observer } from 'mobx-react-lite';
+
+import BookContainer from '@/components/layouts/book/BookContainer';
+import WaitContainer from '@/components/layouts/book/WaitContainer';
+import AlarmContainer from '@/components/layouts/book/AlarmContainer';
 
 export default function Book() {
   const router = useRouter();
@@ -76,9 +79,9 @@ export default function Book() {
       case 'book':
         return <BookContainer />;
       case 'wait':
-        return 'Wait Tab';
+        return <WaitContainer />;
       case 'alarm':
-        return 'Alarm Tab';
+        return <AlarmContainer />;
       default:
         return <BookContainer />;
     }

@@ -107,7 +107,7 @@ const SearchContainer = observer(() => {
         .wrapper {
           position: fixed;
           top: 0px;
-          height: calc(90% - 71px);
+          height: 80%;
           width: 100%;
           z-index: 250;
         }

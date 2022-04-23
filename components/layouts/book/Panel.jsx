@@ -138,7 +138,7 @@ const Panel = observer(({ hidden, setHidden }) => {
         .wrapper {
           position: fixed;
           top: 0;
-          height: 90%;
+          height: 80%;
           width: 100%;
           z-index: 200;
         }
@@ -153,8 +153,8 @@ const Panel = observer(({ hidden, setHidden }) => {
           overflow: auto;
           height: 100%;
           background-color: var(--white);
-          border-bottom-right-radius: 20px;
-          border-bottom-left-radius: 20px;
+          // border-bottom-right-radius: 20px;
+          // border-bottom-left-radius: 20px;
         }
         .list_Areawrap_inner::-webkit-scrollbar {
           display: none;
@@ -163,7 +163,7 @@ const Panel = observer(({ hidden, setHidden }) => {
         }
         .bookingwrap {
           position: absolute;
-          bottom: 0px;
+          bottom: -71px;
           width: 100%;
           height: auto;
         }

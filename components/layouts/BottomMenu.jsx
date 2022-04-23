@@ -83,7 +83,7 @@ const BottomMenu = () => {
           </a>
           <ul>
             <li>
-              ÷<Link href='/teezzim/home'>골프장 홈페이지 바로가기</Link>
+              <Link href='/teezzim/home'>골프장 홈페이지 바로가기</Link>
             </li>
             <li>
               <Link href='/teezzim/home'>이 앱 평가하기</Link>
