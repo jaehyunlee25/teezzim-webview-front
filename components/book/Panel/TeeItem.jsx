@@ -4,10 +4,10 @@ import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
 
 // Todo 등록하기 여부를 네이티브를 통해 받아와 store에 반영한다.
-export function TeeItem({ img, id, name, registered, location }) {
+export function TeeItem({ img, registered, ...tee }) {
   const { panelStore } = useStores();
 
-  const [loc1, loc2, loc3] = location.split(' ');
+  const [loc1, loc2, loc3] = tee.address.split(' ');
   const [badgeMsg, setBadgeMsg] = useState(!registered ? '미등록' : null);
 
   return (
@@ -18,7 +18,7 @@ export function TeeItem({ img, id, name, registered, location }) {
         <div className='list-detail'>
           <Image className='tee-icon' src={img} width={56} height={56} alt='' />
           <div>
-            <p className='tee-name'>{name}</p>
+            <p className='tee-name'>{tee.name}</p>
             <span className='tee-detail'>
               {!registered ? (
                 <span className='badge bg-shade1'>{badgeMsg}</span>
@@ -28,7 +28,7 @@ export function TeeItem({ img, id, name, registered, location }) {
           </div>
         </div>
         {/*//list_detail  */}
-        <TeeCheckInput id={id} name={name} />
+        <TeeCheckInput {...tee} />
       </li>
       <style jsx>{`
         .badge {

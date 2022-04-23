@@ -31,43 +31,11 @@ class TeeScheduleStore {
   }
 
   get isEmpty() {
-    return this._teeScheduleList.length === 0;
+    return this._teeScheduleList?.length === 0;
   }
 
   setTeeScheduleList(teeScheduleList) {
-    this._teeScheduleList = teeScheduleList ?? [
-      {
-        id: '6cbc1160-79af-11ec-b15c-0242ac110005',
-        golf_club_name: '아일랜드CC',
-        date: '2022-02-07',
-        golf_course_name: 'EAST 코스',
-        time: '13:43:00',
-        fee_normal: 150000,
-        fee_discount: 150000,
-        others: null,
-        create_at: '2022-02-05T16:45:43.000Z',
-      },
-    ];
-    // this._teeSchedule = this._teeScheduleList.reduce(
-    //   (acc, { id, GolfSchedules }) => {
-    //     const tee_id = id;
-    //     return {
-    //       ...acc,
-    //       ...GolfSchedules.reduce(
-    //         (schedules, { id, ...others }) => ({
-    //           ...schedules,
-    //           [id]: {
-    //             tee_id,
-    //             id,
-    //             ...others,
-    //           },
-    //         }),
-    //         {},
-    //       ),
-    //     };
-    //   },
-    //   this._teeSchedule,
-    // );
+    this._teeScheduleList = teeScheduleList;
   }
 }
 

@@ -14,14 +14,20 @@ export const Counter = observer(({ type }) => {
       name = '미등록';
       count = panelStore.unregisteredTeeList.length;
       break;
-    case 'checked':
+    default:
       name = '골프장';
-      count = panelStore.checkedTeeList.length;
+      count = panelStore.checkedTeeList.size; // 기획서 상으로 선택한 골프장 수라고 되어있음
       break;
   }
   return (
     <span>
-      {name}: <b>{count}</b>
+      {count > 0 || name === '골프장' ? (
+        <>
+          {name}: <b>{count}</b>
+        </>
+      ) : (
+        `${panelStore.filter}에는 ${name}한 골프장이 없습니다.`
+      )}
     </span>
   );
 });

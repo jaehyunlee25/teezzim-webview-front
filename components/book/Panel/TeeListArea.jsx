@@ -10,8 +10,7 @@ import ImgGolf6 from '@/assets/images/IMG_Golf_06.png';
 import ImgGolf7 from '@/assets/images/IMG_Golf_07.png';
 import TeeItem from '@/components/book/Panel/TeeItem';
 
-export const TeeListArea = observer(({ registered }) => {
-  const { panelStore } = useStores();
+export const TeeListArea = ({ registered, list }) => {
   // [Todo] 전체 선택 Toggle Action Handler(모든 item checkedList에 넣었다가 빼기)
   const TeeImages = [
     ImgGolf1,
@@ -26,17 +25,12 @@ export const TeeListArea = observer(({ registered }) => {
     <>
       <div className='list_Golfarea'>
         <ul>
-          {(registered
-            ? panelStore.registeredTeeList
-            : panelStore.unregisteredTeeList
-          )?.map(tee => (
+          {list?.map((tee, i) => (
             <TeeItem
               key={tee.id}
-              id={tee.id}
-              img={TeeImages[Math.round(Math.random() * 10) % 7]}
-              name={tee.name}
-              location={tee.address}
+              img={TeeImages[i % 7]}
               registered={registered}
+              {...tee}
             />
           ))}
         </ul>
@@ -44,6 +38,6 @@ export const TeeListArea = observer(({ registered }) => {
       <style jsx>{``}</style>
     </>
   );
-});
+};
 
 export default TeeListArea;
