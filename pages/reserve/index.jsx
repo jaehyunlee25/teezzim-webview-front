@@ -128,6 +128,7 @@ const Reserve = () => {
         <p>예약 대기</p>
       </div>
       <div className={styles.reserveContainer}>
+        <p>예약 대기가 없습니다.</p>
         {/* <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
@@ -139,6 +140,7 @@ const Reserve = () => {
         <p>예약오픈 알림</p>
       </div>
       <div className={styles.reserveContainer}>
+        <p>예약오픈 알림이 없습니다.</p>
         {/* <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import axios from 'axios';
+import useSWR from 'swr';
 
 import ReserveDetail from '@/components/common/ReserveDetail/ReserveDetail';
 import BottomMenu from '@/components/layouts/BottomMenu';
@@ -13,6 +14,11 @@ import styles from '@/styles/Reserve.module.scss';
 const ReserveInfo = () => {
   const router = useRouter();
   const [reserveDetailData, setReserveDetailData] = useState([]);
+
+  // const { data } = useSWR(
+  //   `/teezzim/teeapi/v1/schedule/club/${router.query.id}`,
+  // );
+  // console.log('🚀 - data', data);
 
   useEffect(() => {
     const fetchData = async () => {
