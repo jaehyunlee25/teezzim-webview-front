@@ -8,8 +8,9 @@ const BookContainer = observer(() => {
 
   const registeredTee = useMemo(() => {
     return Object.entries(teeScheduleStore.currentTeeSchedules).filter(
-      ([tee_id, _]) =>
+      ([tee_id, schedules]) =>
         panelStore.registeredKeys.includes(tee_id) &&
+        Object.keys(schedules).length > 0 &&
         teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
     );
   }, [
@@ -21,8 +22,9 @@ const BookContainer = observer(() => {
 
   const unregisteredTee = useMemo(() => {
     return Object.entries(teeScheduleStore.currentTeeSchedules).filter(
-      ([tee_id, _]) =>
+      ([tee_id, schedules]) =>
         !panelStore.registeredKeys.includes(tee_id) &&
+        Object.keys(schedules).length > 0 &&
         teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
     );
   }, [
@@ -31,7 +33,7 @@ const BookContainer = observer(() => {
     teeScheduleStore.areas,
     panelStore.teeListMap,
   ]);
-
+  console.log(registeredTee, unregisteredTee);
   return (
     <>
       {/** 데이터가 없을 때 */}
@@ -41,12 +43,7 @@ const BookContainer = observer(() => {
         ) : teeScheduleStore.isEmpty ||
           (registeredTee.length === 0 && unregisteredTee.length === 0) ? (
           <div className='no-data mt-50'>
-            <p className='text-main'>
-              {registeredTee.length === 0 && unregisteredTee.length === 0
-                ? '선택하신 지역에 '
-                : null}
-              예약 가능한 Tee-off가 없습니다.
-            </p>
+            <p className='text-main'>예약 가능한 Tee-off가 없습니다.</p>
           </div>
         ) : (
           <>
