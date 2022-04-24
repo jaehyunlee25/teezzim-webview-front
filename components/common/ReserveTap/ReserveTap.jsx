@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 import Arrow from '/assets/images/arrow.svg';
@@ -7,7 +8,9 @@ import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
 
-const ReserveTap = ({ deleteItem }) => {
+const ReserveTap = ({ reserve, deleteItem }) => {
+  const router = useRouter();
+
   return (
     <>
       <div className={styles.reserveTapContainer}>
@@ -30,8 +33,10 @@ const ReserveTap = ({ deleteItem }) => {
             />
           </div>
           <div>
-            <span>4월 4일(월요일)</span>
-            <span>06:30 | 남춘천 | East코스</span>
+            <span>{reserve?.reserved_date}</span>
+            <span>
+              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course}   코스`}
+            </span>
           </div>
         </div>
 
@@ -40,7 +45,13 @@ const ReserveTap = ({ deleteItem }) => {
             <Image src={Trash} alt='arrow' width={25} height={25} />
           </div>
         ) : (
-          <Image src={Arrow} alt='arrow' width={5} height={26} />
+          <Image
+            src={Arrow}
+            alt='arrow'
+            width={5}
+            height={26}
+            onClick={() => router.push(`/reserve/${reserve?.golf_club?.id}`)}
+          />
         )}
       </div>
     </>
