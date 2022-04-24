@@ -1,41 +1,43 @@
 const { makeObservable, observable, computed, action } = require('mobx');
 
 class TeeScheduleStore {
-  _golfSchedule = {}; // tee_id, id, date, time, others, persons, fee_normal
-  _teeSchedule = {}; // id : golfSchedule
-  _teeScheduleList = []; // teeSchedule[]
+  _teeSchedules = {}; // id : golfSchedule
+  _date;
 
   constructor() {
     makeObservable(this, {
-      _golfSchedule: observable,
-      _teeSchedule: observable,
-      _teeScheduleList: observable,
-      golfSchedule: computed,
-      teeSchedule: computed,
-      teeScheduleList: computed,
+      _teeSchedules: observable,
+      _date: observable,
+
+      teeSchedules: computed,
+      date: computed,
+      currentTeeSchedules: computed,
       isEmpty: computed,
-      setTeeScheduleList: action,
+
+      setTeeSchedules: action,
+      setDate: action,
     });
   }
 
-  get golfSchedule() {
-    return this._golfSchedule;
+  get teeSchedules() {
+    return this._teeSchedules;
   }
-
-  get teeSchedule() {
-    return this._teeSchedule;
+  get date() {
+    return this._date;
   }
-
-  get teeScheduleList() {
-    return this._teeScheduleList;
+  get currentTeeSchedules() {
+    return this._teeSchedules?.[this.date] ?? {};
   }
-
   get isEmpty() {
-    return this._teeScheduleList?.length === 0;
+    return Object.keys(this.currentTeeSchedules).length === 0;
   }
 
-  setTeeScheduleList(teeScheduleList) {
-    this._teeScheduleList = teeScheduleList;
+  setDate(date) {
+    this._date = date;
+  }
+
+  setTeeSchedules(teeSchedules) {
+    this._teeSchedules = { ...this._teeSchedules, [this.date]: teeSchedules };
   }
 }
 

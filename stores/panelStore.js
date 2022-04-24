@@ -5,18 +5,32 @@ class PanelStore {
   _teeList = []; // API를 통해 가져온 Tee List
   _registeredTeeList = [
     {
-      id: '4c6747cf-774f-11ec-b15c-0242ac110005',
-      name: '인천그랜드CC',
-      address: '인천광역시 서구 원석로 195 (원창동)',
-      phone: '032-584-3111~4',
+      id: '6cbc1160-79af-11ec-b15c-0242ac110005',
+      name: '아일랜드CC',
+      address: '15647 경기도 안산시 단원구 대선로 466 (대부남동 1111)',
+      phone: '032-884-1004',
       area: '수도권',
       email: '',
-      homepage: 'https://www.incheongrand.cc/pagesite/club/intro.asp',
-      corp_reg_number: '126-86-04321',
+      homepage: 'https://www.islandresort.co.kr/index.asp',
+      corp_reg_number: '134-86-38098',
       description:
-        '서울에서 30분, 서인천IC에서 3Km에 위치해 접근성이 좋고, 국내 최초로 공공하수처리장 방류수를 중수처리하여 골프장 조경용수로 대규모\n재활용하는 자연친화적인 환경시스템을 운영하고 있으며, 18홀 전홀 라이트 시설을 설치하여 일몰 후에도 야간 라운드를 즐길 수 있습니다.\n\n섬세하면서도 정교한 플레이가 요구되는 인천그랜드 컨트리클럽은 전장 길이가 6,310야드(Regular Tee)로 플랫하면서도 곳곳에 배치된 폰드와\n벙커로 난이도를 조정하고 도심에 위치해 있어도 자연의 낭만을 즐길 수 있으며 아름다운 조경과 코스의 조화로 다양한 모습을 연출하여 색다른 골프의\n묘미를 맛볼 수 있습니다.\n\n인천그랜드 컨트리클럽 전 임직원 일동은 환경 친화적이고 품격있는 대중 골프장을 만들도록 최선을 다해 끊임없는 노력을 기울이겠습니다.\n\n인천그랜드 컨트리클럽 임직원일동',
-      created_at: '2022-01-17T04:38:20.000Z',
-      updated_at: '2022-01-17T04:38:20.000Z',
+        'https://www.islandresort.co.kr/images/company/company01_1.jpg',
+      created_at: '2022-01-20T05:11:29.000Z',
+      updated_at: '2022-01-20T05:11:29.000Z',
+    },
+    {
+      id: '88475b10-7c43-11ec-b15c-0242ac110005',
+      name: '동촌CC',
+      address: '27452 충청북도 충주시 노은면 감노로 1327',
+      phone: '043-722-0707',
+      area: '충청도',
+      email: '',
+      homepage: 'https://www.dongchongc.co.kr:442/',
+      corp_reg_number: '206-86-10769',
+      description:
+        '고객의 가치를 위하여 혁신하는 골프장\n    \n01 열정과 혁신\n동촌은 작은 골프장이지만 저희에게 골프는 모든 것입니다. 그래서 저희의 모든 열정을 헌신합니다. 마치 가족처럼, 고향 마을처럼, 동촌을 사랑하는 골퍼들과 쌓아가는 시간들이 저희는 자랑스럽습니다.\n\n02 골프 에티켓의 준수\n골프에서 가장 중요한 원칙은 코스에서 항상 다른 플레이어를 배려하는 일입니다. 이를 위해 동촌은 골퍼의 안전과 원활한 경기흐름, 코스의 보호를 최우선 과제로 여기며 함께 지켜나갈 것을 약속합니다.\n\n03 언제나 쾌적한 대회코스의 실현\n동촌은 최적의 코스 컨디션 유지를 위해 다양한 골프 대회를 정기적으로 개최하는 원칙을 고수합니다. 이러한 전통을 기반으로 관리되는 동촌의 코스품질 기준은 골퍼에게 언제나 쾌적한 라운드 가치를 제공합니다.\n\n04 정성스런 F&B 서비스의 구현\n우리가 추구하는 F&B 서비스 본질은 ‘소박함’과 ‘정성’입니다. 계절을 담아내는 ‘맛’과 인연을 쌓아가는 ‘정’을 통해 동촌에서의 한끼를 더욱 가치 있게 만드는 ‘아주 작은 차이’ 를 만들어냅니다.\n\n05 REWARD & PRIVILEGE\n골퍼가 플레이 하는 매 라운드는 본질적으로 서로 다른 가치를 지닙니다. 이러한 가치의 차이가 만드는 결과를 고객에게 돌려드리기 위해 저희는 합리적이고 공정한 보상 체계와 특별한 혜택을 제공합니다.\n\n06 서비스의 장인정신\n동촌이 만들어가는 코스와 서비스 그리고 문화는 장인정신을 근본으로 하고 있습니다. 마지막 순간까지 책임지고 보이지 않는 곳까지 배려하는 정신은 동촌인의 기본 자세이자 철학입니다. 머무르는 모든 순간에 아름다운 디테일과 감동을 더하기 위해 진실된 마음으로 끈임 없는 노력을 다하겠습니다.',
+      created_at: '2022-01-23T11:56:43.000Z',
+      updated_at: '2022-01-23T11:56:43.000Z',
     },
   ]; // 골프장 계정을 등록한 Tee List => 네이티브랑 통신헀다고 가정하고 임시로 데이터 한 개 넣어놓음
   _checkedTeeList = new Set(); // 체크박스를 클릭한 Tee List
@@ -36,6 +50,7 @@ class PanelStore {
         registeredKeys: computed,
         unregisteredTeeList: computed,
         checkedTeeList: computed,
+        checkedKeys: computed,
         groupedCheckList: computed,
         filter: computed,
         filterList: computed,
@@ -89,6 +104,10 @@ class PanelStore {
    */
   get checkedTeeList() {
     return this._checkedTeeList;
+  }
+
+  get checkedKeys() {
+    return [...this._checkedTeeList].map(v => JSON.parse(v).id);
   }
 
   get groupedCheckList() {
