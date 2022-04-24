@@ -33,6 +33,7 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
     },
     [teeScheduleStore.times, id, registered],
   );
+
   return (
     <>
       {teeSchedules.map(([course, scheduleList]) => (

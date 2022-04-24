@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   basePath: '/teezzim',
+  images: {
+    domains: ['www.mauna.co.kr'],
+  },
   async rewrites() {
     return process.env.NODE_ENV == 'production'
       ? []

@@ -52,7 +52,7 @@ export default function Book() {
     const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
-    console.log(dateTime);
+    // console.log(dateTime);
 
     if (container !== 'book') return;
 
@@ -69,6 +69,7 @@ export default function Book() {
     });
 
     loadStore.setLoading(false);
+
     if (status === 200) {
       if (resultCode === 1) {
         // console.log(data);
@@ -129,7 +130,6 @@ export default function Book() {
     }
   };
 
-  // TODO panelStore에 있는 checked list 전달하기
   return (
     <>
       <Panel hidden={panelHidden} setHidden={setPanelHidden} />

@@ -1,7 +1,19 @@
+import { useRouter } from 'next/router';
+
 const TeeSchedule = ({ id, time, registered, ...others }) => {
-  const [hour, min, sec] = time.split(':');
+  const router = useRouter();
+  const [_, min, __] = time.split(':');
   return (
-    <div id={id} className={registered ? 'min' : 'min warning'}>
+    <div
+      id={id}
+      className={registered ? 'min' : 'min warning'}
+      onClick={() =>
+        router.push({
+          pathname: '/reserve/create/[id]',
+          query: { ...router.query, id },
+        })
+      }
+    >
       {min}
     </div>
   );

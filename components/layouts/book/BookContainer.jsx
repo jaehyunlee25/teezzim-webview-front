@@ -1,5 +1,5 @@
 import useStores from '@/stores/useStores';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import TeeItem from '@/components/book/BookContainer/TeeItem';
 
@@ -33,7 +33,7 @@ const BookContainer = observer(() => {
     teeScheduleStore.areas,
     panelStore.teeListMap,
   ]);
-  console.log(registeredTee, unregisteredTee);
+
   return (
     <>
       {/** 데이터가 없을 때 */}
