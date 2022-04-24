@@ -4,13 +4,16 @@ import useAsyncMount from '@/lib/hooks/useAsyncMount';
 import axios from 'axios';
 import { useState } from 'react';
 import { getOffsetFirstDay } from '@/lib/DateUtils';
+import useStores from '@/stores/useStores';
+import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
 
 export default function CreateReservation() {
   const router = useRouter();
   const { id } = router.query;
   const [tee, setTee] = useState({
     id,
-    date: '',
+    date: '2022-04-24',
     fee_discount: 0,
     fee_normal: 0,
     golf_club_name: '',
@@ -33,8 +36,8 @@ export default function CreateReservation() {
   } = tee;
 
   const dayList = ['일', '월', '화', '수', '목', '금', '토'];
-  const [hour, min, _] = time.split(':');
-  const [year, mon, _date] = date.split('-');
+  const [hour, min, _] = time?.split(':');
+  const [year, mon, _date] = date?.split('-');
   const day = dayList[getOffsetFirstDay(date)];
   const { golf_club_id } = GolfCourse;
 
@@ -46,7 +49,6 @@ export default function CreateReservation() {
     if (!mountRef.current) return;
     if (status === 200) {
       if (resultCode === 1) {
-        console.log(data);
         setTee(data);
         mountRef.current = false;
       } else {
@@ -116,7 +118,7 @@ export default function CreateReservation() {
                       <div className='tit'>코스명</div>
                       <div className='desc'>{golf_course_name}</div>
                     </li>
-                    {/* <li className='desc-item'>
+                    {/* 정보 누락(홀정보) <li className='desc-item'>
                       <div className='tit'>홀정보</div>
                       <div className='desc'>18홀</div>
                     </li> */}
@@ -126,6 +128,7 @@ export default function CreateReservation() {
                     </li>
                   </ul>
                 </div>
+                <UnregisteredMsg id={golf_club_id} />
               </div>
             </div>
           </div>
@@ -145,27 +148,14 @@ export default function CreateReservation() {
                   있습니다.
                 </li>
                 <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
-                <li className='text-link'>
-                  <a href='#'>더플레이어스 [바로가기]</a>
-                </li>
+                <HompageLink id={golf_club_id}>
+                  더플레이어스 [바로가기]
+                </HompageLink>
               </ul>
             </div>
           </div>
-
-          <div className='component-wrap'>
-            <ul className='btn-group btn-group__fixed'>
-              <li>
-                <button type='button' className='btn large rest full'>
-                  간편예약
-                </button>
-              </li>
-              <li>
-                <button type='button' className='btn large rest full'>
-                  홈페이지예약
-                </button>
-              </li>
-            </ul>
-          </div>
+          {/** 기획에서는 간편예약이 가능한 골프장에 한해서만 간편예약을 렌더링하라고 기재되어있는데 어디에서 받아야할지 모르겠음 */}
+          <ButtonGroup id={golf_club_id} />
         </section>
       </div>
 
@@ -183,3 +173,80 @@ export default function CreateReservation() {
     </>
   );
 }
+
+const HompageLink = observer(({ id, children, ...props }) => {
+  const { panelStore } = useStores();
+  const url = panelStore.teeListMap?.[id]?.homepage;
+  return (
+    <li className='text-link'>
+      <Link href={{ pathname: '/golf_homepage/[url]', query: { url } }}>
+        <a {...props}>{children}</a>
+      </Link>
+    </li>
+  );
+});
+
+const ButtonGroup = observer(({ id }) => {
+  const { panelStore } = useStores();
+  return (
+    <>
+      {panelStore.registeredKeys.includes(id) ? (
+        <div className='component-wrap'>
+          <ul className='btn-group btn-group__fixed'>
+            <li>
+              <button type='button' className='btn large rest full'>
+                간편예약
+              </button>
+            </li>
+            <li>
+              <HompageLink
+                id={id}
+                type='button'
+                className='btn large rest full'
+              >
+                홈페이지예약
+              </HompageLink>
+            </li>
+          </ul>
+        </div>
+      ) : (
+        <div className='component-wrap'>
+          <ul className='btn-group btn-group__fixed'>
+            <li>
+              <HompageLink
+                id={id}
+                type='button'
+                className='btn large rest full'
+              >
+                골프장 회원가입
+              </HompageLink>
+            </li>
+            <li>
+              <button type='button' className='btn large rest full'>
+                골프장 계정등록
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
+      <style jsx>{`
+        .btn-group {
+          display: flex;
+          bottom: 72px;
+        }
+      `}</style>
+    </>
+  );
+});
+
+const UnregisteredMsg = observer(({ id }) => {
+  const { panelStore } = useStores();
+  return !panelStore.registeredKeys.includes(id) ? (
+    <div className='desc-text'>
+      미등록 골프장입니다. 골프장 회원으로 가입해세요. 골프장 회원이라면
+      계정등록 후 이용하실 수 있습니다.
+    </div>
+  ) : (
+    <></>
+  );
+});

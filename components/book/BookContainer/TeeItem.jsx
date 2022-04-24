@@ -20,6 +20,7 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
         .map(([hour, schedules], i) => (
           <TeeScheduleList
             key={id + hour + i}
+            tee_id={id}
             hour={hour}
             schedules={schedules}
             registered={registered}

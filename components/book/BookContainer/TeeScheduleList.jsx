@@ -1,6 +1,6 @@
 import TeeSchedule from '@/components/book/BookContainer/TeeSchedule';
 
-const TeeScheduleList = ({ hour, schedules, registered }) => {
+const TeeScheduleList = ({ hour, schedules, ...others }) => {
   return (
     <div className='time-content'>
       <div className='time-row'>
@@ -8,7 +8,7 @@ const TeeScheduleList = ({ hour, schedules, registered }) => {
         <div className='box-row multi'>
           {/** 미등록인 item className warning */}
           {schedules?.map(v => (
-            <TeeSchedule key={v.id} registered={registered} {...v} />
+            <TeeSchedule key={v.id} {...others} {...v} />
           ))}
         </div>
       </div>

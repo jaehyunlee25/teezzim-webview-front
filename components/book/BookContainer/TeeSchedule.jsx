@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-const TeeSchedule = ({ id, time, registered, ...others }) => {
+const TeeSchedule = ({ id, time, registered, tee_id, ...others }) => {
   const router = useRouter();
   const [_, min, __] = time.split(':');
   return (

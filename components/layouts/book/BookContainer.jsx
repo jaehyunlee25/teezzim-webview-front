@@ -49,7 +49,7 @@ const BookContainer = observer(() => {
           <>
             {registeredTee.map(([tee_id, schedules], i) => (
               <TeeItem
-                key={'registered' + tee_id + i}
+                key={'registered' + i + tee_id}
                 id={tee_id}
                 name={panelStore.teeListMap?.[tee_id].name}
                 area={panelStore.teeListMap?.[tee_id].area}
@@ -59,7 +59,7 @@ const BookContainer = observer(() => {
             ))}
             {unregisteredTee.map(([tee_id, schedules], i) => (
               <TeeItem
-                key={'unregistered' + tee_id + i}
+                key={'unregistered' + i + tee_id}
                 id={tee_id}
                 name={panelStore.teeListMap?.[tee_id].name}
                 area={panelStore.teeListMap?.[tee_id].area}
