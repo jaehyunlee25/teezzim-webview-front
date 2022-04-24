@@ -35,7 +35,11 @@ export default function GolfClubInfo() {
   return (
     <>
       <div id='header'>
-        <button type='button' className='btn-history-back'>
+        <button
+          type='button'
+          className='btn-history-back'
+          onClick={() => router.back()}
+        >
           <span className='offscreen'>이전</span>
         </button>
         <h1 className='headline'>{name}</h1>

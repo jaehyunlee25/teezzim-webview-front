@@ -8,6 +8,7 @@ import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import PopUp from '@/components/common/PopUp';
+import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
 export default function CreateReservation() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function CreateReservation() {
   const dayList = ['일', '월', '화', '수', '목', '금', '토'];
   const [hour, min, _] = time?.split(':');
   const [year, mon, _date] = date?.split('-');
-  const day = dayList[getOffsetFirstDay(date)];
+  const day = dayList[getOffsetFirstDay(date) ?? 0];
 
   const fetchSchedule = async () => {
     const {
@@ -57,9 +58,12 @@ export default function CreateReservation() {
 
   const { mountRef } = useAsyncMount(fetchSchedule);
 
-  const [hidden, setHidden] = useState(true);
-  const handleOpen = () => setHidden(false);
-  const handleClose = () => setHidden(true);
+  const [cancelHidden, setCancelHidden] = useState(true);
+  const [confirmHidden, setConfirmHidden] = useState(true);
+  const handleOpen = type =>
+    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
+  const handleClose = type =>
+    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
@@ -159,9 +163,9 @@ export default function CreateReservation() {
                   있습니다.
                 </li>
                 <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
-                <HompageLink id={tee_id}>
+                <HomepageLink id={tee_id}>
                   {golf_club_name} [바로가기]
-                </HompageLink>
+                </HomepageLink>
               </ul>
             </div>
           </div>
@@ -176,7 +180,8 @@ export default function CreateReservation() {
               time: hour + min,
             }}
             source={source}
-            onButtonClick={() => setHidden(false)}
+            onButtonClick={() => handleOpen('cancel')}
+            cb={() => handleOpen('confirm')}
           />
         </section>
       </div>
@@ -185,9 +190,9 @@ export default function CreateReservation() {
         buttonType='cancel'
         onButtonClick={() => {
           source.cancel('요청 취소');
-          handleClose();
+          handleClose('cancel');
         }}
-        hidden={hidden}
+        hidden={cancelHidden}
       >
         <div className='message-box loading-box'>
           <div className='loading-box'>
@@ -198,7 +203,17 @@ export default function CreateReservation() {
           </div>
         </div>
       </PopUp>
-      {/* <PopUp>
+      <PopUp
+        buttonText='확인(홈으로 이동)'
+        onButtonClick={() => {
+          handleClose('confirm');
+          router.push({
+            pathname: '/home',
+            query: { tab: 'book' },
+          });
+        }}
+        hidden={confirmHidden}
+      >
         <div className='component-wrap'>
           <div className='inner-container'>
             <ul className='desc-list'>
@@ -207,7 +222,9 @@ export default function CreateReservation() {
                   <em>라운드 예약일자</em>
                 </div>
                 <div className='desc'>
-                  <span>2022. 4. 4(화) </span>
+                  <span>
+                    {year}.{mon}.{_date}({day}){' '}
+                  </span>
                 </div>
               </li>
               <li className='desc-item'>
@@ -215,7 +232,9 @@ export default function CreateReservation() {
                   <em>시간</em>
                 </div>
                 <div className='desc'>
-                  <span>7:51</span>
+                  <span>
+                    {hour}:{min}
+                  </span>
                 </div>
               </li>
               <li className='desc-item'>
@@ -223,23 +242,23 @@ export default function CreateReservation() {
                   <em>코스명</em>
                 </div>
                 <div className='desc'>
-                  <span>Valley</span>
+                  <span>{golf_course_name}</span>
                 </div>
               </li>
-              <li className='desc-item'>
+              {/* <li className='desc-item'>
                 <div className='tit'>
                   <em>홀정보</em>
                 </div>
                 <div className='desc'>
                   <span>18홀</span>
                 </div>
-              </li>
+              </li> */}
               <li className='desc-item'>
                 <div className='tit'>
                   <em>그린피</em>
                 </div>
                 <div className='desc'>
-                  <span>230,000원</span>
+                  <span>{fee_normal}원</span>
                 </div>
               </li>
             </ul>
@@ -248,7 +267,7 @@ export default function CreateReservation() {
             <p>예약을 완료했습니다.</p>
           </div>
         </div>
-      </PopUp> */}
+      </PopUp>
       <style jsx>{`
         .img_wrap {
           width: 100%;
@@ -259,18 +278,6 @@ export default function CreateReservation() {
     </>
   );
 }
-
-const HompageLink = observer(({ id, children, ...props }) => {
-  const { panelStore } = useStores();
-  const url = panelStore.teeListMap?.[id]?.homepage;
-  return (
-    <li className='text-link'>
-      <Link href={{ pathname: '/golf_homepage/[url]', query: { url } }}>
-        <a {...props}>{children}</a>
-      </Link>
-    </li>
-  );
-});
 
 const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
   const { panelStore } = useStores();
@@ -319,13 +326,13 @@ const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
               </button>
             </li>
             <li>
-              <HompageLink
+              <HomepageLink
                 id={id}
                 type='button'
                 className='btn large rest full'
               >
                 홈페이지예약
-              </HompageLink>
+              </HomepageLink>
             </li>
           </ul>
         </div>
@@ -333,13 +340,13 @@ const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
         <div className='component-wrap'>
           <ul className='btn-group btn-group__fixed'>
             <li>
-              <HompageLink
+              <HomepageLink
                 id={id}
                 type='button'
                 className='btn large rest full'
               >
                 골프장 회원가입
-              </HompageLink>
+              </HomepageLink>
             </li>
             <li>
               <button type='button' className='btn large rest full'>
