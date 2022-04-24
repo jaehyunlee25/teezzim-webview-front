@@ -11,6 +11,7 @@ import teeScheduleStore from '@/stores/teeScheduleStore';
 import loadStore from '@/stores/loadStore';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
+import PageLayout from '@/components/layouts/PageLayout';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -37,7 +38,9 @@ export default function MyApp({ Component, pageProps }) {
       <SWRConfig value={{ fetcher: url => fetch(url).then(res => res.json()) }}>
         <MobXStoresContext.Provider value={initStores}>
           <div id='app' className='wrap'>
-            <Component {...pageProps} />
+            <PageLayout>
+              <Component {...pageProps} />
+            </PageLayout>
           </div>
         </MobXStoresContext.Provider>
       </SWRConfig>

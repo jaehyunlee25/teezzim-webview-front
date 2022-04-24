@@ -11,7 +11,7 @@ import axios from 'axios';
 import Calender from '@/components/layouts/book/Calendar';
 import Filter from '@/components/layouts/book/Filter';
 import Panel from '@/components/layouts/book/Panel';
-import { observer } from 'mobx-react-lite';
+import MiniPanel from '@/components/layouts/book/MiniPanel';
 
 import BookContainer from '@/components/layouts/book/BookContainer';
 import WaitContainer from '@/components/layouts/book/WaitContainer';
@@ -19,10 +19,10 @@ import AlarmContainer from '@/components/layouts/book/AlarmContainer';
 
 export default function Book() {
   const router = useRouter();
-  const { teeScheduleStore, loadStore } = useStores();
   const {
     query: { subTab = 'tabContent01', container = 'book', ...others },
   } = router;
+  const { teeScheduleStore, loadStore, panelStore } = useStores();
 
   /** Calender Component */
   const [date, setDate] = useState(null);
@@ -46,23 +46,66 @@ export default function Book() {
       }`,
     [yearMonth],
   );
+
+  /** Date Select */
   const handleDate = async e => {
     const { dateTime } = e.target;
     setDate(dateTime);
-    console.log(dateTime);
+    teeScheduleStore.setDate(dateTime);
+    // console.log(dateTime);
+
+    if (container !== 'book') return;
+
     loadStore.reset();
     loadStore.setLoading(true);
     const {
       status,
       data: { resultCode, message, data },
-    } = await axios.get('/teezzim/teeapi/v1/schedule/show', {
-      params: { date: dateTime },
+    } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
+      params: {
+        dates: dateTime,
+        clubId: panelStore.checkedKeys.join(','),
+      },
     });
+
     loadStore.setLoading(false);
+
     if (status === 200) {
       if (resultCode === 1) {
-        console.log(data);
-        teeScheduleStore.setTeeScheduleList(data);
+        // console.log(data);
+        const nameMap = panelStore.checkedKeys.reduce(
+          (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
+          {},
+        );
+
+        const daySchedule = data?.[dateTime]
+          ? Object.entries(data[dateTime]).reduce(
+              (acc, [course, schedules]) => {
+                let nextAcc = acc;
+                for (let [hour, scheduleList] of Object.entries(schedules)) {
+                  for (let schedule of scheduleList) {
+                    const { golf_club_name } = schedule;
+                    if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
+                    nextAcc[nameMap[golf_club_name]] = {
+                      ...(nextAcc[nameMap[golf_club_name]] || {}),
+                      [course]: [
+                        ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
+                        { ...schedule, hour },
+                      ],
+                    };
+                  }
+                }
+                return nextAcc;
+              },
+              panelStore.checkedKeys.reduce(
+                (acc, v) => ({ ...acc, [v]: {} }),
+                {},
+              ),
+            )
+          : {};
+
+        // console.log(daySchedule);
+        teeScheduleStore.setTeeSchedules(daySchedule);
       } else console.warn(message);
     } else {
       loadStore.setError(true);
@@ -87,23 +130,11 @@ export default function Book() {
     }
   };
 
-  const [test, setTest] = useState('');
-  // TODO rollsheet-wrap component 분리하기
-  // TODO panelStore에 있는 checked list 전달하기
   return (
     <>
       <Panel hidden={panelHidden} setHidden={setPanelHidden} />
-
-      {/* <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
-        <div className='rollsheet-container'>
-          <div className='rollsheet'>
-            <h1 className='head-headline text-primary'>예약오픈 알림(1):</h1>
-            <p className='text-sub'>더플레이어스GC</p>
-            <div className='handle'></div>
-          </div>
-        </div>
-      </div> */}
       <MiniPanel setPanelHidden={setPanelHidden} />
+
       <div className='filter-wrap'>
         <div className='filter-container'>
           <div className='title-group'>
@@ -233,46 +264,10 @@ export default function Book() {
           margin-bottom: 8px;
           justify-content: space-between;
         }
-      `}</style>
-    </>
-  );
-}
-
-const MiniPanel = observer(({ setPanelHidden }) => {
-  const router = useRouter();
-  const { container } = router.query;
-  const { panelStore } = useStores();
-
-  const panelName = () => {
-    if (container === 'book') return '실시간 예약';
-    else if (container === 'wait') return '예약대기';
-    else if (container === 'alarm') return '예약오픈 알림';
-  };
-
-  return (
-    <>
-      <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
-        <div className='rollsheet-container'>
-          <div className='rollsheet'>
-            <h1 className='head-headline text-primary'>
-              {panelName()}({panelStore.checkedTeeList.size}):
-            </h1>
-            <p className='text-sub'>
-              {[...panelStore.checkedTeeList]
-                ?.map(v => JSON.parse(v).name)
-                .join(', ')}
-            </p>
-            <div className='handle'></div>
-          </div>
-        </div>
-      </div>
-      <style jsx>{`
-        .text-sub {
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .component-wrap {
+          padding-bottom: 65px;
         }
       `}</style>
     </>
   );
-});
+}

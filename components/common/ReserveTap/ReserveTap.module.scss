@@ -8,12 +8,32 @@
 .dateInfo {
     @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
 
+    .alert {
+        @include flex($flexDirection: column, $alignItems: center, $justifyContent: center);
+        margin-right: 1rem;
+
+        .time {
+            filter: invert(95%) sepia(100%) saturate(1427%) hue-rotate(326deg) brightness(104%) contrast(98%);
+        }
+
+        .bell {
+            filter: invert(35%) sepia(59%) saturate(1725%) hue-rotate(195deg) brightness(88%) contrast(96%);
+        }
+    }
+
     div {
         @include flex($flexDirection: column, $alignItems: flex-start, $justifyContent: space-between);
-        margin-left: 2rem;
+        // margin-left: 2rem;
 
         span {
             padding: 0.3rem;
         }
     }
+}
+
+.trash {
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: var(--warning-surface1);
+    box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%), 0 1px 0 0 rgb(0 0 0 / 14%);
 }

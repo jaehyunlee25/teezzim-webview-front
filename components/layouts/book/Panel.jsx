@@ -41,7 +41,7 @@ const Panel = observer(({ hidden, setHidden }) => {
     return () => {
       mountRef.current = false;
     };
-  }, [getTeeList]);
+  }, []);
 
   return (
     <>

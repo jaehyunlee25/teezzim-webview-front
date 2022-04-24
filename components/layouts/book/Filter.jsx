@@ -1,42 +1,60 @@
+import useStores from '@/stores/useStores';
 import { useState } from 'react';
 
 const Filter = props => {
-  const [region, setRegion] = useState(false);
-  const [time, setTime] = useState(false);
-  const [regionItems, setRegionItems] = useState({
-    r1: false,
-    r2: false,
-    r3: false,
-    r4: false,
-    r5: false,
-    r6: false,
-  });
-  const [timeItems, setTimeItems] = useState({
-    t1: false,
-    t2: false,
-    t3: false,
-    t4: false,
-    t5: false,
-  });
+  const { teeScheduleStore } = useStores();
+
+  const [region, setRegion] = useState(true);
+  const [time, setTime] = useState(true);
+
+  const initialRegionItems = {
+    수도권: true,
+    강원도: true,
+    충청도: true,
+    영남권: true,
+    호남권: true,
+    제주도: true,
+  };
+
+  const initialTimeItems = {
+    '5,6': true,
+    '7,8': true,
+    '11,12': true,
+    '13,14,15,16,17,18,19,20': true,
+    '21,22,23,0,1,2,3,4': true,
+  };
+
+  const [regionItems, setRegionItems] = useState(initialRegionItems);
+  const [timeItems, setTimeItems] = useState(initialTimeItems);
 
   const handleChecked = e => {
     const { id, value } = e.target;
+    let areas, times;
     if (id.startsWith('sSwitch21')) {
       setRegion(!region);
     } else if (id.startsWith('sSwitch22')) {
       setTime(!time);
     } else if (id.startsWith('sCheck1')) {
+      areas = [value];
+      regionItems[value]
+        ? teeScheduleStore.removeAreas(areas)
+        : teeScheduleStore.addAreas(areas);
       setRegionItems({ ...regionItems, [value]: !regionItems[value] });
     } else if (id.startsWith('sCheck2')) {
+      times = value.split(',').map(time => Number(time));
+      timeItems[value]
+        ? teeScheduleStore.removeTimes(times)
+        : teeScheduleStore.addTimes(times);
       setTimeItems({ ...timeItems, [value]: !timeItems[value] });
     }
+    // console.log(teeScheduleStore.times);
+    // console.log(teeScheduleStore.areas);
   };
 
   return (
     <>
       <div
         id='tabContent02'
-        // className='tab-content'
         role='tabpanel'
         aria-labelledby='tabNav02'
         aria-hidden='false'
@@ -66,8 +84,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck11'
                   id='sCheck11'
-                  value='r1'
-                  checked={regionItems.r1}
+                  value='수도권'
+                  checked={regionItems.수도권}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -80,8 +98,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck12'
                   id='sCheck12'
-                  value='r2'
-                  checked={regionItems.r2}
+                  value='강원도'
+                  checked={regionItems.강원도}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -94,8 +112,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck13'
                   id='sCheck13'
-                  value='r3'
-                  checked={regionItems.r3}
+                  value='충청도'
+                  checked={regionItems.충청도}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -110,8 +128,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck14'
                   id='sCheck14'
-                  value='r4'
-                  checked={regionItems.r4}
+                  value='영남권'
+                  checked={regionItems.영남권}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -124,8 +142,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck15'
                   id='sCheck15'
-                  value='r5'
-                  checked={regionItems.r5}
+                  value='호남권'
+                  checked={regionItems.호남권}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -138,8 +156,8 @@ const Filter = props => {
                   type='checkbox'
                   name='sCheck16'
                   id='sCheck16'
-                  value='r6'
-                  checked={regionItems.r6}
+                  value='제주도'
+                  checked={regionItems.제주도}
                   onChange={handleChecked}
                   disabled={!region}
                 />
@@ -176,8 +194,8 @@ const Filter = props => {
                     type='checkbox'
                     name='sCheck21'
                     id='sCheck21'
-                    value='t1'
-                    checked={timeItems.t1}
+                    value='5,6'
+                    checked={timeItems['5,6']}
                     onChange={handleChecked}
                     disabled={!time}
                   />
@@ -195,8 +213,8 @@ const Filter = props => {
                     type='checkbox'
                     name='sCheck22'
                     id='sCheck22'
-                    value='t2'
-                    checked={timeItems.t2}
+                    value='7,8'
+                    checked={timeItems['7,8']}
                     onChange={handleChecked}
                     disabled={!time}
                   />
@@ -214,8 +232,8 @@ const Filter = props => {
                     type='checkbox'
                     name='sCheck23'
                     id='sCheck23'
-                    value='t3'
-                    checked={timeItems.t3}
+                    value='11,12'
+                    checked={timeItems['11,12']}
                     onChange={handleChecked}
                     disabled={!time}
                   />
@@ -233,8 +251,8 @@ const Filter = props => {
                     type='checkbox'
                     name='sCheck24'
                     id='sCheck24'
-                    value='t4'
-                    checked={timeItems.t4}
+                    value='13,14,15,16,17,18,19,20'
+                    checked={timeItems['13,14,15,16,17,18,19,20']}
                     onChange={handleChecked}
                     disabled={!time}
                   />
@@ -252,8 +270,8 @@ const Filter = props => {
                     type='checkbox'
                     name='sCheck25'
                     id='sCheck25'
-                    value='t5'
-                    checked={timeItems.t5}
+                    value='21,22,23,0,1,2,3,4'
+                    checked={timeItems['21,22,23,0,1,2,3,4']}
                     onChange={handleChecked}
                     disabled={!time}
                   />

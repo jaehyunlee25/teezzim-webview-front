@@ -1,6 +1,5 @@
 import Image from 'next/image';
 
-import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
 import ReserveDetail from '@/components/common/ReserveDetail/ReserveDetail';
 import BottomMenu from '@/components/layouts/BottomMenu';
 

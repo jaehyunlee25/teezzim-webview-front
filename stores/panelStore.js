@@ -5,18 +5,18 @@ class PanelStore {
   _teeList = []; // API를 통해 가져온 Tee List
   _registeredTeeList = [
     {
-      id: '4c6747cf-774f-11ec-b15c-0242ac110005',
-      name: '인천그랜드CC',
-      address: '인천광역시 서구 원석로 195 (원창동)',
-      phone: '032-584-3111~4',
+      id: '6cbc1160-79af-11ec-b15c-0242ac110005',
+      name: '아일랜드CC',
+      address: '15647 경기도 안산시 단원구 대선로 466 (대부남동 1111)',
+      phone: '032-884-1004',
       area: '수도권',
       email: '',
-      homepage: 'https://www.incheongrand.cc/pagesite/club/intro.asp',
-      corp_reg_number: '126-86-04321',
+      homepage: 'https://www.islandresort.co.kr/index.asp',
+      corp_reg_number: '134-86-38098',
       description:
-        '서울에서 30분, 서인천IC에서 3Km에 위치해 접근성이 좋고, 국내 최초로 공공하수처리장 방류수를 중수처리하여 골프장 조경용수로 대규모\n재활용하는 자연친화적인 환경시스템을 운영하고 있으며, 18홀 전홀 라이트 시설을 설치하여 일몰 후에도 야간 라운드를 즐길 수 있습니다.\n\n섬세하면서도 정교한 플레이가 요구되는 인천그랜드 컨트리클럽은 전장 길이가 6,310야드(Regular Tee)로 플랫하면서도 곳곳에 배치된 폰드와\n벙커로 난이도를 조정하고 도심에 위치해 있어도 자연의 낭만을 즐길 수 있으며 아름다운 조경과 코스의 조화로 다양한 모습을 연출하여 색다른 골프의\n묘미를 맛볼 수 있습니다.\n\n인천그랜드 컨트리클럽 전 임직원 일동은 환경 친화적이고 품격있는 대중 골프장을 만들도록 최선을 다해 끊임없는 노력을 기울이겠습니다.\n\n인천그랜드 컨트리클럽 임직원일동',
-      created_at: '2022-01-17T04:38:20.000Z',
-      updated_at: '2022-01-17T04:38:20.000Z',
+        'https://www.islandresort.co.kr/images/company/company01_1.jpg',
+      created_at: '2022-01-20T05:11:29.000Z',
+      updated_at: '2022-01-20T05:11:29.000Z',
     },
   ]; // 골프장 계정을 등록한 Tee List => 네이티브랑 통신헀다고 가정하고 임시로 데이터 한 개 넣어놓음
   _checkedTeeList = new Set(); // 체크박스를 클릭한 Tee List
@@ -36,6 +36,7 @@ class PanelStore {
         registeredKeys: computed,
         unregisteredTeeList: computed,
         checkedTeeList: computed,
+        checkedKeys: computed,
         groupedCheckList: computed,
         filter: computed,
         filterList: computed,
@@ -89,6 +90,10 @@ class PanelStore {
    */
   get checkedTeeList() {
     return this._checkedTeeList;
+  }
+
+  get checkedKeys() {
+    return [...this._checkedTeeList].map(v => JSON.parse(v).id);
   }
 
   get groupedCheckList() {
