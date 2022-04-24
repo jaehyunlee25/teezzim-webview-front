@@ -103,38 +103,36 @@ const BottomMenu = () => {
           <div className='tabbar'>
             <ul>
               <li className={tab !== 'my_book' ? 'icon-tab on' : 'icon-tab'}>
-                <Link
-                  href={{ href: '/home', query: { ...others, tab: 'book' } }}
-                  passHref
+                <div
+                  onClick={() =>
+                    router.push('/home', null, {
+                      query: { ...others, tab: 'book' },
+                    })
+                  }
                 >
-                  <div>
-                    <Image
-                      src={CalenderIcon}
-                      alt='예약하기'
-                      className={
-                        tab !== 'my_book' ? 'menu-icon on' : 'menu-icon'
-                      }
-                    />
-                    <span>예약하기</span>
-                  </div>
-                </Link>
+                  <Image
+                    src={CalenderIcon}
+                    alt='예약하기'
+                    className={tab !== 'my_book' ? 'menu-icon on' : 'menu-icon'}
+                  />
+                  <span>예약하기</span>
+                </div>
               </li>
               <li className={tab === 'my_book' ? 'icon-tab on' : 'icon-tab'}>
-                <Link
-                  href={{ href: '/home', query: { ...others, tab: 'my_book' } }}
-                  passHref
+                <div
+                  onClick={() =>
+                    router.push('/reserve', null, {
+                      query: { ...others, tab: 'my_book' },
+                    })
+                  }
                 >
-                  <div>
-                    <Image
-                      src={CheckedOutlineIcon}
-                      alt='나의 예약'
-                      className={
-                        tab === 'my_book' ? 'menu-icon on' : 'menu-icon'
-                      }
-                    />
-                    <span>나의 예약</span>
-                  </div>
-                </Link>
+                  <Image
+                    src={CheckedOutlineIcon}
+                    alt='나의 예약'
+                    className={tab === 'my_book' ? 'menu-icon on' : 'menu-icon'}
+                  />
+                  <span>나의 예약</span>
+                </div>
               </li>
               {/* menu button 누르면 navigation menu 열기 */}
               <li onClick={handleOpen}>

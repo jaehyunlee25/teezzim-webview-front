@@ -42,6 +42,7 @@ const Reserve = () => {
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴(나의예약) 탭으로 이동했음을 App에 알렸는지 여부
   const [reservationList, setReservationList] = useState([]);
+  console.log('🚀 - reservationList', reservationList);
 
   /** APP->WEB 브릿지 함수 선언 */
   useEffect(() => {

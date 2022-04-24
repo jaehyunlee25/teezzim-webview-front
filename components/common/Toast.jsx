@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { forwardRef } from 'react';
 
 export default function Toast({ message, ...props }) {
   /* 
