@@ -164,7 +164,16 @@ export default function CreateReservation() {
             </div>
           </div>
           {/** 기획에서는 간편예약이 가능한 골프장에 한해서만 간편예약을 렌더링하라고 기재되어있는데 어디에서 받아야할지 모르겠음 */}
-          <ButtonGroup id={golf_club_id} />
+          <ButtonGroup
+            id={golf_club_id}
+            postInfo={{
+              year,
+              month: mon,
+              date: _date,
+              course: golf_course_name.split(' ')[0],
+              time: hour + min,
+            }}
+          />
         </section>
       </div>
 
@@ -191,15 +200,42 @@ const HompageLink = observer(({ id, children, ...props }) => {
   );
 });
 
-const ButtonGroup = observer(({ id }) => {
+const ButtonGroup = observer(({ id, postInfo }) => {
   const { panelStore } = useStores();
+  // account 넘어 왔다고 가정
+  const account = {
+    id: 'newrison',
+    password: 'ilovegolf778',
+  };
+  const handleCreateReserve = async () => {
+    console.log({
+      ...account,
+      ...postInfo,
+    });
+    const {
+      status,
+      data: { data, resultCode, message },
+    } = await axios.post(`/teezzim/teeapi/v1/club/${id}/reservation/post`, {
+      ...account,
+      ...postInfo,
+    });
+    if (status === 200) {
+      console.log(data);
+    } else {
+      console.warn(`[errorCode : ${status}] ${message}`);
+    }
+  };
   return (
     <>
       {panelStore.registeredKeys.includes(id) ? (
         <div className='component-wrap'>
           <ul className='btn-group btn-group__fixed'>
             <li>
-              <button type='button' className='btn large rest full'>
+              <button
+                type='button'
+                className='btn large rest full'
+                onClick={handleCreateReserve}
+              >
                 간편예약
               </button>
             </li>
