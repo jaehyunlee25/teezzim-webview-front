@@ -105,7 +105,8 @@ const BottomMenu = () => {
               <li className={tab !== 'my_book' ? 'icon-tab on' : 'icon-tab'}>
                 <div
                   onClick={() =>
-                    router.push('/home', null, {
+                    router.push({
+                      pathname: '/home',
                       query: { ...others, tab: 'book' },
                     })
                   }
@@ -121,7 +122,8 @@ const BottomMenu = () => {
               <li className={tab === 'my_book' ? 'icon-tab on' : 'icon-tab'}>
                 <div
                   onClick={() =>
-                    router.push('/reserve', null, {
+                    router.push({
+                      pathname: '/reserve',
                       query: { ...others, tab: 'my_book' },
                     })
                   }
