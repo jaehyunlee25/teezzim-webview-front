@@ -16,33 +16,19 @@ const Reserve = () => {
   console.log('🚀 - reserveData', reserveData);
   const [deleteItem, setDeleteItem] = useState(false);
 
-  // const [reserveConfirm, { data: reserveData, loading }] = useMutation(
-  //   `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
-  // );
-  // console.log('🚀 - reserveConfirm', reserveConfirm({}));
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await axios.post(
+  //       `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
+  //       { id: 'newrison', password: 'ilovegolf778' },
+  //     );
+  //     const res = await data?.data;
+  //     setReserveData(res?.data);
+  //   };
+  //   fetchData();
+  // }, []);
 
-  // const { data } = useSWR(
-  //   `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
-  // );
-
-  // console.log('🚀 - data', data);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await axios.post(
-        `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
-        { id: 'newrison', password: 'ilovegolf778' },
-      );
-      const res = await data?.data;
-      setReserveData(res?.data);
-    };
-
-    fetchData();
-  }, []);
-
-  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴(나의예약) 탭으로 이동했음을 App에 알렸는지 여부
-  const [reservationList, setReservationList] = useState([]);
-  console.log('🚀 - reservationList', reservationList);
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
 
   /** APP->WEB 브릿지 함수 선언 */
   useEffect(() => {
@@ -51,25 +37,34 @@ const Reserve = () => {
       if (window) {
         // window 존재여부 체크 (nextjs 특징)
         /** 로그인 APP->WEB 전송 */
-        window.getLoginData = function (jsonStr) {
-          // example = {"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}
-          const data = JSON.parse(jsonStr);
-          console.log(data);
-          handleGetReservationInfo(data.clubId, data.id, data.password);
+        window.getSavedAuth = function (jsonStr) {
+          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
+          const dataList = JSON.parse(jsonStr);
+          // console.log(dataList);
+          for (let i = 0; i < dataList.length; i++) {
+            const data = dataList[i];
+            handleGetReservationInfo(data.clubId, data.id, data.password);
+            // TODO 배열일 경우에는??
+          }
         };
         /** 예약 정보 APP->WEB 전송 */
-        window.getAppData = function (jsonStr) {
-          const data = JSON.parse(jsonStr);
-          console.log(data);
-          // TODO 예약 확정 메뉴에 띄움?
-        };
-      }
+        // window.getAppData = function (jsonStr) {
+        //   const data = JSON.parse(jsonStr);
+        //   console.log(data);
+        //   // TODO 예약 확정 메뉴에 띄움?
+        // };
 
-      if (window && window.BRIDGE && window.BRIDGE.openWebMenu) {
-        setTimeout(() => {
-          /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
-          window.BRIDGE.openWebMenu('MyReservation');
-        }, 300); // 약간 지연
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
+            window.BRIDGE.openWebMenu('MyReservation');
+          }, 300); // 약간 지연
+        } else {
+          setTimeout(() => {
+            // 웹뷰에서는 테스트 데이터로!
+            window.getSavedAuth(`[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`);
+          }, 1000);
+        }
       }
       setIsInitSignal(true);
     }
@@ -82,12 +77,15 @@ const Reserve = () => {
       data: { id, password },
     })
       .then(({ data: respData }) => {
-        console.log(respData);
-        setReservationList(respData.data); // TODO UI 처리
+        for (let idx = 0; idx < respData.data.data.length; idx++) {
+          respData.data.data[idx].golf_club = respData.data.golf_club;
+        }
+        setReserveData(respData.data); 
+        console.log(respData.data);
         if (window && window.BRIDGE && window.BRIDGE.setReservationInfo) {
           // 앱으로 전송
           window.BRIDGE.setReservationInfo(
-            JSON.stringify({ club, data: respData.data }),
+            JSON.stringify({ club, data: respData.data, golf_info: respData.golf_club }),
           );
         }
       })

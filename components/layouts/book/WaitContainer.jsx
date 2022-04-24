@@ -1,4 +1,18 @@
+
 const WaitContainer = () => {
+
+  const handleWaitButton = e => {
+    if (window) {
+      /** 예약하기 탭 열림완료 WEB->APP 전송 */
+      if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+        setTimeout(() => {
+          const jsonStr = JSON.stringify({}); // TODO 저장할 데이터 타입 확정시키기
+          window.BRIDGE.saveWaitReservation(jsonStr);
+        }, 100); // 약간 지연
+      }
+    }
+  }
+
   return (
     <>
       <div className='component-wrap time-select'>
@@ -98,7 +112,11 @@ const WaitContainer = () => {
       <div className='component-wrap'>
         <div className='inner-container'>
           <div className='btn-group'>
-            <button type='button' className='btn large wide round primary'>
+            <button
+              type='button'
+              className='btn large wide round primary'
+              onClick={handleWaitButton}
+            >
               예약대기 만들기
             </button>
           </div>
