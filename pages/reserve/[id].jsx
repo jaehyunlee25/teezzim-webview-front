@@ -14,11 +14,37 @@ import styles from '@/styles/Reserve.module.scss';
 const ReserveInfo = () => {
   const router = useRouter();
   const [reserveDetailData, setReserveDetailData] = useState([]);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  console.log('🚀 - reserveDetailData', reserveDetailData);
 
   // const { data } = useSWR(
   //   `/teezzim/teeapi/v1/schedule/club/${router.query.id}`,
   // );
   // console.log('🚀 - data', data);
+
+  const handleCancel = async () => {
+    if (!cancelLoading) return;
+
+    setCancelLoading(true);
+    await axios.post(
+      `/teezzim/teeapi/v1/club/${router.query.id}/reservation/cancel`,
+      {
+        id: 'newrison',
+        password: 'ilovegolf778',
+        year: reserveDetailData[0]?.reserved_date.split('.')[0],
+        month: reserveDetailData[0]?.reserved_date.split('.')[1],
+        date: reserveDetailData[0]?.reserved_date.split('.')[2],
+        course: reserveDetailData[0]?.reserved_course,
+        time: reserveDetailData[0]?.reserved_time.replace(':', ''),
+      },
+    );
+    setCancelLoading(false);
+  };
+
+  console.log(
+    '🚀 - test',
+    reserveDetailData[0]?.reserved_time.replace(':', ''),
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +110,9 @@ const ReserveInfo = () => {
       </div>
 
       <div className={styles.btnContainer}>
-        <button>홈페이지 예약 취소</button>
+        <button onClick={handleCancel}>
+          {cancelLoading ? 'Loading...' : '홈페이지 예약 취소'}
+        </button>
       </div>
 
       {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
