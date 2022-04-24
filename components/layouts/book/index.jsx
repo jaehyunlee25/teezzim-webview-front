@@ -71,7 +71,7 @@ export default function Book() {
     loadStore.setLoading(false);
     if (status === 200) {
       if (resultCode === 1) {
-        console.log(data);
+        // console.log(data);
         const nameMap = panelStore.checkedKeys.reduce(
           (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
           {},
@@ -94,7 +94,6 @@ export default function Book() {
                     };
                   }
                 }
-                console.log(nextAcc);
                 return nextAcc;
               },
               panelStore.checkedKeys.reduce(
@@ -103,6 +102,7 @@ export default function Book() {
               ),
             )
           : {};
+
         // console.log(daySchedule);
         teeScheduleStore.setTeeSchedules(daySchedule);
       } else console.warn(message);

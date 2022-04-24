@@ -32,6 +32,7 @@ export default function Home() {
         {`
           .container {
             height: 100%;
+            overflow-y: scroll;
           }
 
           .main {
