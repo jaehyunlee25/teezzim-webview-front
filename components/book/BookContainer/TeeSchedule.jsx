@@ -10,7 +10,7 @@ const TeeSchedule = ({ id, time, registered, tee_id, ...others }) => {
       onClick={() =>
         router.push({
           pathname: '/reserve/create/[id]',
-          query: { ...router.query, id },
+          query: { ...router.query, id, tee_id },
         })
       }
     >
