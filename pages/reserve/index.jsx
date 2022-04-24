@@ -12,20 +12,36 @@ import IconImport from '/assets/images/Icon_Import.svg';
 import styles from '../../styles/Reserve.module.scss';
 
 const Reserve = () => {
+  const [reserveData, setReserveData] = useState([]);
+  console.log('🚀 - reserveData', reserveData);
   const [deleteItem, setDeleteItem] = useState(false);
 
-  const [reserveConfirm, { data: reserveData, loading }] = useMutation(
-    `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
-  );
-  console.log('🚀 - reserveConfirm', reserveConfirm({}));
+  // const [reserveConfirm, { data: reserveData, loading }] = useMutation(
+  //   `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
+  // );
+  // console.log('🚀 - reserveConfirm', reserveConfirm({}));
 
-  const { data } = useSWR(`/teezzim/teeapi/v1/schedule`);
+  // const { data } = useSWR(
+  //   `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
+  // );
 
-  console.log('🚀 - data', data);
+  // console.log('🚀 - data', data);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await axios.post(
+        `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
+        { id: 'newrison', password: 'ilovegolf778' },
+      );
+      const res = await data?.data;
+      setReserveData(res?.data);
+    };
+
+    fetchData();
+  }, []);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴(나의예약) 탭으로 이동했음을 App에 알렸는지 여부
   const [reservationList, setReservationList] = useState([]);
-  console.log('🚀 - reservationList', reservationList);
 
   /** APP->WEB 브릿지 함수 선언 */
   useEffect(() => {
@@ -103,36 +119,31 @@ const Reserve = () => {
         <p>예약 확정</p>
       </div>
       <div className={styles.reserveContainer}>
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
+        {reserveData?.data?.map((reserve, index) => (
+          <ReserveTap key={index} reserve={reserve} deleteItem={deleteItem} />
+        ))}
       </div>
 
       <div className={styles.reserveState}>
         <p>예약 대기</p>
       </div>
       <div className={styles.reserveContainer}>
+        {/* <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
+        <ReserveTap deleteItem={deleteItem} /> */}
       </div>
 
       <div className={styles.reserveState}>
         <p>예약오픈 알림</p>
       </div>
       <div className={styles.reserveContainer}>
+        {/* <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
         <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
+        <ReserveTap deleteItem={deleteItem} /> */}
       </div>
 
       {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
