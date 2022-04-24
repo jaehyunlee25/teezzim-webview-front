@@ -93,7 +93,16 @@ export default function CreateReservation() {
                 <h1 className='head-headline'>{golf_club_name}</h1>
                 <ul className='btn-group'>
                   <li>
-                    <button type='button' className='btn small round'>
+                    <button
+                      type='button'
+                      className='btn small round'
+                      onClick={() =>
+                        router.push({
+                          pathname: '/reserve/info/[id]',
+                          query: { ...router.query, id: golf_club_id },
+                        })
+                      }
+                    >
                       골프장 정보
                     </button>
                   </li>
@@ -149,7 +158,7 @@ export default function CreateReservation() {
                 </li>
                 <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
                 <HompageLink id={golf_club_id}>
-                  더플레이어스 [바로가기]
+                  {golf_club_name} [바로가기]
                 </HompageLink>
               </ul>
             </div>
@@ -164,10 +173,6 @@ export default function CreateReservation() {
           width: 100%;
           height: 100px;
           position: relative;
-        }
-        .btn-group {
-          display: flex;
-          bottom: 72px;
         }
       `}</style>
     </>
