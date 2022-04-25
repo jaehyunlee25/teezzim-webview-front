@@ -47,6 +47,8 @@ const Reserve = () => {
             // TODO 배열일 경우에는??
           }
         };
+        
+        
         /** 예약 정보 APP->WEB 전송 */
         // window.getAppData = function (jsonStr) {
         //   const data = JSON.parse(jsonStr);
@@ -82,9 +84,9 @@ const Reserve = () => {
         }
         setReserveData(respData.data); 
         console.log(respData.data);
-        if (window && window.BRIDGE && window.BRIDGE.setReservationInfo) {
+        if (window && window.BRIDGE && window.BRIDGE.saveReservationList) {
           // 앱으로 전송
-          window.BRIDGE.setReservationInfo(
+          window.BRIDGE.saveReservationList(
             JSON.stringify({ club, data: respData.data, golf_info: respData.golf_club }),
           );
         }
