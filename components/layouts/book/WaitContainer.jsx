@@ -6,7 +6,12 @@ const WaitContainer = () => {
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.openWebMenu) {
         setTimeout(() => {
-          const jsonStr = JSON.stringify({}); // TODO 저장할 데이터 타입 확정시키기
+          const dataSample = { // 앱에 보내줄 데이터 형식
+            clubId: "골프장id",
+            waitDate: "예약일",
+            waitTime: ["예약시간", /* 0, 1개 선택해도 배열로! */ ]
+          };
+          const jsonStr = JSON.stringify(dataSample);
           window.BRIDGE.saveWaitReservation(jsonStr);
         }, 100); // 약간 지연
       }
