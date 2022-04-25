@@ -9,6 +9,7 @@ import globalStore from '@/stores/globalStore';
 import panelStore from '@/stores/panelStore';
 import teeScheduleStore from '@/stores/teeScheduleStore';
 import loadStore from '@/stores/loadStore';
+import authStore from '@/stores/authStore';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import PageLayout from '@/components/layouts/PageLayout';
@@ -21,6 +22,7 @@ export default function MyApp({ Component, pageProps }) {
     panelStore,
     teeScheduleStore,
     loadStore,
+    authStore,
   };
 
   return (
