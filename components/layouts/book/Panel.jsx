@@ -5,7 +5,7 @@ import TeeListArea from '@/components/book/Panel/TeeListArea';
 import CheckController from '@/components/book/Panel/CheckController';
 
 import useStores from '@/stores/useStores';
-import { useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
@@ -41,6 +41,55 @@ const Panel = observer(({ hidden, setHidden }) => {
     return () => {
       mountRef.current = false;
     };
+  }, []);
+
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
+  const [savedAuthList, setSavedAuthList] = useState(false);
+
+  /** APP<->WEB 브릿지 함수용 */
+  useEffect(() => {
+    if (isInitSignalSendApp == false) {
+      if (window) {
+        // window 존재여부 체크 (nextjs 특징)
+        /** 로그인 APP->WEB 전송 */
+        window.getSavedAuth = function (jsonStr) {
+          console.log(jsonStr);
+          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
+          const dataList = JSON.parse(jsonStr);
+          for (let i = 0; i < dataList.length; i++) {
+            const findIndex = panelStore._registeredTeeList.findIndex( item => item.id == dataList[i].clubId );
+            if( findIndex > -1 ){
+              // dataList[i].name = panelStore._registeredTeeList[findIndex].name;
+              dataList[i].clubInfo = panelStore._registeredTeeList[findIndex];
+            }
+          }
+          setSavedAuthList(dataList);
+        };
+        /** 예약 정보 APP->WEB 전송 */
+        window.getSavedReservation = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          // TODO 예약 확정 메뉴에 띄움?
+        };
+        /** 예약 대기 정보 APP->WEB 전송 */
+        window.getSavedWaitReservation = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          // TODO 예약 확정 메뉴에 띄움?
+        };
+
+        /** 예약하기 탭 열림완료 WEB->APP 전송 */
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            window.BRIDGE.openWebMenu('Reservation');
+          }, 100); // 약간 지연
+        } else {
+          setTimeout(() => {
+            // 웹뷰에서는 테스트 데이터로!
+            window.getSavedAuth(`[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`);
+          }, 1000);
+        }
+      }
+      setIsInitSignal(true);
+    }
   }, []);
 
   return (
