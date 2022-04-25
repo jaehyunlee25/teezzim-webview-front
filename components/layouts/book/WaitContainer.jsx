@@ -4,7 +4,7 @@ const WaitContainer = () => {
   const handleWaitButton = e => {
     if (window) {
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
-      if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+      if (window.BRIDGE && window.BRIDGE.saveWaitReservation) {
         setTimeout(() => {
           const dataSample = { // 앱에 보내줄 데이터 형식
             clubId: "골프장id",
