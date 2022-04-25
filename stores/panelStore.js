@@ -3,21 +3,21 @@ import { makeObservable, action, observable, computed } from 'mobx';
 /** 계정 정보 패널의 사용자 Action 관련 상태 스토어 */
 class PanelStore {
   _teeList = []; // API를 통해 가져온 Tee List
-  _registeredTeeList = [
-    {
-      id: '6cbc1160-79af-11ec-b15c-0242ac110005',
-      name: '아일랜드CC',
-      address: '15647 경기도 안산시 단원구 대선로 466 (대부남동 1111)',
-      phone: '032-884-1004',
-      area: '수도권',
-      email: '',
-      homepage: 'https://www.islandresort.co.kr/index.asp',
-      corp_reg_number: '134-86-38098',
-      description:
-        'https://www.islandresort.co.kr/images/company/company01_1.jpg',
-      created_at: '2022-01-20T05:11:29.000Z',
-      updated_at: '2022-01-20T05:11:29.000Z',
-    },
+  _registeredKeys = [
+    // {
+    //   id: '6cbc1160-79af-11ec-b15c-0242ac110005',
+    //   name: '아일랜드CC',
+    //   address: '15647 경기도 안산시 단원구 대선로 466 (대부남동 1111)',
+    //   phone: '032-884-1004',
+    //   area: '수도권',
+    //   email: '',
+    //   homepage: 'https://www.islandresort.co.kr/index.asp',
+    //   corp_reg_number: '134-86-38098',
+    //   description:
+    //     'https://www.islandresort.co.kr/images/company/company01_1.jpg',
+    //   created_at: '2022-01-20T05:11:29.000Z',
+    //   updated_at: '2022-01-20T05:11:29.000Z',
+    // },
   ]; // 골프장 계정을 등록한 Tee List => 네이티브랑 통신헀다고 가정하고 임시로 데이터 한 개 넣어놓음
   _checkedTeeList = new Set(); // 체크박스를 클릭한 Tee List
   _filter = null;
@@ -27,13 +27,12 @@ class PanelStore {
       this,
       {
         _teeList: observable,
-        _registeredTeeList: observable,
+        _registeredKeys: observable,
         _checkedTeeList: observable,
         _filter: observable,
 
         teeList: computed,
         registeredTeeList: computed,
-        registeredKeys: computed,
         unregisteredTeeList: computed,
         checkedTeeList: computed,
         checkedKeys: computed,
@@ -43,7 +42,7 @@ class PanelStore {
         teeListMap: computed,
 
         setTeeList: action,
-        setRegisteredTeeList: action,
+        setRegisteredKeys: action,
         setFilter: action,
         addChecked: action,
         removeChecked: action,
@@ -61,16 +60,18 @@ class PanelStore {
    * 등록된 TeeList의 객체 배열
    */
   get registeredTeeList() {
-    return !this._filter
-      ? this._registeredTeeList
-      : this._registeredTeeList.filter(({ area }) => area === this._filter);
+    return this._teeList.filter(({ id, area }) =>
+      this._filter
+        ? area === this._filter && this.registeredKeys.includes(id)
+        : this.registeredKeys.includes(id),
+    );
   }
 
   /**
    * 등록된 TeeList의 id 배열
    */
   get registeredKeys() {
-    return this.registeredTeeList.map(({ id }) => id);
+    return this._registeredKeys;
   }
 
   /**
@@ -122,8 +123,8 @@ class PanelStore {
     this._teeList = teeList;
   }
 
-  setRegisteredTeeList(registeredTeeList) {
-    this._registeredTeeList = registeredTeeList;
+  setRegisteredKeys(teeList) {
+    this._registeredKeys = teeList;
   }
 
   setFilter(area) {
