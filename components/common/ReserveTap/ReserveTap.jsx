@@ -8,7 +8,7 @@ import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
 
-const ReserveTap = ({ reserve, deleteItem }) => {
+const ReserveTap = ({ userInfo, reserve, deleteItem }) => {
   const router = useRouter();
 
   return (
@@ -35,7 +35,7 @@ const ReserveTap = ({ reserve, deleteItem }) => {
           <div>
             <span>{reserve?.reserved_date}</span>
             <span>
-              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course}   코스`}
+              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
             </span>
           </div>
         </div>
@@ -50,7 +50,16 @@ const ReserveTap = ({ reserve, deleteItem }) => {
             alt='arrow'
             width={5}
             height={26}
-            onClick={() => router.push(`/reserve/${reserve?.golf_club?.id}`)}
+            // onClick={() => router.push(`/reserve/${reserve?.golf_club?.id}`)}
+            onClick={() => {
+              router.push({
+                pathname: `/reserve/${reserve?.golf_club?.id}`,
+                query: {
+                  userId: userInfo[0]?.id,
+                  password: userInfo[0]?.password,
+                },
+              });
+            }}
           />
         )}
       </div>

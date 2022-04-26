@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { observer } from 'mobx-react-lite';
+import useStores from '@/stores/useStores';
 import Image from 'next/image';
 import axios from 'axios';
 import useSWR from 'swr';
 
 import ReserveDetail from '@/components/common/ReserveDetail/ReserveDetail';
+import PopUp from '@/components/common/PopUp';
 import BottomMenu from '@/components/layouts/BottomMenu';
 
 import Back from '/assets/images/Icon_Back.svg';
@@ -13,9 +16,19 @@ import styles from '@/styles/Reserve.module.scss';
 
 const ReserveInfo = () => {
   const router = useRouter();
+  console.log('🚀 - router', router);
+  const { authStore } = useStores();
+
   const [reserveDetailData, setReserveDetailData] = useState([]);
-  const [cancelLoading, setCancelLoading] = useState(false);
   console.log('🚀 - reserveDetailData', reserveDetailData);
+  const [cancelLoading, setCancelLoading] = useState(false);
+
+  const [cancelHidden, setCancelHidden] = useState(true);
+  const [confirmHidden, setConfirmHidden] = useState(true);
+  const handleOpen = type =>
+    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
+  const handleClose = type =>
+    type === 'confirm' ? setConfirmHidden(true) : setCancelHidden(true);
 
   // const { data } = useSWR(
   //   `/teezzim/teeapi/v1/schedule/club/${router.query.id}`,
@@ -23,14 +36,15 @@ const ReserveInfo = () => {
   // console.log('🚀 - data', data);
 
   const handleCancel = async () => {
-    if (!cancelLoading) return;
+    if (cancelLoading) return;
 
+    return;
     setCancelLoading(true);
     await axios.post(
-      `/teezzim/teeapi/v1/club/${router.query.id}/reservation/cancel`,
+      `/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`,
       {
-        id: 'newrison',
-        password: 'ilovegolf778',
+        id: router?.query?.userId,
+        password: router?.query?.password,
         year: reserveDetailData[0]?.reserved_date.split('.')[0],
         month: reserveDetailData[0]?.reserved_date.split('.')[1],
         date: reserveDetailData[0]?.reserved_date.split('.')[2],
@@ -41,23 +55,31 @@ const ReserveInfo = () => {
     setCancelLoading(false);
   };
 
-  console.log(
-    '🚀 - test',
-    reserveDetailData[0]?.reserved_time.replace(':', ''),
-  );
+  useEffect(() => {
+    const getUserInfo = () =>
+      observer(() => {
+        const { id, password } = authStore?.authList[0];
+
+        console.log('🚀 - id', id);
+        console.log('🚀 - password', password);
+        console.log('🚀 - authStore', authStore);
+      });
+
+    getUserInfo();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.post(
         `/teezzim/teeapi/v1/club/${router.query.id}/reservation/confirm`,
-        { id: 'newrison', password: 'ilovegolf778' },
+        { id: router?.query?.userId, password: router?.query?.password },
       );
       const res = await data?.data;
       setReserveDetailData(res?.data?.data);
     };
 
     fetchData();
-  }, [router.query.id]);
+  }, [router?.query?.id, router?.query?.userId, router?.query?.password]);
 
   return (
     <>
@@ -114,6 +136,72 @@ const ReserveInfo = () => {
           {cancelLoading ? 'Loading...' : '홈페이지 예약 취소'}
         </button>
       </div>
+
+      <PopUp
+        buttonText='확인(홈으로 이동)'
+        onButtonClick={() => {
+          handleClose('confirm');
+          router.push({
+            pathname: '/home',
+            query: { tab: 'book' },
+          });
+        }}
+        hidden={confirmHidden}
+      >
+        <div className='component-wrap'>
+          {/* <div className='inner-container'>
+            <ul className='desc-list'>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>라운드 예약일자</em>
+                </div>
+                <div className='desc'>
+                  <span>
+                    {year}.{mon}.{_date}({day}){' '}
+                  </span>
+                </div>
+              </li>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>시간</em>
+                </div>
+                <div className='desc'>
+                  <span>
+                    {hour}:{min}
+                  </span>
+                </div>
+              </li>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>코스명</em>
+                </div>
+                <div className='desc'>
+                  <span>{golf_course_name}</span>
+                </div>
+              </li>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>홀정보</em>
+                </div>
+                <div className='desc'>
+                  <span>18홀</span>
+                </div>
+              </li>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>그린피</em>
+                </div>
+                <div className='desc'>
+                  <span>{fee}원</span>
+                </div>
+              </li>
+            </ul>
+          </div> */}
+          <div className='message-box line2-top pt-15'>
+            <p>예약을 완료했습니다.</p>
+          </div>
+        </div>
+      </PopUp>
 
       {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
       <BottomMenu />

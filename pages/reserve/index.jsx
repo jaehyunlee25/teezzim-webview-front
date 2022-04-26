@@ -12,21 +12,11 @@ import IconImport from '/assets/images/Icon_Import.svg';
 import styles from '../../styles/Reserve.module.scss';
 
 const Reserve = () => {
+  const [userInfo, setUserInfo] = useState([]);
+  console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
   console.log('🚀 - reserveData', reserveData);
   const [deleteItem, setDeleteItem] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await axios.post(
-  //       `/teezzim/teeapi/v1/club/6cbc1160-79af-11ec-b15c-0242ac110005/reservation/confirm`,
-  //       { id: 'newrison', password: 'ilovegolf778' },
-  //     );
-  //     const res = await data?.data;
-  //     setReserveData(res?.data);
-  //   };
-  //   fetchData();
-  // }, []);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
 
@@ -38,6 +28,7 @@ const Reserve = () => {
         // window 존재여부 체크 (nextjs 특징)
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
+          setUserInfo(JSON.parse(jsonStr));
           // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
           const dataList = JSON.parse(jsonStr);
           // console.log(dataList);
@@ -47,8 +38,7 @@ const Reserve = () => {
             // TODO 배열일 경우에는??
           }
         };
-        
-        
+
         /** 예약 정보 APP->WEB 전송 */
         // window.getAppData = function (jsonStr) {
         //   const data = JSON.parse(jsonStr);
@@ -64,7 +54,9 @@ const Reserve = () => {
         } else {
           setTimeout(() => {
             // 웹뷰에서는 테스트 데이터로!
-            window.getSavedAuth(`[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`);
+            window.getSavedAuth(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
           }, 1000);
         }
       }
@@ -82,12 +74,16 @@ const Reserve = () => {
         for (let idx = 0; idx < respData.data.data.length; idx++) {
           respData.data.data[idx].golf_club = respData.data.golf_club;
         }
-        setReserveData(respData.data); 
+        setReserveData(respData.data);
         console.log(respData.data);
         if (window && window.BRIDGE && window.BRIDGE.saveReservationList) {
           // 앱으로 전송
           window.BRIDGE.saveReservationList(
-            JSON.stringify({ club, data: respData.data, golf_info: respData.golf_club }),
+            JSON.stringify({
+              club,
+              data: respData.data,
+              golf_info: respData.golf_club,
+            }),
           );
         }
       })
@@ -121,7 +117,12 @@ const Reserve = () => {
       </div>
       <div className={styles.reserveContainer}>
         {reserveData?.data?.map((reserve, index) => (
-          <ReserveTap key={index} reserve={reserve} deleteItem={deleteItem} />
+          <ReserveTap
+            key={index}
+            userInfo={userInfo}
+            reserve={reserve}
+            deleteItem={deleteItem}
+          />
         ))}
       </div>
 
