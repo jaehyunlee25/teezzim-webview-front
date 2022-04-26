@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { observer } from 'mobx-react-lite';
-import useStores from '@/stores/useStores';
 import Image from 'next/image';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -17,8 +15,8 @@ import styles from '@/styles/Reserve.module.scss';
 const ReserveInfo = () => {
   const router = useRouter();
   console.log('🚀 - router', router);
-  const { authStore } = useStores();
-
+  const [userInfo, setUserInfo] = useState([]);
+  console.log('🚀 - userInfo', userInfo);
   const [reserveDetailData, setReserveDetailData] = useState([]);
   console.log('🚀 - reserveDetailData', reserveDetailData);
   const [cancelLoading, setCancelLoading] = useState(false);
@@ -35,6 +33,81 @@ const ReserveInfo = () => {
   // );
   // console.log('🚀 - data', data);
 
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
+
+  /** APP->WEB 브릿지 함수 선언 */
+  useEffect(() => {
+    if (isInitSignalSendApp == false) {
+      console.log('한번만 수행될까?');
+      if (window) {
+        // window 존재여부 체크 (nextjs 특징)
+        /** 로그인 APP->WEB 전송 */
+        window.getSavedAuth = function (jsonStr) {
+          setUserInfo(JSON.parse(jsonStr));
+          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
+          const dataList = JSON.parse(jsonStr);
+          // console.log(dataList);
+          for (let i = 0; i < dataList.length; i++) {
+            const data = dataList[i];
+            handleGetReservationInfo(data.clubId, data.id, data.password);
+            // TODO 배열일 경우에는??
+          }
+        };
+
+        /** 예약 정보 APP->WEB 전송 */
+        // window.getAppData = function (jsonStr) {
+        //   const data = JSON.parse(jsonStr);
+        //   console.log(data);
+        //   // TODO 예약 확정 메뉴에 띄움?
+        // };
+
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
+            window.BRIDGE.openWebMenu('MyReservation');
+          }, 300); // 약간 지연
+        } else {
+          setTimeout(() => {
+            // 웹뷰에서는 테스트 데이터로!
+            window.getSavedAuth(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
+          }, 1000);
+        }
+      }
+      setIsInitSignal(true);
+    }
+  }, []);
+
+  const handleGetReservationInfo = function (club, id, password) {
+    axios({
+      method: 'POST',
+      url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
+      data: { id, password },
+    })
+      .then(({ data: respData }) => {
+        for (let idx = 0; idx < respData.data.data.length; idx++) {
+          respData.data.data[idx].golf_club = respData.data.golf_club;
+        }
+        setReserveData(respData.data);
+        console.log(respData.data);
+        if (window && window.BRIDGE && window.BRIDGE.saveReservationList) {
+          // 앱으로 전송
+          window.BRIDGE.saveReservationList(
+            JSON.stringify({
+              club,
+              data: respData.data,
+              golf_info: respData.golf_club,
+            }),
+          );
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
+      });
+  };
+
   const handleCancel = async () => {
     if (cancelLoading) return;
 
@@ -43,8 +116,8 @@ const ReserveInfo = () => {
     await axios.post(
       `/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`,
       {
-        id: router?.query?.userId,
-        password: router?.query?.password,
+        id: 'newrison',
+        password: 'ilovegolf778',
         year: reserveDetailData[0]?.reserved_date.split('.')[0],
         month: reserveDetailData[0]?.reserved_date.split('.')[1],
         date: reserveDetailData[0]?.reserved_date.split('.')[2],
@@ -56,30 +129,17 @@ const ReserveInfo = () => {
   };
 
   useEffect(() => {
-    const getUserInfo = () =>
-      observer(() => {
-        const { id, password } = authStore?.authList[0];
-
-        console.log('🚀 - id', id);
-        console.log('🚀 - password', password);
-        console.log('🚀 - authStore', authStore);
-      });
-
-    getUserInfo();
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       const data = await axios.post(
         `/teezzim/teeapi/v1/club/${router.query.id}/reservation/confirm`,
-        { id: router?.query?.userId, password: router?.query?.password },
+        { id: 'newrison', password: 'ilovegolf778' },
       );
       const res = await data?.data;
-      setReserveDetailData(res?.data?.data);
+      setReserveDetailData(res?.data);
     };
 
     fetchData();
-  }, [router?.query?.id, router?.query?.userId, router?.query?.password]);
+  }, [router?.query?.id]);
 
   return (
     <>
@@ -98,14 +158,14 @@ const ReserveInfo = () => {
       </div>
 
       <div className={styles.reserveTitle}>
-        <p>{reserveDetailData[0]?.golf_club?.name}</p>
+        <p>{reserveDetailData?.golf_club?.name}</p>
         <button className={styles.sideBtn} style={{ width: '90px' }}>
           골프장 정보
         </button>
       </div>
 
       <div className={styles.reserveContainer}>
-        <ReserveDetail detail={reserveDetailData[0]} />
+        <ReserveDetail detail={reserveDetailData.data} />
       </div>
 
       <div className={styles.ruleContainer}>
@@ -123,10 +183,10 @@ const ReserveInfo = () => {
           <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
           <li
             onClick={() =>
-              window.open(`${reserveDetailData[0]?.golf_club?.homepage}`)
+              window.open(`${reserveDetailData?.golf_club?.homepage}`)
             }
           >
-            {reserveDetailData[0]?.golf_club?.name} [바로가기]
+            {reserveDetailData?.golf_club?.name} [바로가기]
           </li>
         </ul>
       </div>
