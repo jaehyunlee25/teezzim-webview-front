@@ -116,7 +116,7 @@ const Reserve = () => {
         <p>예약 확정</p>
       </div>
       <div className={styles.reserveContainer}>
-        {reserveData?.data?.length >= 0 ? (
+        {reserveData?.data?.length > 0 ? (
           <>
             {reserveData?.data?.map((reserve, index) => (
               <ReserveTap
@@ -127,16 +127,24 @@ const Reserve = () => {
             ))}
           </>
         ) : (
-          <div className='message-box loading-box'>
-            <div className='loading-box'>
-              <div className='loading-icon'>
-                <span className='offscreen'>데이터를 가져오고 있습니다.</span>
+          <>
+            {reserveData?.data?.length === 0 ? (
+              <p>예약 내역이 없습니다.</p>
+            ) : (
+              <div className='message-box loading-box'>
+                <div className='loading-box'>
+                  <div className='loading-icon'>
+                    <span className='offscreen'>
+                      데이터를 가져오고 있습니다.
+                    </span>
+                  </div>
+                  <div className='loading-text ml-10'>
+                    데이터를 가져오고 있습니다.
+                  </div>
+                </div>
               </div>
-              <div className='loading-text ml-10'>
-                데이터를 가져오고 있습니다.
-              </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
       </div>
 

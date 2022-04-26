@@ -14,19 +14,13 @@ import styles from '@/styles/Reserve.module.scss';
 
 const ReserveInfo = () => {
   const router = useRouter();
-  console.log('🚀 - router', router);
   const [userInfo, setUserInfo] = useState([]);
   console.log('🚀 - userInfo', userInfo);
   const [reserveDetailData, setReserveDetailData] = useState([]);
   console.log('🚀 - reserveDetailData', reserveDetailData);
   const [cancelLoading, setCancelLoading] = useState(false);
 
-  const [cancelHidden, setCancelHidden] = useState(true);
   const [confirmHidden, setConfirmHidden] = useState(true);
-  const handleOpen = type =>
-    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
-  const handleClose = type =>
-    type === 'confirm' ? setConfirmHidden(true) : setCancelHidden(true);
 
   // const { data } = useSWR(
   //   `/teezzim/teeapi/v1/schedule/club/${router.query.id}`,
@@ -109,15 +103,11 @@ const ReserveInfo = () => {
   };
 
   const handleCancel = async () => {
-    if (cancelLoading) return;
-
-    return;
-    setCancelLoading(true);
     await axios.post(
       `/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`,
       {
-        id: 'newrison',
-        password: 'ilovegolf778',
+        id: userInfo[0]?.id,
+        password: userInfo[0]?.password,
         year: reserveDetailData[0]?.reserved_date.split('.')[0],
         month: reserveDetailData[0]?.reserved_date.split('.')[1],
         date: reserveDetailData[0]?.reserved_date.split('.')[2],
@@ -125,21 +115,20 @@ const ReserveInfo = () => {
         time: reserveDetailData[0]?.reserved_time.replace(':', ''),
       },
     );
-    setCancelLoading(false);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.post(
         `/teezzim/teeapi/v1/club/${router.query.id}/reservation/confirm`,
-        { id: 'newrison', password: 'ilovegolf778' },
+        { id: userInfo[0]?.id, password: userInfo[0]?.password },
       );
       const res = await data?.data;
       setReserveDetailData(res?.data);
     };
 
     fetchData();
-  }, [router?.query?.id]);
+  }, [router?.query?.id, userInfo]);
 
   return (
     <>
@@ -159,7 +148,13 @@ const ReserveInfo = () => {
 
       <div className={styles.reserveTitle}>
         <p>{reserveDetailData?.golf_club?.name}</p>
-        <button className={styles.sideBtn} style={{ width: '90px' }}>
+        <button
+          onClick={() =>
+            router.push(`/reserve/info/${reserveDetailData?.golf_club?.id}`)
+          }
+          className={styles.sideBtn}
+          style={{ width: '90px' }}
+        >
           골프장 정보
         </button>
       </div>
@@ -171,11 +166,13 @@ const ReserveInfo = () => {
       <div className={styles.ruleContainer}>
         <h4>위약 규정</h4>
 
-        <ul>
-          <li>
-            예약일자로부터 7일전 오후 5시 이전까지 예약취소 할 수 있습니다.
+        <ul className='bul-list bul-dot'>
+          <li className='text-warning'>
+            예약일자로부터 7일전 오후 5시 이전까지 예약취소할 수 있습니다.
           </li>
-          <li>예약 취소했던 날짜에는 재예약 할 수 없습니다.</li>
+          <li className='text-warning'>
+            예약 취소했던 날짜에는 재예약 할 수 없습니다.
+          </li>
           <li>
             오후 5시 이후 예약 취소시 이용 정지 및 위약금 등의 패널티가
             있습니다.
@@ -192,32 +189,36 @@ const ReserveInfo = () => {
       </div>
 
       <div className={styles.btnContainer}>
-        <button onClick={handleCancel}>
-          {cancelLoading ? 'Loading...' : '홈페이지 예약 취소'}
+        <button onClick={() => setConfirmHidden(false)}>
+          홈페이지 예약 취소
         </button>
       </div>
 
       <PopUp
-        buttonText='확인(홈으로 이동)'
+        buttonText='확인'
         onButtonClick={() => {
-          handleClose('confirm');
-          router.push({
-            pathname: '/home',
-            query: { tab: 'book' },
-          });
+          handleCancel();
+          setTimeout(() => {
+            router.push({
+              pathname: '/reserve',
+              query: { tab: 'book' },
+            });
+          }, 3000);
         }}
         hidden={confirmHidden}
       >
         <div className='component-wrap'>
-          {/* <div className='inner-container'>
+          <div className='inner-container'>
             <ul className='desc-list'>
               <li className='desc-item'>
                 <div className='tit'>
-                  <em>라운드 예약일자</em>
+                  <em>예약일자</em>
                 </div>
                 <div className='desc'>
                   <span>
-                    {year}.{mon}.{_date}({day}){' '}
+                    {reserveDetailData.status === 'okay'
+                      ? reserveDetailData?.data[0]?.reserved_date
+                      : null}
                   </span>
                 </div>
               </li>
@@ -227,7 +228,9 @@ const ReserveInfo = () => {
                 </div>
                 <div className='desc'>
                   <span>
-                    {hour}:{min}
+                    {reserveDetailData.status === 'okay'
+                      ? reserveDetailData?.data[0]?.reserved_time
+                      : null}
                   </span>
                 </div>
               </li>
@@ -236,10 +239,14 @@ const ReserveInfo = () => {
                   <em>코스명</em>
                 </div>
                 <div className='desc'>
-                  <span>{golf_course_name}</span>
+                  <span>
+                    {reserveDetailData.status === 'okay'
+                      ? `${reserveDetailData?.data[0]?.reserved_course} 코스`
+                      : null}
+                  </span>
                 </div>
               </li>
-              <li className='desc-item'>
+              {/* <li className='desc-item'>
                 <div className='tit'>
                   <em>홀정보</em>
                 </div>
@@ -251,14 +258,14 @@ const ReserveInfo = () => {
                 <div className='tit'>
                   <em>그린피</em>
                 </div>
-                <div className='desc'>
-                  <span>{fee}원</span>
-                </div>
-              </li>
+                <div className='desc'>123123123</div>
+              </li> */}
             </ul>
-          </div> */}
+          </div>
           <div className='message-box line2-top pt-15'>
-            <p>예약을 완료했습니다.</p>
+            <p>예약을 취소하시겠습니까?</p>
+            <span>취소한 날짜에는</span>
+            <span>다시 예약 할 수 없습니다.</span>
           </div>
         </div>
       </PopUp>
