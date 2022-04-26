@@ -2,41 +2,46 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useAsyncMount from '@/lib/hooks/useAsyncMount';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getOffsetFirstDay } from '@/lib/DateUtils';
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
-import Link from 'next/link';
 import PopUp from '@/components/common/PopUp';
+import HomepageLink from '@/components/layouts/reserve/HomepageLink';
+import UnregisteredMsg from '@/components/layouts/reserve/create/UnregisteredMsg';
 
 export default function CreateReservation() {
   const router = useRouter();
   const { id, tee_id } = router.query;
-  const [tee, setTee] = useState({
-    id,
-    date: '2022-04-24',
-    fee_discount: 0,
-    fee_normal: 0,
-    golf_club_name: '',
-    golf_course_name: '',
-    time: '',
-  });
+  const { panelStore, authStore } = useStores();
+
+  const [tee, setTee] = useState({});
 
   const {
-    date,
-    fee_discount,
-    fee_normal,
-    golf_club_name,
-    golf_course_name,
-    time,
-  } = tee;
+    date = '',
+    fee_discount = '',
+    fee_normal = '',
+    golf_club_name = '',
+    golf_course_name = '',
+    time = '',
+  } = tee ?? {};
 
   const dayList = ['일', '월', '화', '수', '목', '금', '토'];
-  const [hour, min, _] = time?.split(':');
-  const [year, mon, _date] = date?.split('-');
-  const day = dayList[getOffsetFirstDay(date)];
+  const [hour, min, _] = time?.split(':') ?? [];
+  const [year, mon, _date] = date?.split('-') ?? [];
+  const day = dayList[getOffsetFirstDay(date) ?? 0];
+  const fee = String(fee_normal ?? '')
+    .split('')
+    .reverse()
+    .reduce((acc, cur, i) => {
+      return i < String(fee_normal).length - 1 && (i + 1) % 3 === 0
+        ? [...acc, cur, ',']
+        : [...acc, cur];
+    }, [])
+    .reverse()
+    .join('');
 
-  const fetchSchedule = async () => {
+  const fetchSchedule = useCallback(async () => {
     const {
       status,
       data: { data, resultCode, message },
@@ -53,13 +58,51 @@ export default function CreateReservation() {
     } else {
       console.warn(`[errorCode: ${status}] ${message}`);
     }
-  };
+  }, [id]);
 
   const { mountRef } = useAsyncMount(fetchSchedule);
 
-  const [hidden, setHidden] = useState(true);
-  const handleOpen = () => setHidden(false);
-  const handleClose = () => setHidden(true);
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
+  /** APP<->WEB 브릿지 함수용 */
+  useEffect(() => {
+    if (!isInitSignalSendApp && !authStore.communicated) {
+      if (window) {
+        // window 존재여부 체크 (nextjs 특징)
+        /** 로그인 APP->WEB 전송 */
+        window.getSavedAuth = function (jsonStr) {
+          console.log(jsonStr);
+          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
+          const dataList = JSON.parse(jsonStr);
+          panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
+          authStore.saveAuthList(dataList);
+          authStore.communicate();
+          // setSavedAuthList(dataList);
+        };
+
+        /** 예약하기 탭 열림완료 WEB->APP 전송 */
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            window.BRIDGE.openWebMenu('Reservation');
+          }, 100); // 약간 지연
+        } else {
+          setTimeout(() => {
+            // 웹뷰에서는 테스트 데이터로!
+            window.getSavedAuth(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
+          }, 1000);
+        }
+      }
+      setIsInitSignal(true);
+    }
+  }, [isInitSignalSendApp, panelStore, authStore]);
+
+  const [cancelHidden, setCancelHidden] = useState(true);
+  const [confirmHidden, setConfirmHidden] = useState(true);
+  const handleOpen = type =>
+    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
+  const handleClose = type =>
+    type === 'confirm' ? setConfirmHidden(true) : setCancelHidden(true);
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
@@ -135,7 +178,7 @@ export default function CreateReservation() {
                     </li> */}
                     <li className='desc-item'>
                       <div className='tit'>그린피</div>
-                      <div className='desc'>{fee_normal}원</div>
+                      <div className='desc'>{fee}원</div>
                     </li>
                   </ul>
                 </div>
@@ -159,35 +202,38 @@ export default function CreateReservation() {
                   있습니다.
                 </li>
                 <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
-                <HompageLink id={tee_id}>
+                <HomepageLink id={tee_id}>
                   {golf_club_name} [바로가기]
-                </HompageLink>
+                </HomepageLink>
               </ul>
             </div>
           </div>
           {/** 기획에서는 간편예약이 가능한 골프장에 한해서만 간편예약을 렌더링하라고 기재되어있는데 어디에서 받아야할지 모르겠음 */}
-          <ButtonGroup
-            id={tee_id}
-            postInfo={{
-              year,
-              month: mon,
-              date: _date,
-              course: golf_course_name.split(' ')[0],
-              time: hour + min,
-            }}
-            source={source}
-            onButtonClick={() => setHidden(false)}
-          />
+          {tee && (
+            <ButtonGroup
+              clubId={tee_id}
+              postInfo={{
+                year,
+                month: mon,
+                date: _date,
+                course: golf_course_name?.split(' ')[0],
+                time: hour + min,
+              }}
+              source={source}
+              onButtonClick={() => handleOpen('cancel')}
+              cb={() => handleOpen('confirm')}
+            />
+          )}
         </section>
       </div>
       <PopUp
         buttonText='취소'
         buttonType='cancel'
         onButtonClick={() => {
+          handleClose('cancel');
           source.cancel('요청 취소');
-          handleClose();
         }}
-        hidden={hidden}
+        hidden={cancelHidden}
       >
         <div className='message-box loading-box'>
           <div className='loading-box'>
@@ -198,7 +244,17 @@ export default function CreateReservation() {
           </div>
         </div>
       </PopUp>
-      {/* <PopUp>
+      <PopUp
+        buttonText='확인(홈으로 이동)'
+        onButtonClick={() => {
+          handleClose('confirm');
+          router.push({
+            pathname: '/home',
+            query: { tab: 'book' },
+          });
+        }}
+        hidden={confirmHidden}
+      >
         <div className='component-wrap'>
           <div className='inner-container'>
             <ul className='desc-list'>
@@ -207,7 +263,9 @@ export default function CreateReservation() {
                   <em>라운드 예약일자</em>
                 </div>
                 <div className='desc'>
-                  <span>2022. 4. 4(화) </span>
+                  <span>
+                    {year}.{mon}.{_date}({day}){' '}
+                  </span>
                 </div>
               </li>
               <li className='desc-item'>
@@ -215,7 +273,9 @@ export default function CreateReservation() {
                   <em>시간</em>
                 </div>
                 <div className='desc'>
-                  <span>7:51</span>
+                  <span>
+                    {hour}:{min}
+                  </span>
                 </div>
               </li>
               <li className='desc-item'>
@@ -223,23 +283,23 @@ export default function CreateReservation() {
                   <em>코스명</em>
                 </div>
                 <div className='desc'>
-                  <span>Valley</span>
+                  <span>{golf_course_name}</span>
                 </div>
               </li>
-              <li className='desc-item'>
+              {/* <li className='desc-item'>
                 <div className='tit'>
                   <em>홀정보</em>
                 </div>
                 <div className='desc'>
                   <span>18홀</span>
                 </div>
-              </li>
+              </li> */}
               <li className='desc-item'>
                 <div className='tit'>
                   <em>그린피</em>
                 </div>
                 <div className='desc'>
-                  <span>230,000원</span>
+                  <span>{fee}원</span>
                 </div>
               </li>
             </ul>
@@ -248,7 +308,7 @@ export default function CreateReservation() {
             <p>예약을 완료했습니다.</p>
           </div>
         </div>
-      </PopUp> */}
+      </PopUp>
       <style jsx>{`
         .img_wrap {
           width: 100%;
@@ -260,113 +320,94 @@ export default function CreateReservation() {
   );
 }
 
-const HompageLink = observer(({ id, children, ...props }) => {
-  const { panelStore } = useStores();
-  const url = panelStore.teeListMap?.[id]?.homepage;
-  return (
-    <li className='text-link'>
-      <Link href={{ pathname: '/golf_homepage/[url]', query: { url } }}>
-        <a {...props}>{children}</a>
-      </Link>
-    </li>
-  );
-});
+const ButtonGroup = observer(
+  ({ clubId, postInfo, source, cb, onButtonClick }) => {
+    const { panelStore, authStore } = useStores();
+    // account 넘어 왔다고 가정
+    // const account = {
+    //   id: 'newrison',
+    //   password: 'ilovegolf778',
+    // };
+    const [{ id, password } = {}] =
+      authStore.authList?.filter(auth => auth.clubId == clubId) ?? [];
 
-const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
-  const { panelStore } = useStores();
-  // account 넘어 왔다고 가정
-  const account = {
-    id: 'newrison',
-    password: 'ilovegolf778',
-  };
-
-  const handleCreateReserve = async () => {
-    if (onButtonClick) onButtonClick();
-    const {
-      status,
-      data: { data, resultCode, message },
-    } = await axios.post(
-      `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-      {
-        ...account,
-        ...postInfo,
-      },
-      { cancelToken: source.token },
-    );
-    if (status === 200) {
-      console.log(data);
-      if (resultCode === 1) {
-        if (cb) cb();
+    const handleCreateReserve = async () => {
+      if (!id || !password) return;
+      if (onButtonClick) onButtonClick();
+      const {
+        status,
+        data: { data, resultCode, message },
+      } = await axios.post(
+        `/teezzim/teeapi/v1/club/${id}/reservation/post`,
+        {
+          id,
+          password,
+          ...postInfo,
+        },
+        { cancelToken: source.token },
+      );
+      if (status === 200) {
+        console.log(resultCode, message, data);
+        if (resultCode === 1) {
+          if (cb) cb();
+        } else {
+          console.warn(`[errorCode : ${resultCode}] ${message}`);
+        }
       } else {
-        console.warn(`[errorCode : ${resultCode}] ${message}`);
+        console.warn(`[errorCode : ${status}] ${message}`);
       }
-    } else {
-      console.warn(`[errorCode : ${status}] ${message}`);
-    }
-  };
-  return (
-    <>
-      {panelStore.registeredKeys.includes(id) ? (
-        <div className='component-wrap'>
-          <ul className='btn-group btn-group__fixed'>
-            <li>
-              <button
-                type='button'
-                className='btn large rest full'
-                onClick={handleCreateReserve}
-              >
-                간편예약
-              </button>
-            </li>
-            <li>
-              <HompageLink
-                id={id}
-                type='button'
-                className='btn large rest full'
-              >
-                홈페이지예약
-              </HompageLink>
-            </li>
-          </ul>
-        </div>
-      ) : (
-        <div className='component-wrap'>
-          <ul className='btn-group btn-group__fixed'>
-            <li>
-              <HompageLink
-                id={id}
+    };
+    return (
+      <>
+        {panelStore.registeredKeys.includes(clubId) ? (
+          <div className='component-wrap'>
+            <ul className='btn-group btn-group__fixed'>
+              <li>
+                <button
+                  type='button'
+                  className='btn large rest full'
+                  onClick={handleCreateReserve}
+                >
+                  간편예약
+                </button>
+              </li>
+              <li>
+                <HomepageLink
+                  id={clubId}
+                  type='button'
+                  className='btn large rest full'
+                >
+                  홈페이지예약
+                </HomepageLink>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <div className='component-wrap'>
+            <ul className='btn-group btn-group__fixed'>
+              <HomepageLink
+                id={clubId}
                 type='button'
                 className='btn large rest full'
               >
                 골프장 회원가입
-              </HompageLink>
-            </li>
-            <li>
-              <button type='button' className='btn large rest full'>
-                골프장 계정등록
-              </button>
-            </li>
-          </ul>
-        </div>
-      )}
-      <style jsx>{`
-        .btn-group {
-          display: flex;
-          bottom: 72px;
-        }
-      `}</style>
-    </>
-  );
-});
+              </HomepageLink>
 
-const UnregisteredMsg = observer(({ id }) => {
-  const { panelStore } = useStores();
-  return !panelStore.registeredKeys.includes(id) ? (
-    <div className='desc-text'>
-      미등록 골프장입니다. 골프장 회원으로 가입해세요. 골프장 회원이라면
-      계정등록 후 이용하실 수 있습니다.
-    </div>
-  ) : (
-    <></>
-  );
-});
+              <li>
+                <button type='button' className='btn large rest full'>
+                  골프장 계정등록
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+        <style jsx>{`
+          .btn-group {
+            display: flex;
+            bottom: 72px;
+          }
+        `}</style>
+      </>
+    );
+  },
+);

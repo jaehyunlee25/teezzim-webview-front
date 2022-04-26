@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import useAsyncMount from '@/lib/hooks/useAsyncMount';
 import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
@@ -11,7 +11,7 @@ export default function GolfClubInfo() {
   const [info, setInfo] = useState({});
   const { name, address, phone, email, homepage } = info;
 
-  const fetchGolfClubInfo = async () => {
+  const fetchGolfClubInfo = useCallback(async () => {
     const {
       status,
       data: { data, resultCode, message },
@@ -28,14 +28,18 @@ export default function GolfClubInfo() {
     } else {
       console.warn(`[errorCode: ${status}] ${message}`);
     }
-  };
+  }, [id]);
 
   const { mountRef } = useAsyncMount(fetchGolfClubInfo);
 
   return (
     <>
       <div id='header'>
-        <button type='button' className='btn-history-back'>
+        <button
+          type='button'
+          className='btn-history-back'
+          onClick={() => router.back()}
+        >
           <span className='offscreen'>이전</span>
         </button>
         <h1 className='headline'>{name}</h1>
