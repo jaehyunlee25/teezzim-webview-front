@@ -50,7 +50,12 @@ const ReserveTap = ({ reserve, deleteItem }) => {
             alt='arrow'
             width={5}
             height={26}
-            onClick={() => router.push(`/reserve/${reserve?.golf_club?.id}`)}
+            onClick={() =>
+              router.push({
+                pathname: `/reserve/${reserve?.golf_club?.id}`,
+                query: { tab: 'my_book' },
+              })
+            }
           />
         )}
       </div>
