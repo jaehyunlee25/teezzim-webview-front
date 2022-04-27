@@ -35,7 +35,7 @@ const ReserveTap = ({ reserve, deleteItem }) => {
           <div>
             <span>{reserve?.reserved_date}</span>
             <span>
-              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course}   코스`}
+              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
             </span>
           </div>
         </div>
