@@ -28,7 +28,7 @@ const ReserveInfo = () => {
   // console.log('🚀 - data', data);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
-
+  const [reserveData, setReserveData] = useState({});
   /** APP->WEB 브릿지 함수 선언 */
   useEffect(() => {
     if (isInitSignalSendApp == false) {
@@ -74,6 +74,7 @@ const ReserveInfo = () => {
   }, []);
 
   const handleGetReservationInfo = function (club, id, password) {
+    console.log(club);
     axios({
       method: 'POST',
       url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
@@ -84,7 +85,6 @@ const ReserveInfo = () => {
           respData.data.data[idx].golf_club = respData.data.golf_club;
         }
         setReserveData(respData.data);
-        console.log(respData.data);
         if (window && window.BRIDGE && window.BRIDGE.saveReservationList) {
           // 앱으로 전송
           window.BRIDGE.saveReservationList(
@@ -103,18 +103,25 @@ const ReserveInfo = () => {
   };
 
   const handleCancel = async () => {
-    await axios.post(
-      `/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`,
-      {
+    const { data } = reserveData;
+    const { status } = await axios
+      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
         id: userInfo[0]?.id,
         password: userInfo[0]?.password,
-        year: reserveDetailData[0]?.reserved_date.split('.')[0],
-        month: reserveDetailData[0]?.reserved_date.split('.')[1],
-        date: reserveDetailData[0]?.reserved_date.split('.')[2],
-        course: reserveDetailData[0]?.reserved_course,
-        time: reserveDetailData[0]?.reserved_time.replace(':', ''),
-      },
-    );
+        year: data[0]?.reserved_date.split('.')[0],
+        month: data[0]?.reserved_date.split('.')[1],
+        date: data[0]?.reserved_date.split('.')[2],
+        course: data[0]?.reserved_course,
+        time: data[0]?.reserved_time.replace(':', ''),
+      })
+      .catch(err => console.warn(err));
+
+    if (status === 200) {
+      router.push({
+        pathname: '/reserve',
+        query: { tab: 'my_book' },
+      });
+    }
   };
 
   useEffect(() => {
@@ -198,12 +205,6 @@ const ReserveInfo = () => {
         buttonText='확인'
         onButtonClick={() => {
           handleCancel();
-          setTimeout(() => {
-            router.push({
-              pathname: '/reserve',
-              query: { tab: 'book' },
-            });
-          }, 3000);
         }}
         hidden={confirmHidden}
       >
