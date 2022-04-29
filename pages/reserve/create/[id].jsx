@@ -97,12 +97,15 @@ export default function CreateReservation() {
     }
   }, [isInitSignalSendApp, panelStore, authStore]);
 
+  /** PopUp Status */
   const [cancelHidden, setCancelHidden] = useState(true);
   const [confirmHidden, setConfirmHidden] = useState(true);
   const handleOpen = type =>
     type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
   const handleClose = type =>
     type === 'confirm' ? setConfirmHidden(true) : setCancelHidden(true);
+
+  /** Axios Cancel Token */
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
@@ -334,18 +337,21 @@ const ButtonGroup = observer(
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const {
-        status,
-        data: { data, resultCode, message },
-      } = await axios.post(
-        `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-        {
-          id,
-          password,
-          ...postInfo,
-        },
-        { cancelToken: source.token },
-      );
+      const { status, data: { data, resultCode, message } = {} } = await axios
+        .post(
+          `/teezzim/teeapi/v1/club/${id}/reservation/post`,
+          {
+            id,
+            password,
+            ...postInfo,
+          },
+          { cancelToken: source.token },
+        )
+        .catch(({ message }) => {
+          console.warn(message);
+          return err;
+        });
+
       if (status === 200) {
         console.log(resultCode, message, data);
         if (resultCode === 1) {
@@ -354,7 +360,7 @@ const ButtonGroup = observer(
           console.warn(`[errorCode : ${resultCode}] ${message}`);
         }
       } else {
-        console.warn(`[errorCode : ${status}] ${message}`);
+        handleClose('cancel');
       }
     };
     return (

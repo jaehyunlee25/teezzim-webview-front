@@ -11,7 +11,7 @@ import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 
-const Panel = observer(({ hidden, setHidden }) => {
+const Panel = observer(() => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore } = useStores();
@@ -102,7 +102,7 @@ const Panel = observer(({ hidden, setHidden }) => {
 
   return (
     <>
-      <div hidden={hidden}>
+      <div hidden={panelStore.panelHidden}>
         <SearchContainer />
         <div className='wrapper'>
           <NavTab />
@@ -155,7 +155,9 @@ const Panel = observer(({ hidden, setHidden }) => {
                     },
                   }}
                 >
-                  <a onClick={() => setHidden(true)}>실시간 예약</a>
+                  <a onClick={() => panelStore.setPanelHidden(true)}>
+                    실시간 예약
+                  </a>
                 </Link>
               </li>
               <li className='button'>
@@ -169,7 +171,9 @@ const Panel = observer(({ hidden, setHidden }) => {
                     },
                   }}
                 >
-                  <a onClick={() => setHidden(true)}>예약대기</a>
+                  <a onClick={() => panelStore.setPanelHidden(true)}>
+                    예약대기
+                  </a>
                 </Link>
               </li>
               <li className='button'>
@@ -183,7 +187,9 @@ const Panel = observer(({ hidden, setHidden }) => {
                     },
                   }}
                 >
-                  <a onClick={() => setHidden(true)}>예약오픈 알림</a>
+                  <a onClick={() => panelStore.setPanelHidden(true)}>
+                    예약오픈 알림
+                  </a>
                 </Link>
               </li>
             </ul>

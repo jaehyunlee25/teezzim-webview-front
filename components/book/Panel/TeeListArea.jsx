@@ -11,7 +11,6 @@ import ImgGolf7 from '@/assets/images/IMG_Golf_07.png';
 import TeeItem from '@/components/book/Panel/TeeItem';
 
 export const TeeListArea = ({ registered, list }) => {
-  // [Todo] 전체 선택 Toggle Action Handler(모든 item checkedList에 넣었다가 빼기)
   const TeeImages = [
     ImgGolf1,
     ImgGolf2,

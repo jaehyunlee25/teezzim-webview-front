@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 
-const MiniPanel = observer(({ setPanelHidden }) => {
+const MiniPanel = observer(() => {
   const router = useRouter();
   const { container } = router.query;
   const { panelStore } = useStores();
@@ -15,7 +15,10 @@ const MiniPanel = observer(({ setPanelHidden }) => {
 
   return (
     <>
-      <div className='rollsheet-wrap' onClick={() => setPanelHidden(false)}>
+      <div
+        className='rollsheet-wrap'
+        onClick={() => panelStore.setPanelHidden(false)}
+      >
         <div className='rollsheet-container'>
           <div className='rollsheet'>
             <h1 className='head-headline text-primary'>

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
 
-// Todo 등록하기 여부를 네이티브를 통해 받아와 store에 반영한다.
 export function TeeItem({ img, registered, ...tee }) {
   const { panelStore } = useStores();
 

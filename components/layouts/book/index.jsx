@@ -114,7 +114,6 @@ export default function Book() {
   };
 
   /** Panel Component */
-  const [panelHidden, setPanelHidden] = useState(false);
 
   const renderContainer = () => {
     if (!date) return;
@@ -132,8 +131,8 @@ export default function Book() {
 
   return (
     <>
-      <Panel hidden={panelHidden} setHidden={setPanelHidden} />
-      <MiniPanel setPanelHidden={setPanelHidden} />
+      <Panel />
+      <MiniPanel />
 
       <div className='filter-wrap'>
         <div className='filter-container'>
