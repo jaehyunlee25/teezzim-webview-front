@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { forwardRef } from 'react';
+import useStores from '@/stores/useStores';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Toast({ message, ...props }) {
   /* 
@@ -7,19 +7,18 @@ export default function Toast({ message, ...props }) {
         message(string) : Toast에 띄울 메세지
  */
   const ref = useRef(null);
-
+  const { toastStore } = useStores();
   useEffect(() => {
-    if (ref.current) {
-      ref.current.style.display = 'block';
-      ref.current.style.animation = '0.5s 1.5s fadeOut linear';
-    }
     const pid = setTimeout(() => {
       if (ref.current) {
         ref.current.style.display = 'none';
+        toastStore.setHidden(true);
       }
     }, 2000);
-    return () => clearTimeout(pid);
-  }, []);
+    return () => {
+      clearTimeout(pid);
+    };
+  }, [toastStore]);
 
   return (
     <>
@@ -28,9 +27,17 @@ export default function Toast({ message, ...props }) {
       </div>
       <style jsx>{`
         .notice {
-          bottom: 15%;
+          position: absolute;
+          maxwidth: 90%;
+          bottom: 75px;
           left: 50%;
           transform: translate(-50%, 0);
+          animation: 0.85s 1.3s fadeOut linear;
+          display: block;
+        }
+
+        .notice > p {
+          padding: 4px 48px;
         }
 
         @keyframes fadeOut {

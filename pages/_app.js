@@ -4,12 +4,15 @@ import '@/styles/globals.scss';
 import '@/styles/layout.scss';
 import '@/styles/tzapp.scss';
 import '@/styles/app.scss';
+
 import MobXStoresContext from '@/stores/MobXStoreContext.js';
 import globalStore from '@/stores/globalStore';
 import panelStore from '@/stores/panelStore';
 import teeScheduleStore from '@/stores/teeScheduleStore';
 import loadStore from '@/stores/loadStore';
 import authStore from '@/stores/authStore';
+import toastStore from '@/stores/toastStore';
+
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import PageLayout from '@/components/layouts/PageLayout';
@@ -23,6 +26,7 @@ export default function MyApp({ Component, pageProps }) {
     teeScheduleStore,
     loadStore,
     authStore,
+    toastStore,
   };
 
   return (

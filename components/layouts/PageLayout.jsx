@@ -1,12 +1,16 @@
 import Toast from '@/components/common/Toast';
 import BottomMenu from '@/components/layouts/BottomMenu';
+import useStores from '@/stores/useStores';
+import { observer } from 'mobx-react-lite';
 
-const PageLayout = ({ children }) => {
+const PageTemplate = observer(({ children }) => {
+  const { toastStore } = useStores();
+  const message = toastStore.message;
   return (
     <>
       <div className='container'>{children}</div>
 
-      {/* <Toast message='골프장을 1개 이상 선택해 주세요.' hidden={true} /> */}
+      {!toastStore.hidden && <Toast message={message} />}
       <BottomMenu />
       <style jsx>
         {`
@@ -29,6 +33,8 @@ const PageLayout = ({ children }) => {
       </style>
     </>
   );
-};
+});
+
+const PageLayout = ({ children }) => <PageTemplate>{children}</PageTemplate>;
 
 export default PageLayout;
