@@ -35,6 +35,25 @@ const AlarmContainer = () => {
     Cap10,
   ];
 
+  const handleAlarmButton = e => {
+    if (window) {
+      /** 예약하기 탭 열림완료 WEB->APP 전송 */
+      if (window.BRIDGE && window.BRIDGE.saveOpenAlarmList) {
+          // 앱에 보내줄 데이터 형식
+          const dataSample = [
+            { 
+              clubId: "골프장id",
+              waitDate: "예약일",
+              waitTime: "예약시간",
+            },
+            // ... 체크된 갯수만큼 반복
+          ];
+          const jsonStr = JSON.stringify(dataSample);
+          window.BRIDGE.saveOpenAlarmList(jsonStr);
+      }
+    }
+  }
+
   return (
     <>
       <div className='list_AreaTop'>
@@ -94,7 +113,7 @@ const AlarmContainer = () => {
             <button
               type='button'
               className='btn large wide round primary'
-              onClick={() => {}}
+              onClick={handleAlarmButton}
             >
               예약오픈 알림 받기
             </button>
