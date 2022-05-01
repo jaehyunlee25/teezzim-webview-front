@@ -69,7 +69,6 @@ export default function Book() {
 
     if (status === 200) {
       if (resultCode === 1) {
-        // console.log(data);
         const nameMap = panelStore.checkedKeys.reduce(
           (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
           {},
@@ -99,7 +98,10 @@ export default function Book() {
                 {},
               ),
             )
-          : {};
+          : panelStore.checkedKeys.reduce(
+              (acc, v) => ({ ...acc, [v]: {} }),
+              {},
+            );
 
         // console.log(daySchedule);
         teeScheduleStore.setTeeSchedules(daySchedule);
