@@ -20,6 +20,13 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
 
   const handleCancel = async index => {
     const { data } = reserveData;
+    console.log('🚀 - data', data);
+    console.log('🚀 - year', data[index]?.reserved_date?.split('.')[1]);
+    console.log('🚀 - month', data[index]?.reserved_date?.split('.')[0]);
+    console.log('🚀 - date', data[index]?.reserved_date?.split('.')[2]);
+    console.log('🚀 - course', data[index]?.reserved_course);
+    console.log('🚀 - time', data[index]?.reserved_time?.replace(':', ''));
+
     const { status } = await axios
       .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
         id: userInfo[0]?.id,
@@ -38,6 +45,7 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
         pathname: '/reserve',
         query: { tab: 'my_book' },
       });
+      window.location.reload();
     }
   };
 
@@ -92,7 +100,7 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
         <PopUp
           buttonText='확인'
           onButtonClick={() => {
-            handleCancel();
+            handleCancel(index);
           }}
           hidden={confirmHidden}
         >
