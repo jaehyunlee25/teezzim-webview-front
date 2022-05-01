@@ -264,7 +264,7 @@ const Reserve = () => {
           </>
         ) : (
           <>
-            {reserveWait?.length === 0 ? (
+            {reserveAlarm?.length === 0 ? (
               <p>예약 오픈 알림이 없습니다.</p>
             ) : (
               <div className='message-box loading-box'>
@@ -283,8 +283,6 @@ const Reserve = () => {
           </>
         )}
       </div>
-
-      {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
       <BottomMenu />
     </>
   );
