@@ -26,19 +26,17 @@ export default function Book() {
 
   /** Calender Component */
   const [date, setDate] = useState(null);
-  const now = getTodayKST();
 
+  const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
     now.getFullYear(),
     now.getMonth() + 1, // returns 0 - 11
     now.getDate(),
-  ];
-
+  ]; // 오늘 기준의 연도, 달, 날
   const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
     tdate < 10 ? '0' + tdate : tdate
-  }`;
-
-  const [yearMonth, setYearMonth] = useState({ year: tyear, month: tmonth });
+  }`; // YYYY-MM-DD 형식으로 출력한 오늘 날짜
+  const [yearMonth, setYearMonth] = useState({ year: tyear, month: tmonth }); // 달력에 출력할
   const yearMonthStr = useMemo(
     () =>
       `${yearMonth.year}-${
@@ -53,8 +51,7 @@ export default function Book() {
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
     // console.log(dateTime);
-
-    if (container !== 'book') return;
+    // if (container !== 'book') return;
 
     loadStore.reset();
     loadStore.setLoading(true);

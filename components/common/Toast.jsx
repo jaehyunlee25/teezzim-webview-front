@@ -28,7 +28,7 @@ export default function Toast({ message, ...props }) {
       <style jsx>{`
         .notice {
           position: absolute;
-          maxwidth: 90%;
+          max-width: 90%;
           bottom: 75px;
           left: 50%;
           transform: translate(-50%, 0);
@@ -37,7 +37,7 @@ export default function Toast({ message, ...props }) {
         }
 
         .notice > p {
-          padding: 4px 48px;
+          padding: 4px 16px;
         }
 
         @keyframes fadeOut {

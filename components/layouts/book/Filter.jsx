@@ -2,7 +2,7 @@ import useStores from '@/stores/useStores';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
-const Filter = observer(props => {
+const FilterComponent = observer(props => {
   const { teeScheduleStore } = useStores();
 
   const [region, setRegion] = useState(true);
@@ -311,4 +311,5 @@ const Filter = observer(props => {
   );
 });
 
+const Filter = props => <FilterComponent {...props} />;
 export default Filter;
