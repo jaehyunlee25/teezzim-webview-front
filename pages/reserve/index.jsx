@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
 import Image from 'next/image';
 import axios from 'axios';
@@ -11,6 +11,8 @@ import BottomMenu from '@/components/layouts/BottomMenu';
 import IconImport from '/assets/images/Icon_Import.svg';
 
 import styles from '../../styles/Reserve.module.scss';
+import { observer } from 'mobx-react-lite';
+import useStores from '@/stores/useStores';
 
 const Reserve = () => {
   const [userInfo, setUserInfo] = useState([]);
@@ -107,7 +109,7 @@ const Reserve = () => {
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00"]}]`,
             );
             window.getSavedOpenAlarm(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-27"}]`,
+              `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-26"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-26"}]`,
             );
           }, 1000);
         }
@@ -215,73 +217,14 @@ const Reserve = () => {
         <p>예약 대기</p>
       </div>
       <div className={styles.reserveContainer}>
-        {reserveWait?.length > 0 ? (
-          <>
-            <p>{`아일랜드 CC | ${reserveWait[0]?.waitDate}`}</p>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              {reserveWait[0]?.waitTime?.map((item, index) => (
-                <p style={{ marginTop: '0' }} key={index}>
-                  {item.slice(0, 5).replace('', ' | ')}
-                </p>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            {reserveWait?.length === 0 ? (
-              <p>예약 대기가 없습니다.</p>
-            ) : (
-              <div className='message-box loading-box'>
-                <div className='loading-box'>
-                  <div className='loading-icon'>
-                    <span className='offscreen'>
-                      데이터를 가져오고 있습니다.
-                    </span>
-                  </div>
-                  <div className='loading-text ml-10'>
-                    데이터를 가져오고 있습니다.
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
+        <ReserveWaitList reserveWait={reserveWait} />
       </div>
 
       <div className={styles.reserveState}>
         <p>예약오픈 알림</p>
       </div>
       <div className={styles.reserveContainer}>
-        {reserveAlarm?.length > 0 ? (
-          <>
-            <p>{`아일랜드 CC | ${reserveAlarm[0]?.alarmDate}`}</p>
-          </>
-        ) : (
-          <>
-            {reserveAlarm?.length === 0 ? (
-              <p>예약 오픈 알림이 없습니다.</p>
-            ) : (
-              <div className='message-box loading-box'>
-                <div className='loading-box'>
-                  <div className='loading-icon'>
-                    <span className='offscreen'>
-                      데이터를 가져오고 있습니다.
-                    </span>
-                  </div>
-                  <div className='loading-text ml-10'>
-                    데이터를 가져오고 있습니다.
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
+        <ReserveAlarmList reserveAlarm={reserveAlarm} />
       </div>
       <BottomMenu />
     </>
@@ -289,3 +232,76 @@ const Reserve = () => {
 };
 
 export default Reserve;
+
+const ReserveWaitList = observer(({ reserveWait }) => {
+  const { panelStore } = useStores();
+
+  return reserveWait?.length > 0 ? (
+    reserveWait.map(({ clubId, waitDate, waitTime }, idx) => {
+      return (
+        <React.Fragment key={`${clubId}-wait-${idx}`}>
+          <p>{`${panelStore.teeListMap?.[clubId]?.name} | ${waitDate}`}</p>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            {waitTime?.map((item, index) => (
+              <p style={{ marginTop: '0' }} key={index}>
+                {item.slice(0, 5).replace('', ' | ')}
+              </p>
+            ))}
+          </div>
+        </React.Fragment>
+      );
+    })
+  ) : (
+    <>
+      {reserveWait?.length === 0 ? (
+        <p>예약 대기가 없습니다.</p>
+      ) : (
+        <div className='message-box loading-box'>
+          <div className='loading-box'>
+            <div className='loading-icon'>
+              <span className='offscreen'>데이터를 가져오고 있습니다.</span>
+            </div>
+            <div className='loading-text ml-10'>
+              데이터를 가져오고 있습니다.
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+});
+
+const ReserveAlarmList = observer(({ reserveAlarm }) => {
+  const { panelStore } = useStores();
+
+  return reserveAlarm?.length > 0 ? (
+    reserveAlarm.map(({ clubId, alarmDate }, idx) => (
+      <p
+        key={`${clubId}-alarm-${idx}`}
+      >{`${panelStore?.teeListMap?.[clubId]?.name} | ${alarmDate}`}</p>
+    ))
+  ) : (
+    <>
+      {reserveAlarm?.length === 0 ? (
+        <p>예약 오픈 알림이 없습니다.</p>
+      ) : (
+        <div className='message-box loading-box'>
+          <div className='loading-box'>
+            <div className='loading-icon'>
+              <span className='offscreen'>데이터를 가져오고 있습니다.</span>
+            </div>
+            <div className='loading-text ml-10'>
+              데이터를 가져오고 있습니다.
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+});
