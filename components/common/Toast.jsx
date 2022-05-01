@@ -27,13 +27,14 @@ export default function Toast({ message, ...props }) {
       </div>
       <style jsx>{`
         .notice {
-          position: absolute;
-          max-width: 90%;
-          bottom: 75px;
+          position: sticky;
+          max-width: 80%;
+          top: 70%;
           left: 50%;
-          transform: translate(-50%, 0);
+          transform: translate(-10%, 0);
           animation: 0.85s 1.3s fadeOut linear;
           display: block;
+          z-index: 4000;
         }
 
         .notice > p {
