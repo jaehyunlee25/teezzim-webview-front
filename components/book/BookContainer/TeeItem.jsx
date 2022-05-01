@@ -29,7 +29,7 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
       return result.length > 0 ? (
         result
       ) : (
-        <p>선택하신 시간대에 예약 가능한 Tee-off가 없습니다.</p>
+        <p className='text-main'>고급 필터와 일치하는 골프장이 없습니다.</p>
       );
     },
     [teeScheduleStore.times, id, registered],

@@ -11,10 +11,10 @@ import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 
-const Panel = observer(({ hidden, setHidden }) => {
+const Panel = observer(() => {
   const router = useRouter();
   const { ...others } = router?.query;
-  const { panelStore, authStore } = useStores();
+  const { panelStore, authStore, toastStore } = useStores();
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -44,7 +44,6 @@ const Panel = observer(({ hidden, setHidden }) => {
   }, [getTeeList]);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
-  // const [savedAuthList, setSavedAuthList] = useState(false);
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
@@ -133,9 +132,45 @@ const Panel = observer(({ hidden, setHidden }) => {
     }
   }, [isInitSignalSendApp, panelStore, authStore]);
 
+  const handleSelectContainer = e => {
+    const selectedLength = panelStore.checkedTeeList.size;
+    const { id } = e.target;
+    if (!id) return;
+    if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
+
+    if (selectedLength <= 0) {
+      toastStore.setMessage('골프장을 1개 이상 선택해 주세요.');
+      toastStore.setHidden(false);
+      return;
+    }
+
+    if (id === 'wait' || id === 'alarm') {
+      if (selectedLength > 5) {
+        toastStore.setMessage(
+          <>
+            5개 이하의 골프장에서만
+            <br /> 예약{id === 'wait' ? '대기' : '오픈알림'}을 할 수 있습니다.
+          </>,
+        );
+        toastStore.setHidden(false);
+        return;
+      }
+    }
+
+    router.push({
+      href: '/home',
+      query: {
+        ...others,
+        subTab: 'tabContent01',
+        container: id,
+      },
+    });
+    panelStore.setPanelHidden(true);
+  };
+
   return (
     <>
-      <div hidden={hidden}>
+      <div hidden={panelStore.panelHidden}>
         <SearchContainer />
         <div className='wrapper'>
           <NavTab />
@@ -177,47 +212,14 @@ const Panel = observer(({ hidden, setHidden }) => {
           <div className='bookingwrap'>
             <Counter type='checked' />
             <ul className='button-list'>
-              <li className='button'>
-                <Link
-                  href={{
-                    href: '/home',
-                    query: {
-                      ...others,
-                      subTab: 'tabContent01',
-                      container: 'book',
-                    },
-                  }}
-                >
-                  <a onClick={() => setHidden(true)}>실시간 예약</a>
-                </Link>
+              <li id='book' className='button' onClick={handleSelectContainer}>
+                실시간 예약
               </li>
-              <li className='button'>
-                <Link
-                  href={{
-                    href: '/home',
-                    query: {
-                      ...others,
-                      subTab: 'tabContent01',
-                      container: 'wait',
-                    },
-                  }}
-                >
-                  <a onClick={() => setHidden(true)}>예약대기</a>
-                </Link>
+              <li id='wait' className='button' onClick={handleSelectContainer}>
+                예약대기
               </li>
-              <li className='button'>
-                <Link
-                  href={{
-                    href: '/home',
-                    query: {
-                      ...others,
-                      subTab: 'tabContent01',
-                      container: 'alarm',
-                    },
-                  }}
-                >
-                  <a onClick={() => setHidden(true)}>예약오픈 알림</a>
-                </Link>
+              <li id='alarm' className='button' onClick={handleSelectContainer}>
+                예약오픈 알림
               </li>
             </ul>
           </div>

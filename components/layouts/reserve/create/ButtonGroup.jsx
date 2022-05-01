@@ -13,10 +13,7 @@ const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
 
   const handleCreateReserve = async () => {
     if (onButtonClick) onButtonClick();
-    const {
-      status,
-      data: { data, resultCode, message },
-    } = await axios.post(
+    const res = await axios.post(
       `/teezzim/teeapi/v1/club/${id}/reservation/post`,
       {
         ...account,
@@ -24,8 +21,9 @@ const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
       },
       { cancelToken: source.token },
     );
-    if (status === 200) {
+    if (res.status === 200) {
       console.log(data);
+      const { data, resultCode, message } = res?.data ?? {};
       if (resultCode === 1) {
         if (cb) cb();
       } else {
