@@ -114,7 +114,7 @@ const Reserve = () => {
       }
       setIsInitSignal(true);
     }
-  }, []);
+  }, [isInitSignalSendApp]);
 
   const handleGetReservationInfo = function (club, id, password) {
     axios({
