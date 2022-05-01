@@ -18,7 +18,7 @@ const ReserveDetail = ({ detail }) => {
 
         <div className={styles.reserveInfo}>
           <span>코스명</span>
-          <span>{detail && detail[0]?.reserved_course} 코스</span>
+          <span>{detail && `${detail[0]?.reserved_course}코스`}</span>
         </div>
 
         <div className={styles.reserveInfo}>
@@ -28,7 +28,9 @@ const ReserveDetail = ({ detail }) => {
 
         <div className={styles.reserveInfo}>
           <span>그린피</span>
-          <span>230,000원</span>
+          <span>
+            {detail && `${(detail[0]?.fee_normal).toLocaleString()}원`}
+          </span>
         </div>
       </div>
     </>

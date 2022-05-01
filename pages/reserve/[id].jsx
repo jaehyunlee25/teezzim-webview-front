@@ -20,6 +20,7 @@ const ReserveInfo = () => {
   console.log('🚀 - reserveDetailData', reserveDetailData);
   const [cancelLoading, setCancelLoading] = useState(false);
 
+  // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
 
   // const { data } = useSWR(
