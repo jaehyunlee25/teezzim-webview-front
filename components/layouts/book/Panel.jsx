@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
+import teeScheduleStore from '@/stores/teeScheduleStore';
 
 const Panel = observer(() => {
   const router = useRouter();
@@ -44,6 +45,9 @@ const Panel = observer(() => {
   }, [getTeeList]);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
+  const [savedReservationList, setSavedReservationList] = useState(null);
+  const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
+  const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
@@ -73,6 +77,20 @@ const Panel = observer(() => {
         /** 예약 정보 APP->WEB 전송 */
         window.getSavedReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          setSavedReservationList(data);
+
+          const reducedData = data.reduce(
+            (acc, v) => ({
+              ...acc,
+              [v.clubId]: [
+                ...(acc?.[v.clubId] || []),
+                { ...v, reserved_date: v.reserved_date.replace('.', '-') },
+              ],
+            }),
+            {},
+          );
+          // console.log(reducedData);
+          teeScheduleStore.setReservedSchedules(reducedData);
           /* 예상 구조
             [
               {
@@ -85,9 +103,11 @@ const Panel = observer(() => {
             ]
           */
         };
+
         /** 예약 대기 정보 APP->WEB 전송 */
         window.getSavedWaitReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          setSaveWaitReservationList(data);
           /* 예상 구조
             [
               {
@@ -102,6 +122,7 @@ const Panel = observer(() => {
         /** 오픈 알림 정보 APP->WEB 전송 */
         window.getSavedOpenAlarm = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          setSavedOpenAlarmList(data);
           /* 예상 구조
             [
               {
@@ -124,6 +145,15 @@ const Panel = observer(() => {
             // 웹뷰에서는 테스트 데이터로!
             window.getSavedAuth(
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
+            window.getSavedReservation(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","reserved_date":"2022.05.25","reserved_time":"05:12","reserved_course": "EAST"}]`,
+            );
+            window.getSavedWaitReservation(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00"]}]`,
+            );
+            window.getSavedOpenAlarm(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-27"}]`,
             );
           }, 1000);
         }

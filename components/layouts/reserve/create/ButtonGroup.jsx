@@ -23,14 +23,20 @@ const ButtonGroup = observer(({ id, postInfo, source, cb, onButtonClick }) => {
     );
     if (res.status === 200) {
       console.log(data);
-      const { data, resultCode, message } = res?.data ?? {};
+      const {
+        data = null,
+        resultCode = null,
+        message = null,
+      } = res?.data ?? {};
       if (resultCode === 1) {
         if (cb) cb();
-      } else {
-        console.warn(`[errorCode : ${resultCode}] ${message}`);
+      } else if (resultCode === -1) {
+        console.warn(
+          `[errorCode : ${resultCode}] ${message}, 이미 등록된 예약이거나 일시적 오류`,
+        );
       }
     } else {
-      console.warn(`[errorCode : ${status}] ${message}`);
+      console.warn(`[errorCode] : 통신 장애 또는 내부 에러입니다.`);
     }
   };
   return (
