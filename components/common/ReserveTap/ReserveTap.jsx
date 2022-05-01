@@ -1,5 +1,9 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import axios from 'axios';
+
+import PopUp from '../PopUp';
 
 import Arrow from '/assets/images/arrow.svg';
 import Time from '/assets/images/Icon_time.svg';
@@ -8,8 +12,34 @@ import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
 
-const ReserveTap = ({ reserve, deleteItem }) => {
+const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
   const router = useRouter();
+
+  // 취소 팝업
+  const [confirmHidden, setConfirmHidden] = useState(true);
+
+  const handleCancel = async index => {
+    const { data } = reserveData;
+    const { status } = await axios
+      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
+        id: userInfo[0]?.id,
+        password: userInfo[0]?.password,
+        year: data[index]?.reserved_date.split('.')[0],
+        month: data[index]?.reserved_date.split('.')[1],
+        date: data[index]?.reserved_date.split('.')[2],
+        course: data[index]?.reserved_course,
+        time: data[index]?.reserved_time.replace(':', ''),
+      })
+      .catch(err => console.warn(err));
+
+    if (status === 200) {
+      setConfirmHidden(true);
+      router.push({
+        pathname: '/reserve',
+        query: { tab: 'my_book' },
+      });
+    }
+  };
 
   return (
     <>
@@ -41,7 +71,7 @@ const ReserveTap = ({ reserve, deleteItem }) => {
         </div>
 
         {deleteItem ? (
-          <div className={styles.trash}>
+          <div className={styles.trash} onClick={() => setConfirmHidden(false)}>
             <Image src={Trash} alt='arrow' width={25} height={25} />
           </div>
         ) : (
@@ -58,6 +88,64 @@ const ReserveTap = ({ reserve, deleteItem }) => {
             }
           />
         )}
+
+        <PopUp
+          buttonText='확인'
+          onButtonClick={() => {
+            handleCancel();
+          }}
+          hidden={confirmHidden}
+        >
+          <div className='component-wrap'>
+            <div className='inner-container'>
+              <ul className='desc-list'>
+                <li className='desc-item'>
+                  <div className='tit'>
+                    <em>예약일자</em>
+                  </div>
+                  <div className='desc'>
+                    <span>{reserve?.reserved_date}</span>
+                  </div>
+                </li>
+                <li className='desc-item'>
+                  <div className='tit'>
+                    <em>시간</em>
+                  </div>
+                  <div className='desc'>
+                    <span>{reserve?.reserved_time}</span>
+                  </div>
+                </li>
+                <li className='desc-item'>
+                  <div className='tit'>
+                    <em>코스명</em>
+                  </div>
+                  <div className='desc'>
+                    <span>{reserve?.reserved_course}</span>
+                  </div>
+                </li>
+                {/* <li className='desc-item'>
+                <div className='tit'>
+                  <em>홀정보</em>
+                </div>
+                <div className='desc'>
+                  <span>18홀</span>
+                </div>
+              </li>
+              <li className='desc-item'>
+                <div className='tit'>
+                  <em>그린피</em>
+                </div>
+                <div className='desc'>123123123</div>
+              </li> */}
+              </ul>
+            </div>
+            <div className='message-box line2-top pt-15'>
+              <p>예약을 취소하시겠습니까?</p>
+              <span>취소한 날짜에는</span>
+              <span>다시 예약 할 수 없습니다.</span>
+            </div>
+          </div>
+        </PopUp>
       </div>
     </>
   );

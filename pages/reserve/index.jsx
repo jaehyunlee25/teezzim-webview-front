@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { useMutation } from '@/lib/hooks/useMutation';
 import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
+import PopUp from '@/components/common/PopUp';
 import BottomMenu from '@/components/layouts/BottomMenu';
 
 import IconImport from '/assets/images/Icon_Import.svg';
@@ -93,17 +94,43 @@ const Reserve = () => {
       });
   };
 
+  const handleCancel = async index => {
+    console.log('🚀 - index', index);
+    const { data } = reserveData;
+    const { status } = await axios
+      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
+        id: userInfo[0]?.id,
+        password: userInfo[0]?.password,
+        year: data[0]?.reserved_date.split('.')[0],
+        month: data[0]?.reserved_date.split('.')[1],
+        date: data[0]?.reserved_date.split('.')[2],
+        course: data[0]?.reserved_course,
+        time: data[0]?.reserved_time.replace(':', ''),
+      })
+      .catch(err => console.warn(err));
+
+    if (status === 200) {
+      router.push({
+        pathname: '/reserve',
+        query: { tab: 'my_book' },
+      });
+    }
+  };
+
   return (
     <>
       <div className={styles.topNav}>
-        <button className={styles.sideBtn}>
+        <button
+          className={styles.sideBtn}
+          onClick={() => window.location.reload()}
+        >
           <Image src={IconImport} alt='Icon_Import' width={24} height={24} />
         </button>
-        <div className={styles.centerMenu}>
+        {/* <div className={styles.centerMenu}>
           <button>분류</button>
           <button>날짜</button>
           <button>골프장</button>
-        </div>
+        </div> */}
         <button
           className={styles.sideBtn}
           onClick={() => setDeleteItem(!deleteItem)}
@@ -121,8 +148,12 @@ const Reserve = () => {
             {reserveData?.data?.map((reserve, index) => (
               <ReserveTap
                 key={index}
+                index={index}
+                userInfo={userInfo}
                 reserve={reserve}
+                reserveData={reserveData}
                 deleteItem={deleteItem}
+                handleClick={() => setConfirmHidden(false)}
               />
             ))}
           </>
