@@ -366,24 +366,22 @@ const ButtonGroup = observer(
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const res = await axios
-        .post(
-          `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-          {
-            id,
-            password,
-            ...postInfo,
-          },
-          { cancelToken: source.token },
-        )
-        .catch(({ message }) => {
-          console.warn(message);
-        });
+      const res = await axios.post(
+        `/teezzim/teeapi/v1/club/${id}/reservation/post`,
+        {
+          id,
+          password,
+          ...postInfo,
+        },
+        { cancelToken: source.token },
+      );
+
       const {
         data = null,
         resultCode = null,
         message = null,
       } = res?.data ?? {};
+
       if (res?.status === 200) {
         if (resultCode === 1) {
           if (cb) cb();

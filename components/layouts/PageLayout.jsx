@@ -8,9 +8,8 @@ const PageTemplate = observer(({ children }) => {
   const message = toastStore.message;
   return (
     <>
-      <div className='container'>{children}</div>
-
       {!toastStore.hidden && <Toast message={message} />}
+      <div className='container'>{children}</div>
       <BottomMenu />
       <style jsx>
         {`
