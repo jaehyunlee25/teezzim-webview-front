@@ -54,14 +54,14 @@ const WaitContainerComponent = observer(() => {
           window.BRIDGE.saveWaitReservation(jsonStr);
         }, 100); // 약간 지연
       }
+      toastStore.setMessage(
+        <>
+          {mon}월 {date}일 ({day}요일) {waitData.length}개 골프장에
+          <br /> 예약대기를 만들었습니다.
+        </>,
+      );
+      toastStore.setHidden(false);
     }
-    toastStore.setMessage(
-      <>
-        {mon}월 {date}일 ({day}요일) {waitData.length}개 골프장에
-        <br /> 예약대기를 만들었습니다.
-      </>,
-    );
-    toastStore.setHidden(false);
   };
 
   const handleChecked = e => {

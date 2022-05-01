@@ -11,7 +11,7 @@ import Cap08 from '@/assets/images/temp/Cap08.svg';
 import Cap09 from '@/assets/images/temp/Cap09.svg';
 import Cap10 from '@/assets/images/temp/Cap10.svg';
 import { observer } from 'mobx-react-lite';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import useStores from '@/stores/useStores';
 import { getDay } from '@/lib/DateUtils';
 
@@ -27,12 +27,16 @@ const AlarmContainerComponent = observer(() => {
     '호남권',
     '제주도',
   ];
+
   const [filter, setFilter] = useState('전체');
-  const [chipStatus, setChipStatus] = useState(
-    filterList.reduce((acc, v) => ({ ...acc, [v]: 0 }), {}),
+  const initialChipStatus = filterList.reduce(
+    (acc, v) => ({ ...acc, [v]: 0 }),
+    {},
   );
+  const [chipStatus, setChipStatus] = useState(initialChipStatus);
 
   const [alarmData, setAlarmData] = useState([]);
+
   /** Tee Checkbox Handler */
   const handleCheck = e => {
     const { id, value } = e.target;
@@ -44,7 +48,6 @@ const AlarmContainerComponent = observer(() => {
       setAlarmData([...alarmData, id]);
       setChipStatus({ ...chipStatus, [value]: chipStatus?.[value] + 1 });
     }
-    console.log(chipStatus);
   };
 
   /** Toast에 필요한 데이터 형식 */
@@ -89,19 +92,37 @@ const AlarmContainerComponent = observer(() => {
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.saveOpenAlarmList) {
         // 앱에 보내줄 데이터 형식
-        const dataSample = [
-          {
-            clubId: '골프장id',
-            alarmDate: '예약일',
-            alarmTime: '예약시간',
-          },
-          // ... 체크된 갯수만큼 반복
-        ];
-        const jsonStr = JSON.stringify(dataSample);
+        // const dataSample = [
+        //   {
+        //     clubId: '골프장id',
+        //     alarmDate: '예약일',
+        //   },
+        //   // ... 체크된 갯수만큼 반복
+        // ];
+        const data = alarmData.map(v => ({
+          clubId: v,
+          alarmDate: currentDate,
+        }));
+        console.log(data);
+        const jsonStr = JSON.stringify(data);
         window.BRIDGE.saveOpenAlarmList(jsonStr);
       }
+      toastStore.setMessage(
+        <>
+          {mon}월 {date}일 ({day}요일) {alarmData.length}개 골프장에
+          <br />
+          예약오픈 알림을 만들었습니다.
+        </>,
+      );
+      toastStore.setHidden(false);
     }
   };
+
+  useEffect(() => {
+    /** 날짜 바뀔때마다 status 초기화 */
+    setAlarmData([]);
+    setChipStatus(initialChipStatus);
+  }, [currentDate]);
 
   return (
     <>
@@ -283,14 +304,24 @@ const TeeAlarmCard = ({
             <label htmlFor={id}></label>
           </div>
           <div className='area_info'>
-            <span>{name}</span>
+            <span>
+              {name.length <= 6 ? (
+                name
+              ) : (
+                <>
+                  {name.substring(0, 5)}
+                  <br />
+                  {name.substring(5)}
+                </>
+              )}
+            </span>
             {/* <span className='open_date'>{openData}일 오픈</span> */}
           </div>
         </div>
       </li>
       <style jsx>{`
         li {
-          width: 66px;
+          width: 68px;
           margin: 0px 4px;
         }
         .checkbg {
@@ -304,13 +335,16 @@ const TeeAlarmCard = ({
           margin: 0px;
         }
         .area_info {
+          text-align: center;
           display: flex;
           justify-content: center;
-          align-items: center;
+          width: 66px;
+          height: calc(100% - 54px);
         }
         .area_info > span {
-          max-width: 100%;
-          display: inline-block;
+          overflow-wrap: break-word;
+          word-break: break-all;
+          display: block;
         }
         .open_data {
           left: 50%;
