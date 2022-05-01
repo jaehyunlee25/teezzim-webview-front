@@ -14,9 +14,12 @@ import styles from '../../styles/Reserve.module.scss';
 
 const Reserve = () => {
   const [userInfo, setUserInfo] = useState([]);
-  console.log('🚀 - userInfo', userInfo);
+  // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
-  console.log('🚀 - reserveData', reserveData);
+  // console.log('🚀 - reserveData', reserveData);
+  const [reserveWait, setReserveWait] = useState([]);
+  console.log('🚀 - reserveWait', reserveWait);
+
   const [deleteItem, setDeleteItem] = useState(false);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
@@ -41,11 +44,51 @@ const Reserve = () => {
         };
 
         /** 예약 정보 APP->WEB 전송 */
-        // window.getAppData = function (jsonStr) {
-        //   const data = JSON.parse(jsonStr);
-        //   console.log(data);
-        //   // TODO 예약 확정 메뉴에 띄움?
-        // };
+        window.getSavedReservation = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장식별자",
+                "reserved_date": "2022.05.09",
+                "reserved_time": "05:25",
+                "reserved_course": "SOUTH"
+              },
+              // ... 반복
+            ]
+          */
+        };
+        /** 예약 대기 정보 APP->WEB 전송 */
+        window.getSavedWaitReservation = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          console.log(data);
+          setReserveWait(data);
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장식별자",
+                "waitDate": "날짜",
+                "waitTime": "시간"
+              },
+              // ... 반복
+            ]
+          */
+        };
+        /** 오픈 알림 정보 APP->WEB 전송 */
+        window.getSavedOpenAlarm = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          console.log(data);
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장id",
+                "alarmDate": "알람설정 일",
+                "alarmTime": "알람설정 시간",
+              },
+              // ... 반복
+            ]
+          */
+        };
 
         if (window.BRIDGE && window.BRIDGE.openWebMenu) {
           setTimeout(() => {

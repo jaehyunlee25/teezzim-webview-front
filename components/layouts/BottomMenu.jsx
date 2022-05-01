@@ -153,19 +153,16 @@ const BottomMenu = () => {
             z-index: 400;
           }
           #footer {
-            position: relative;
+            position: sticky;
+            bottom: 0;
           }
           #footer .inner {
           }
           /*하단고정*/
           .tabbar {
             width: 100%;
-            position: fixed;
-            bottom: 0px;
             background: #fff;
             margin: 0 auto;
-            left: 0;
-            right: 0;
             border-top: 1px solid #e0e0e0;
           }
           .tabbar {

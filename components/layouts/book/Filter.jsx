@@ -1,27 +1,38 @@
 import useStores from '@/stores/useStores';
 import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
-const Filter = props => {
+const FilterComponent = observer(props => {
   const { teeScheduleStore } = useStores();
 
   const [region, setRegion] = useState(true);
   const [time, setTime] = useState(true);
 
   const initialRegionItems = {
-    수도권: true,
-    강원도: true,
-    충청도: true,
-    영남권: true,
-    호남권: true,
-    제주도: true,
+    수도권: teeScheduleStore.areas.includes('수도권'),
+    강원도: teeScheduleStore.areas.includes('강원도'),
+    충청도: teeScheduleStore.areas.includes('충청도'),
+    영남권: teeScheduleStore.areas.includes('영남권'),
+    호남권: teeScheduleStore.areas.includes('호남권'),
+    제주도: teeScheduleStore.areas.includes('제주도'),
   };
 
   const initialTimeItems = {
-    '5,6': true,
-    '7,8': true,
-    '11,12': true,
-    '13,14,15,16,17,18,19,20': true,
-    '21,22,23,0,1,2,3,4': true,
+    '5,6':
+      new Set([...teeScheduleStore.times, 5, 6]).size ===
+      teeScheduleStore.times.length,
+    '7,8':
+      new Set([...teeScheduleStore.times, 7, 8]).size ===
+      teeScheduleStore.times.length,
+    '11,12':
+      new Set([...teeScheduleStore.times, 11, 12]).size ===
+      teeScheduleStore.times.length,
+    '13,14,15,16,17,18,19,20':
+      new Set([...teeScheduleStore.times, 13, 14, 15, 16, 17, 18, 19, 20])
+        .size === teeScheduleStore.times.length,
+    '21,22,23,0,1,2,3,4':
+      new Set([...teeScheduleStore.times, 21, 22, 23, 0, 1, 2, 3, 4]).size ===
+      teeScheduleStore.times.length,
   };
 
   const [regionItems, setRegionItems] = useState(initialRegionItems);
@@ -298,6 +309,7 @@ const Filter = props => {
       `}</style>
     </>
   );
-};
+});
 
+const Filter = props => <FilterComponent {...props} />;
 export default Filter;
