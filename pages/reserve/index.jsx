@@ -19,6 +19,8 @@ const Reserve = () => {
   // console.log('🚀 - reserveData', reserveData);
   const [reserveWait, setReserveWait] = useState([]);
   console.log('🚀 - reserveWait', reserveWait);
+  const [reserveAlarm, setReserveAlarm] = useState([]);
+  console.log('🚀 - reserveAlarm', reserveAlarm);
 
   const [deleteItem, setDeleteItem] = useState(false);
 
@@ -78,6 +80,7 @@ const Reserve = () => {
         window.getSavedOpenAlarm = function (jsonStr) {
           const data = JSON.parse(jsonStr);
           console.log(data);
+          setReserveAlarm(data);
           /* 예상 구조
             [
               {
@@ -92,14 +95,19 @@ const Reserve = () => {
 
         if (window.BRIDGE && window.BRIDGE.openWebMenu) {
           setTimeout(() => {
-            /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
-            window.BRIDGE.openWebMenu('MyReservation');
-          }, 300); // 약간 지연
+            window.BRIDGE.openWebMenu('Reservation');
+          }, 100); // 약간 지연
         } else {
           setTimeout(() => {
             // 웹뷰에서는 테스트 데이터로!
             window.getSavedAuth(
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
+            window.getSavedWaitReservation(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00"]}]`,
+            );
+            window.getSavedOpenAlarm(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-27"}]`,
             );
           }, 1000);
         }
@@ -135,29 +143,6 @@ const Reserve = () => {
         console.error(err);
         alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
       });
-  };
-
-  const handleCancel = async index => {
-    console.log('🚀 - index', index);
-    const { data } = reserveData;
-    const { status } = await axios
-      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
-        id: userInfo[0]?.id,
-        password: userInfo[0]?.password,
-        year: data[0]?.reserved_date.split('.')[0],
-        month: data[0]?.reserved_date.split('.')[1],
-        date: data[0]?.reserved_date.split('.')[2],
-        course: data[0]?.reserved_course,
-        time: data[0]?.reserved_time.replace(':', ''),
-      })
-      .catch(err => console.warn(err));
-
-    if (status === 200) {
-      router.push({
-        pathname: '/reserve',
-        query: { tab: 'my_book' },
-      });
-    }
   };
 
   return (
@@ -222,28 +207,81 @@ const Reserve = () => {
         )}
       </div>
 
+      {/* <span>
+              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
+            </span> */}
+
       <div className={styles.reserveState}>
         <p>예약 대기</p>
       </div>
       <div className={styles.reserveContainer}>
-        <p>예약 대기가 없습니다.</p>
-        {/* <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} /> */}
+        {reserveWait?.length > 0 ? (
+          <>
+            <p>{`아일랜드 CC | ${reserveWait[0]?.waitDate}`}</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              {reserveWait[0]?.waitTime?.map((item, index) => (
+                <p style={{ marginTop: '0' }} key={index}>
+                  {item.slice(0, 5).replace('', ' | ')}
+                </p>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            {reserveWait?.length === 0 ? (
+              <p>예약 대기가 없습니다.</p>
+            ) : (
+              <div className='message-box loading-box'>
+                <div className='loading-box'>
+                  <div className='loading-icon'>
+                    <span className='offscreen'>
+                      데이터를 가져오고 있습니다.
+                    </span>
+                  </div>
+                  <div className='loading-text ml-10'>
+                    데이터를 가져오고 있습니다.
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <div className={styles.reserveState}>
         <p>예약오픈 알림</p>
       </div>
       <div className={styles.reserveContainer}>
-        <p>예약오픈 알림이 없습니다.</p>
-        {/* <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} />
-        <ReserveTap deleteItem={deleteItem} /> */}
+        {reserveAlarm?.length > 0 ? (
+          <>
+            <p>{`아일랜드 CC | ${reserveAlarm[0]?.alarmDate}`}</p>
+          </>
+        ) : (
+          <>
+            {reserveWait?.length === 0 ? (
+              <p>예약 오픈 알림이 없습니다.</p>
+            ) : (
+              <div className='message-box loading-box'>
+                <div className='loading-box'>
+                  <div className='loading-icon'>
+                    <span className='offscreen'>
+                      데이터를 가져오고 있습니다.
+                    </span>
+                  </div>
+                  <div className='loading-text ml-10'>
+                    데이터를 가져오고 있습니다.
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
