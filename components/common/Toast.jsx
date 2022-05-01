@@ -37,7 +37,7 @@ export default function Toast({ message, ...props }) {
         }
 
         .notice > p {
-          padding: 4px 16px;
+          padding: 4px 8px;
         }
 
         @keyframes fadeOut {
