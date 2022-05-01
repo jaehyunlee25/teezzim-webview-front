@@ -366,10 +366,7 @@ const ButtonGroup = observer(
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const {
-        status = null,
-        data: { data = null, resultCode = null, message = null } = {},
-      } = await axios
+      const res = await axios
         .post(
           `/teezzim/teeapi/v1/club/${id}/reservation/post`,
           {
@@ -382,9 +379,12 @@ const ButtonGroup = observer(
         .catch(({ message }) => {
           console.warn(message);
         });
-
-      if (status === 200) {
-        console.log(resultCode, message, data);
+      const {
+        data = null,
+        resultCode = null,
+        message = null,
+      } = res?.data ?? {};
+      if (res?.status === 200) {
         if (resultCode === 1) {
           if (cb) cb();
         } else {
@@ -393,7 +393,7 @@ const ButtonGroup = observer(
         }
       } else {
         if (errCb) errCb();
-        handleClose('cancel');
+        console.warn('unhandled error');
       }
     };
     return (
