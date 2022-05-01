@@ -29,6 +29,7 @@ class TeeScheduleStore {
       removeTimes: action,
       addAreas: action,
       removeAreas: action,
+      initFilter: action,
     });
   }
 
@@ -80,6 +81,14 @@ class TeeScheduleStore {
   removeAreas(areas = [], clear = false) {
     if (clear) this._areas = [];
     else this._areas = this._areas.filter(area => !areas.includes(area));
+  }
+
+  initFilter() {
+    this._times = [
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23,
+    ];
+    this._areas = ['수도권', '강원도', '충청도', '영남권', '호남권', '제주도'];
   }
 }
 

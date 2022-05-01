@@ -57,6 +57,7 @@ const Reserve = () => {
         /** 예약 대기 정보 APP->WEB 전송 */
         window.getSavedWaitReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          console.log(data);
           /* 예상 구조
             [
               {
@@ -71,6 +72,7 @@ const Reserve = () => {
         /** 오픈 알림 정보 APP->WEB 전송 */
         window.getSavedOpenAlarm = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          console.log(data);
           /* 예상 구조
             [
               {

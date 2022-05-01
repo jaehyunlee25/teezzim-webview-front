@@ -10,8 +10,9 @@ import Cap07 from '@/assets/images/temp/Cap07.svg';
 import Cap08 from '@/assets/images/temp/Cap08.svg';
 import Cap09 from '@/assets/images/temp/Cap09.svg';
 import Cap10 from '@/assets/images/temp/Cap10.svg';
+import { observer } from 'mobx-react-lite';
 
-const AlarmContainer = () => {
+const AlarmContainerComponent = observer(() => {
   const filterList = [
     '전체',
     '수도권',
@@ -39,20 +40,20 @@ const AlarmContainer = () => {
     if (window) {
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.saveOpenAlarmList) {
-          // 앱에 보내줄 데이터 형식
-          const dataSample = [
-            { 
-              clubId: "골프장id",
-              waitDate: "예약일",
-              waitTime: "예약시간",
-            },
-            // ... 체크된 갯수만큼 반복
-          ];
-          const jsonStr = JSON.stringify(dataSample);
-          window.BRIDGE.saveOpenAlarmList(jsonStr);
+        // 앱에 보내줄 데이터 형식
+        const dataSample = [
+          {
+            clubId: '골프장id',
+            waitDate: '예약일',
+            waitTime: '예약시간',
+          },
+          // ... 체크된 갯수만큼 반복
+        ];
+        const jsonStr = JSON.stringify(dataSample);
+        window.BRIDGE.saveOpenAlarmList(jsonStr);
       }
     }
-  }
+  };
 
   return (
     <>
@@ -176,8 +177,9 @@ const AlarmContainer = () => {
       `}</style>
     </>
   );
-};
+});
 
+const AlarmContainer = () => <AlarmContainer />;
 export default AlarmContainer;
 
 const TeeAlarmCard = ({ registered = false, id, img, name, openData }) => {
