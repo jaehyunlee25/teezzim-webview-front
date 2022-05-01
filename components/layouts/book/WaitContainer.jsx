@@ -56,7 +56,10 @@ const WaitContainerComponent = observer(() => {
       }
     }
     toastStore.setMessage(
-      `${mon}월 ${date}일 (${day}요일) ${waitData.length}개 골프장에 예약대기를 만들었습니다.`,
+      <>
+        {mon}월 {date}일 ({day}요일) {waitData.length}개 골프장에
+        <br /> 예약대기를 만들었습니다.
+      </>,
     );
     toastStore.setHidden(false);
   };
@@ -94,6 +97,7 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 5, 6]).size === times.length
                           }
                           onChange={handleChecked}
+                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck21' className='time'>
                           <span className='text-r'>
@@ -114,6 +118,7 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 7, 8]).size === times.length
                           }
                           onChange={handleChecked}
+                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck22' className='time'>
                           <span className='text-r'>
@@ -134,6 +139,7 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 11, 12]).size === times.length
                           }
                           onChange={handleChecked}
+                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck23' className='time'>
                           <span className='text-r'>
@@ -155,6 +161,7 @@ const WaitContainerComponent = observer(() => {
                               .size === times.length
                           }
                           onChange={handleChecked}
+                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck24' className='time'>
                           <span className='text-r'>
@@ -176,6 +183,7 @@ const WaitContainerComponent = observer(() => {
                               .size === times.length
                           }
                           onChange={handleChecked}
+                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck25' className='time'>
                           <span className='text-c'>
@@ -198,6 +206,7 @@ const WaitContainerComponent = observer(() => {
                   type='button'
                   className='btn large wide round primary'
                   onClick={handleWaitButton}
+                  disabled={waitData.length === 0}
                 >
                   예약대기 만들기
                 </button>
