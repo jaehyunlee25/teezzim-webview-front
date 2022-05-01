@@ -74,12 +74,45 @@ const Panel = observer(({ hidden, setHidden }) => {
         /** 예약 정보 APP->WEB 전송 */
         window.getSavedReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
-          // TODO 예약 확정 메뉴에 띄움?
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장식별자",
+                "reserved_date": "2022.05.09",
+                "reserved_time": "05:25",
+                "reserved_course": "SOUTH"
+              },
+              // ... 반복
+            ]
+          */
         };
         /** 예약 대기 정보 APP->WEB 전송 */
         window.getSavedWaitReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
-          // TODO 예약 확정 메뉴에 띄움?
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장식별자",
+                "waitDate": "날짜",
+                "waitTime": "시간"
+              },
+              // ... 반복
+            ]
+          */
+        };
+        /** 오픈 알림 정보 APP->WEB 전송 */
+        window.getSavedOpenAlarm = function (jsonStr) {
+          const data = JSON.parse(jsonStr);
+          /* 예상 구조
+            [
+              {
+                "clubId": "골프장id",
+                "alarmDate": "알람설정 일",
+                "alarmTime": "알람설정 시간",
+              },
+              // ... 반복
+            ]
+          */
         };
 
         /** 예약하기 탭 열림완료 WEB->APP 전송 */
