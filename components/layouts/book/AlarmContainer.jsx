@@ -88,6 +88,14 @@ const AlarmContainerComponent = observer(() => {
   );
 
   const handleAlarmButton = e => {
+    // console.log(
+    //   JSON.stringify(
+    //     alarmData.map(v => ({
+    //       clubId: v,
+    //       alarmDate: currentDate,
+    //     })),
+    //   ),
+    // );
     if (window) {
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.saveOpenAlarmList) {

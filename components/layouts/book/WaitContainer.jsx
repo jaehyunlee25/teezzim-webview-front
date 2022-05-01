@@ -1,5 +1,5 @@
 import useStores from '@/stores/useStores';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { getDay } from '@/lib/DateUtils';
 
@@ -7,7 +7,6 @@ const WaitContainerComponent = observer(() => {
   const { teeScheduleStore, loadStore, toastStore } = useStores();
 
   const currentDate = teeScheduleStore.date;
-
   const [_, mon, date] = currentDate.split('-');
   const day = getDay(currentDate);
 
@@ -18,8 +17,8 @@ const WaitContainerComponent = observer(() => {
 
   const waitData = useMemo(
     () =>
-      Object.entries(teeScheduleStore.currentTeeSchedules ?? {}).map(
-        ([tee_id, schedules]) => {
+      Object.entries(teeScheduleStore.currentTeeSchedules ?? {})
+        .map(([tee_id, schedules]) => {
           return {
             clubId: tee_id,
             waitDate: currentDate,
@@ -33,11 +32,11 @@ const WaitContainerComponent = observer(() => {
               [],
             ), // schedule ID로 받아야 할 것 같음 => 시간, 골프장ID가 같은데 코스가 다른 경우
           };
-        },
-      ),
+        })
+        .filter(({ waitTime }) => waitTime.length > 0),
     [times, teeScheduleStore.currentTeeSchedules, currentDate],
   );
-  // console.log(waitData);
+  // console.log(JSON.stringify(waitData));
 
   const handleWaitButton = e => {
     if (window) {
@@ -72,6 +71,13 @@ const WaitContainerComponent = observer(() => {
     else setTimes([...times, ...targetTimes]);
   };
 
+  useEffect(() => {
+    setTimes([
+      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23,
+    ]);
+  }, [currentDate]);
+
   return (
     <>
       {loadStore.isLoading ? (
@@ -97,7 +103,6 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 5, 6]).size === times.length
                           }
                           onChange={handleChecked}
-                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck21' className='time'>
                           <span className='text-r'>
@@ -118,7 +123,6 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 7, 8]).size === times.length
                           }
                           onChange={handleChecked}
-                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck22' className='time'>
                           <span className='text-r'>
@@ -139,7 +143,6 @@ const WaitContainerComponent = observer(() => {
                             new Set([...times, 11, 12]).size === times.length
                           }
                           onChange={handleChecked}
-                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck23' className='time'>
                           <span className='text-r'>
@@ -161,7 +164,6 @@ const WaitContainerComponent = observer(() => {
                               .size === times.length
                           }
                           onChange={handleChecked}
-                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck24' className='time'>
                           <span className='text-r'>
@@ -183,7 +185,6 @@ const WaitContainerComponent = observer(() => {
                               .size === times.length
                           }
                           onChange={handleChecked}
-                          disabled={waitData.length === 0}
                         />
                         <label htmlFor='sCheck25' className='time'>
                           <span className='text-c'>

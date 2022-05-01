@@ -82,6 +82,9 @@ export default function Book() {
                   for (let schedule of scheduleList) {
                     const { golf_club_name } = schedule;
                     if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
+                    // 여기에서 SavedReservation Data로 필터링
+                    // nextAcc.nameMap[golf_club_name];
+                    // teeScheduleStore.reservedSchedules[golf]
                     nextAcc[nameMap[golf_club_name]] = {
                       ...(nextAcc[nameMap[golf_club_name]] || {}),
                       [course]: [

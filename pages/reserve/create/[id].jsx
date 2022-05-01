@@ -100,10 +100,19 @@ export default function CreateReservation() {
   /** PopUp Status */
   const [cancelHidden, setCancelHidden] = useState(true);
   const [confirmHidden, setConfirmHidden] = useState(true);
-  const handleOpen = type =>
-    type === 'confirm' ? setConfirmHidden(false) : setCancelHidden(false);
-  const handleClose = type =>
-    type === 'confirm' ? setConfirmHidden(true) : setCancelHidden(true);
+  const [errorHidden, setErrorHidden] = useState(true);
+
+  const handleOpen = type => {
+    if (type === 'confirm') setConfirmHidden(false);
+    else if (type === 'cancel') setCancelHidden(false);
+    else if (type === 'error') setErrorHidden(false);
+  };
+
+  const handleClose = type => {
+    if (type === 'confirm') setConfirmHidden(true);
+    else if (type === 'cancel') setCancelHidden(true);
+    else if (type === 'error') setErrorHidden(true);
+  };
 
   /** Axios Cancel Token */
   const CancelToken = axios.CancelToken;
@@ -225,6 +234,7 @@ export default function CreateReservation() {
               source={source}
               onButtonClick={() => handleOpen('cancel')}
               cb={() => handleOpen('confirm')}
+              errCb={() => handleOpen('error')}
             />
           )}
         </section>
@@ -312,6 +322,30 @@ export default function CreateReservation() {
           </div>
         </div>
       </PopUp>
+      <PopUp
+        buttonText='확인(홈으로 이동)'
+        onButtonClick={() => {
+          handleClose('error');
+          router.push({
+            pathname: '/home',
+            query: { tab: 'book' },
+          });
+        }}
+        hidden={errorHidden}
+      >
+        <div className='component-wrap'>
+          <div className='message-box'>
+            <p>
+              다른 회원이 예약했거나,
+              <br />
+              일시적 오류로 인해
+              <br />
+              예약할 수 없습니다.
+            </p>
+          </div>
+        </div>
+      </PopUp>
+
       <style jsx>{`
         .img_wrap {
           width: 100%;
@@ -324,20 +358,18 @@ export default function CreateReservation() {
 }
 
 const ButtonGroup = observer(
-  ({ clubId, postInfo, source, cb, onButtonClick }) => {
+  ({ clubId, postInfo, source, cb, errCb, onButtonClick }) => {
     const { panelStore, authStore } = useStores();
-    // account 넘어 왔다고 가정
-    // const account = {
-    //   id: 'newrison',
-    //   password: 'ilovegolf778',
-    // };
     const [{ id, password } = {}] =
       authStore.authList?.filter(auth => auth.clubId == clubId) ?? [];
 
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const { status, data: { data, resultCode, message } = {} } = await axios
+      const {
+        status = null,
+        data: { data = null, resultCode = null, message = null } = {},
+      } = await axios
         .post(
           `/teezzim/teeapi/v1/club/${id}/reservation/post`,
           {
@@ -349,7 +381,6 @@ const ButtonGroup = observer(
         )
         .catch(({ message }) => {
           console.warn(message);
-          return err;
         });
 
       if (status === 200) {
@@ -357,9 +388,11 @@ const ButtonGroup = observer(
         if (resultCode === 1) {
           if (cb) cb();
         } else {
+          if (errCb) errCb();
           console.warn(`[errorCode : ${resultCode}] ${message}`);
         }
       } else {
+        if (errCb) errCb();
         handleClose('cancel');
       }
     };
