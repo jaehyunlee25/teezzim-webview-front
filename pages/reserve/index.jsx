@@ -179,6 +179,7 @@ const Reserve = () => {
               <ReserveTap
                 key={index}
                 index={index}
+                type='reserve'
                 userInfo={userInfo}
                 reserve={reserve}
                 reserveData={reserveData}
@@ -237,23 +238,19 @@ const ReserveWaitList = observer(({ reserveWait }) => {
   const { panelStore } = useStores();
 
   return reserveWait?.length > 0 ? (
-    reserveWait.map(({ clubId, waitDate, waitTime }, idx) => {
+    reserveWait.map(({ clubId, waitDate, waitTime }, index) => {
       return (
-        <React.Fragment key={`${clubId}-wait-${idx}`}>
-          <p>{`${panelStore.teeListMap?.[clubId]?.name} | ${waitDate}`}</p>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            {waitTime?.map((item, index) => (
-              <p style={{ marginTop: '0' }} key={index}>
-                {item.slice(0, 5).replace('', ' | ')}
-              </p>
-            ))}
-          </div>
+        <React.Fragment key={`${clubId}-wait-${index}`}>
+          <ReserveTap
+            key={index}
+            index={index}
+            type='wait'
+            clubName={panelStore.teeListMap?.[clubId]?.name}
+            waitDate={waitDate}
+            waitTime={waitTime}
+            // deleteItem={deleteItem}
+            handleClick={() => setConfirmHidden(false)}
+          />
         </React.Fragment>
       );
     })
@@ -281,10 +278,19 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
   const { panelStore } = useStores();
 
   return reserveAlarm?.length > 0 ? (
-    reserveAlarm.map(({ clubId, alarmDate }, idx) => (
-      <p
-        key={`${clubId}-alarm-${idx}`}
-      >{`${panelStore?.teeListMap?.[clubId]?.name} | ${alarmDate}`}</p>
+    reserveAlarm.map(({ clubId, alarmDate }, index) => (
+      <ReserveTap
+        key={index}
+        index={index}
+        type='alarm'
+        clubName={panelStore?.teeListMap?.[clubId]?.name}
+        alarmDate={alarmDate}
+        // deleteItem={deleteItem}
+        handleClick={() => setConfirmHidden(false)}
+      />
+      // <p
+      //   key={`${clubId}-alarm-${idx}`}
+      // >{`${panelStore?.teeListMap?.[clubId]?.name} | ${alarmDate}`}</p>
     ))
   ) : (
     <>

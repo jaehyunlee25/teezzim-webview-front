@@ -12,7 +12,18 @@ import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
 
-const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
+const ReserveTap = ({
+  type,
+  index,
+  userInfo,
+  reserve,
+  reserveData,
+  deleteItem,
+  clubName,
+  waitDate,
+  waitTime,
+  alarmDate,
+}) => {
   const router = useRouter();
 
   // 취소 팝업
@@ -20,13 +31,6 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
 
   const handleCancel = async index => {
     const { data } = reserveData;
-    console.log('🚀 - data', data);
-    console.log('🚀 - year', data[index]?.reserved_date?.split('.')[1]);
-    console.log('🚀 - month', data[index]?.reserved_date?.split('.')[0]);
-    console.log('🚀 - date', data[index]?.reserved_date?.split('.')[2]);
-    console.log('🚀 - course', data[index]?.reserved_course);
-    console.log('🚀 - time', data[index]?.reserved_time?.replace(':', ''));
-
     const { status } = await axios
       .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
         id: userInfo[0]?.id,
@@ -55,27 +59,55 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
         <div className={styles.dateInfo}>
           <div className={styles.alert}>
             <span>D-7</span>
-            {/* <Image
-              className={styles.time}
-              src={Time}
-              alt='time'
-              width={26}
-              height={26}
-            /> */}
-            <Image
-              className={styles.bell}
-              src={Bell}
-              alt='bell'
-              width={26}
-              height={26}
-            />
+            {type === 'reserve' && (
+              <Image
+                className={styles.time}
+                src={Time}
+                alt='time'
+                width={26}
+                height={26}
+              />
+            )}
+
+            {type === 'wait' && (
+              <Image
+                className={styles.bell}
+                src={Bell}
+                alt='bell'
+                width={26}
+                height={26}
+              />
+            )}
           </div>
-          <div>
-            <span>{reserve?.reserved_date}</span>
-            <span>
-              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
-            </span>
-          </div>
+          {type === 'reserve' && (
+            <div>
+              <span>{reserve?.reserved_date}</span>
+              <span>
+                {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
+              </span>
+            </div>
+          )}
+
+          {type === 'wait' && (
+            <div>
+              <span>{waitDate}</span>
+              <span>{`${clubName} `}</span>
+              <div className={styles.waitTime}>
+                {waitTime?.map((item, index) => (
+                  <p key={index} style={{ margin: '0.3rem' }}>
+                    {item.slice(0, 5).replace('', ' ')}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {type === 'alarm' && (
+            <div>
+              <span>{alarmDate}</span>
+              <span>{`${clubName} `}</span>
+            </div>
+          )}
         </div>
 
         {deleteItem ? (
@@ -83,18 +115,22 @@ const ReserveTap = ({ index, userInfo, reserve, reserveData, deleteItem }) => {
             <Image src={Trash} alt='arrow' width={25} height={25} />
           </div>
         ) : (
-          <Image
-            src={Arrow}
-            alt='arrow'
-            width={5}
-            height={26}
-            onClick={() =>
-              router.push({
-                pathname: `/reserve/${reserve?.golf_club?.id}`,
-                query: { tab: 'my_book' },
-              })
-            }
-          />
+          <>
+            {type === 'reserve' ? (
+              <Image
+                src={Arrow}
+                alt='arrow'
+                width={5}
+                height={26}
+                onClick={() =>
+                  router.push({
+                    pathname: `/reserve/${reserve?.golf_club?.id}`,
+                    query: { tab: 'my_book' },
+                  })
+                }
+              />
+            ) : null}
+          </>
         )}
 
         <PopUp
