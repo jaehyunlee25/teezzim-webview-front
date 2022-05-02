@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import useSWR from 'swr';
 import Image from 'next/image';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 
 const Reserve = () => {
+  const { panelStore } = useStores();
   const [userInfo, setUserInfo] = useState([]);
   // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
@@ -23,6 +24,35 @@ const Reserve = () => {
   console.log('🚀 - reserveWait', reserveWait);
   const [reserveAlarm, setReserveAlarm] = useState([]);
   console.log('🚀 - reserveAlarm', reserveAlarm);
+
+  /** Tee 정보 가져오는 API 호출 */
+  const mountRef = useRef(true);
+  const getTeeList = useCallback(async () => {
+    const {
+      status,
+      data: { resultCode, message, data },
+    } = await axios.get('/teezzim/teeapi/v1/club');
+    if (!mountRef.current) return;
+    if (status === 200) {
+      if (resultCode === 1) {
+        panelStore.setTeeList(data);
+        mountRef.current = false;
+      } else {
+        console.warn(`[error code : ${resultCode}] ${message}`);
+      }
+    } else {
+      console.warn(`[error code : ${status}]`);
+    }
+  }, [panelStore]);
+
+  useEffect(() => {
+    mountRef.current = true;
+    getTeeList();
+    return () => {
+      mountRef.current = false;
+    };
+  }, [getTeeList]);
+  /**  */
 
   const [deleteItem, setDeleteItem] = useState(false);
 
@@ -37,10 +67,20 @@ const Reserve = () => {
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
           setUserInfo(JSON.parse(jsonStr));
+
           // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
           const dataList = JSON.parse(jsonStr);
+          panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
           // console.log(dataList);
+
           for (let i = 0; i < dataList.length; i++) {
+            const findIndex = panelStore.teeList.findIndex(
+              item => item.id == dataList[i].clubId,
+            );
+            if (findIndex > -1) {
+              dataList[i].clubInfo = panelStore.teeList[findIndex];
+            }
+
             const data = dataList[i];
             handleGetReservationInfo(data.clubId, data.id, data.password);
             // TODO 배열일 경우에는??
@@ -116,7 +156,7 @@ const Reserve = () => {
       }
       setIsInitSignal(true);
     }
-  }, [isInitSignalSendApp]);
+  }, [isInitSignalSendApp, panelStore]);
 
   const handleGetReservationInfo = function (club, id, password) {
     axios({
