@@ -20,6 +20,29 @@ export const TeeListArea = ({ registered, list }) => {
     ImgGolf6,
     ImgGolf7,
   ];
+
+  const saveLoginInfo = e => {
+    if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
+      const sampleData = {
+        "clubId":"골프장식별자",
+        "id":"아이디",
+        "pw":"패스워드"
+      };
+      window.BRIDGE.saveLoginInfo( JSON.stringify(sampleData) );
+    } else {
+      alert("이 기능은 앱에서만 동작합니다.");
+      return;
+    }
+  }
+  const removeLoginInfo = e => {
+    if (window.BRIDGE && window.BRIDGE.removeLoginInfo) {
+      window.BRIDGE.removeLoginInfo("골프장식별자");
+    } else {
+      alert("이 기능은 앱에서만 동작합니다.");
+      return;
+    }
+  }
+
   return (
     <>
       <div className='list_Golfarea'>
