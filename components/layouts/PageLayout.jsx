@@ -2,13 +2,18 @@ import Toast from '@/components/common/Toast';
 import BottomMenu from '@/components/layouts/BottomMenu';
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
+import LoginModal from '../common/Modal/LoginModal';
+import ModalContainer from '../common/Modal/ModalContainer';
+import ReLoginModal from '../common/Modal/ReLoginModal';
 
 const PageTemplate = observer(({ children }) => {
-  const { toastStore } = useStores();
+  const { toastStore, modalStore } = useStores();
   const message = toastStore.message;
+
   return (
     <>
       {!toastStore.hidden && <Toast message={message} />}
+      <ModalContainer title='계정등록' hidden={modalStore.hidden} />
       <div className='container'>{children}</div>
       <BottomMenu />
       <style jsx>

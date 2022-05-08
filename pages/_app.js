@@ -12,6 +12,7 @@ import teeScheduleStore from '@/stores/teeScheduleStore';
 import loadStore from '@/stores/loadStore';
 import authStore from '@/stores/authStore';
 import toastStore from '@/stores/toastStore';
+import modalStore from '@/stores/modalStore';
 
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
@@ -27,6 +28,7 @@ export default function MyApp({ Component, pageProps }) {
     loadStore,
     authStore,
     toastStore,
+    modalStore,
   };
 
   return (
