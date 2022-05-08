@@ -328,9 +328,6 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
         // deleteItem={deleteItem}
         handleClick={() => setConfirmHidden(false)}
       />
-      // <p
-      //   key={`${clubId}-alarm-${idx}`}
-      // >{`${panelStore?.teeListMap?.[clubId]?.name} | ${alarmDate}`}</p>
     ))
   ) : (
     <>

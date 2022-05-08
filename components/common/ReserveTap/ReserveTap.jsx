@@ -94,7 +94,7 @@ const ReserveTap = ({
               <span>{`${clubName} `}</span>
               <div className={styles.waitTime}>
                 {waitTime?.map((item, index) => (
-                  <p key={index} style={{ margin: '0.3rem' }}>
+                  <p key={index} style={{ margin: '0.2rem' }}>
                     {item.slice(0, 5).replace('', ' ')}
                   </p>
                 ))}

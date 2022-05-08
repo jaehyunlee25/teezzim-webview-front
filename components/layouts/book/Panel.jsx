@@ -51,7 +51,8 @@ const Panel = observer(() => {
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
-    if (!isInitSignalSendApp) {
+    console.log(authStore.communicated);
+    if (!isInitSignalSendApp || !authStore.communicated) {
       if (window) {
         // window 존재여부 체크 (nextjs 특징)
         /** 로그인 APP->WEB 전송 */
@@ -160,7 +161,7 @@ const Panel = observer(() => {
       }
       setIsInitSignal(true);
     }
-  }, [isInitSignalSendApp, panelStore, authStore]);
+  }, [isInitSignalSendApp, panelStore, authStore, authStore.communicated]);
 
   const handleSelectContainer = e => {
     const selectedLength = panelStore.checkedTeeList.size;

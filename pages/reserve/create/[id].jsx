@@ -1,22 +1,23 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import useAsyncMount from '@/lib/hooks/useAsyncMount';
+
 import axios from 'axios';
 import { useState, useCallback, useEffect } from 'react';
-import { getOffsetFirstDay } from '@/lib/DateUtils';
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
+import useAsyncMount from '@/lib/hooks/useAsyncMount';
+import { getOffsetFirstDay } from '@/lib/DateUtils';
+
 import PopUp from '@/components/common/PopUp';
 import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 import UnregisteredMsg from '@/components/layouts/reserve/create/UnregisteredMsg';
+import ButtonGroup from '@/components/layouts/reserve/create/ButtonGroup';
 
 export default function CreateReservation() {
   const router = useRouter();
   const { id, tee_id } = router.query;
-  const { panelStore, authStore } = useStores();
 
   const [tee, setTee] = useState({});
-
   const {
     date = '',
     fee_discount = '',
@@ -24,6 +25,7 @@ export default function CreateReservation() {
     golf_club_name = '',
     golf_course_name = '',
     time = '',
+    GolfClub = {},
   } = tee ?? {};
 
   const dayList = ['일', '월', '화', '수', '목', '금', '토'];
@@ -49,7 +51,7 @@ export default function CreateReservation() {
     if (!mountRef.current) return;
     if (status === 200) {
       if (resultCode === 1) {
-        console.log(data);
+        // console.log(data);
         setTee(data);
         mountRef.current = false;
       } else {
@@ -61,41 +63,6 @@ export default function CreateReservation() {
   }, [id]);
 
   const { mountRef } = useAsyncMount(fetchSchedule);
-
-  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
-  /** APP<->WEB 브릿지 함수용 */
-  useEffect(() => {
-    if (!isInitSignalSendApp && !authStore.communicated) {
-      if (window) {
-        // window 존재여부 체크 (nextjs 특징)
-        /** 로그인 APP->WEB 전송 */
-        window.getSavedAuth = function (jsonStr) {
-          console.log(jsonStr);
-          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
-          const dataList = JSON.parse(jsonStr);
-          panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
-          authStore.saveAuthList(dataList);
-          authStore.communicate();
-          // setSavedAuthList(dataList);
-        };
-
-        /** 예약하기 탭 열림완료 WEB->APP 전송 */
-        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
-          setTimeout(() => {
-            window.BRIDGE.openWebMenu('Reservation');
-          }, 100); // 약간 지연
-        } else {
-          setTimeout(() => {
-            // 웹뷰에서는 테스트 데이터로!
-            window.getSavedAuth(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
-            );
-          }, 1000);
-        }
-      }
-      setIsInitSignal(true);
-    }
-  }, [isInitSignalSendApp, panelStore, authStore]);
 
   /** PopUp Status */
   const [cancelHidden, setCancelHidden] = useState(true);
@@ -120,6 +87,7 @@ export default function CreateReservation() {
 
   return (
     <>
+      <ConnectWithApp />
       <div id='header'>
         <button
           type='button'
@@ -235,6 +203,7 @@ export default function CreateReservation() {
               onButtonClick={() => handleOpen('cancel')}
               cb={() => handleOpen('confirm')}
               errCb={() => handleOpen('error')}
+              golfInfo={GolfClub}
             />
           )}
         </section>
@@ -357,98 +326,40 @@ export default function CreateReservation() {
   );
 }
 
-const ButtonGroup = observer(
-  ({ clubId, postInfo, source, cb, errCb, onButtonClick }) => {
-    const { panelStore, authStore } = useStores();
-    const [{ id, password } = {}] =
-      authStore.authList?.filter(auth => auth.clubId == clubId) ?? [];
+const ConnectWithApp = observer(() => {
+  const { panelStore, authStore } = useStores();
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false);
+  /** APP<->WEB 브릿지 함수용 */
+  useEffect(() => {
+    if (!isInitSignalSendApp && !authStore.communicated) {
+      if (window) {
+        // window 존재여부 체크 (nextjs 특징)
+        /** 로그인 APP->WEB 전송 */
+        window.getSavedAuth = function (jsonStr) {
+          console.log(jsonStr);
+          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
+          const dataList = JSON.parse(jsonStr);
+          panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
+          authStore.saveAuthList(dataList);
+          authStore.communicate();
+        };
 
-    const handleCreateReserve = async () => {
-      if (!id || !password) return;
-      if (onButtonClick) onButtonClick();
-      const res = await axios
-        .post(
-          `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-          {
-            id,
-            password,
-            ...postInfo,
-          },
-          { cancelToken: source.token },
-        )
-        .catch(err => {
-          console.warn(err);
-        });
-
-      const {
-        data = null,
-        resultCode = null,
-        message = null,
-      } = res?.data ?? {};
-
-      if (res?.status === 200) {
-        if (resultCode === 1) {
-          if (cb) cb();
+        /** 예약하기 탭 열림완료 WEB->APP 전송 */
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            window.BRIDGE.openWebMenu('Reservation');
+          }, 100); // 약간 지연
         } else {
-          if (errCb) errCb();
-          console.warn(`[errorCode : ${resultCode}] ${message}`);
+          setTimeout(() => {
+            // 웹뷰에서는 테스트 데이터로!
+            window.getSavedAuth(
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+            );
+          }, 1000);
         }
-      } else {
-        if (errCb) errCb();
-        console.warn('unhandled error');
       }
-    };
-    return (
-      <>
-        {panelStore.registeredKeys.includes(clubId) ? (
-          <div className='component-wrap'>
-            <ul className='btn-group btn-group__fixed'>
-              <li>
-                <button
-                  type='button'
-                  className='btn large rest full'
-                  onClick={handleCreateReserve}
-                >
-                  간편예약
-                </button>
-              </li>
-              <li>
-                <HomepageLink
-                  id={clubId}
-                  type='button'
-                  className='btn large rest full'
-                >
-                  홈페이지예약
-                </HomepageLink>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <div className='component-wrap'>
-            <ul className='btn-group btn-group__fixed'>
-              <HomepageLink
-                id={clubId}
-                type='button'
-                className='btn large rest full'
-              >
-                골프장 회원가입
-              </HomepageLink>
-
-              <li>
-                <button type='button' className='btn large rest full'>
-                  골프장 계정등록
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
-        <style jsx>{`
-          .btn-group {
-            display: flex;
-            bottom: 72px;
-          }
-        `}</style>
-      </>
-    );
-  },
-);
+      setIsInitSignal(true);
+    }
+  }, [isInitSignalSendApp, panelStore, authStore, authStore.communicated]);
+  return <></>;
+});

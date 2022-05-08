@@ -20,15 +20,15 @@ class AuthStore {
   }
 
   get communicated() {
-    return this._authSaved?.length > 0 || this._communicated;
+    return this._communicated;
   }
 
   saveAuthList(authList) {
     this._authList = authList;
   }
 
-  communicate() {
-    this._communicated = true;
+  communicate(condition) {
+    this._communicated = condition ?? true;
   }
 }
 
