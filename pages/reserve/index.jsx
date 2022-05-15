@@ -193,6 +193,13 @@ const Reserve = () => {
       });
   };
 
+  let today = new Date();
+  let dDay = new Date(2022, 4, 16);
+  let gap = dDay.getTime() - today.getTime();
+
+  let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+  console.log('🚀 - dDayResult', dDayResult);
+
   return (
     <>
       <div className={styles.topNav}>
@@ -221,18 +228,29 @@ const Reserve = () => {
       <div className={styles.reserveContainer}>
         {reserveData?.data?.length > 0 ? (
           <>
-            {reserveData?.data?.map((reserve, index) => (
-              <ReserveTap
-                key={index}
-                index={index}
-                type='reserve'
-                userInfo={userInfo}
-                reserve={reserve}
-                reserveData={reserveData}
-                deleteItem={deleteItem}
-                handleClick={() => setConfirmHidden(false)}
-              />
-            ))}
+            {reserveData?.data?.map((reserve, index) => {
+              const year = reserve?.reserved_date?.split('.')[0];
+              const month = reserve?.reserved_date?.split('.')[1];
+              const day = reserve?.reserved_date?.split('.')[2];
+              let today = new Date();
+              let dDay = new Date(year, month - 1, day);
+              let gap = dDay.getTime() - today.getTime();
+              let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+
+              return (
+                <ReserveTap
+                  key={index}
+                  index={index}
+                  type='reserve'
+                  userInfo={userInfo}
+                  reserve={reserve}
+                  reserveData={reserveData}
+                  deleteItem={deleteItem}
+                  dDay={dDayResult}
+                  handleClick={() => setConfirmHidden(false)}
+                />
+              );
+            })}
           </>
         ) : (
           <>
@@ -285,6 +303,13 @@ const ReserveWaitList = observer(({ reserveWait }) => {
 
   return reserveWait?.length > 0 ? (
     reserveWait.map(({ clubId, waitDate, waitTime }, index) => {
+      const year = waitDate?.split('-')[0];
+      const month = waitDate?.split('-')[1];
+      const day = waitDate?.split('-')[2];
+      let today = new Date();
+      let dDay = new Date(year, month - 1, day);
+      let gap = dDay.getTime() - today.getTime();
+      let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
       return (
         <React.Fragment key={`${clubId}-wait-${index}`}>
           <ReserveTap
@@ -294,6 +319,7 @@ const ReserveWaitList = observer(({ reserveWait }) => {
             clubName={panelStore.teeListMap?.[clubId]?.name}
             waitDate={waitDate}
             waitTime={waitTime}
+            dDay={dDayResult}
             // deleteItem={deleteItem}
             handleClick={() => setConfirmHidden(false)}
           />
@@ -324,17 +350,27 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
   const { panelStore } = useStores();
 
   return reserveAlarm?.length > 0 ? (
-    reserveAlarm.map(({ clubId, alarmDate }, index) => (
-      <ReserveTap
-        key={index}
-        index={index}
-        type='alarm'
-        clubName={panelStore?.teeListMap?.[clubId]?.name}
-        alarmDate={alarmDate}
-        // deleteItem={deleteItem}
-        handleClick={() => setConfirmHidden(false)}
-      />
-    ))
+    reserveAlarm.map(({ clubId, alarmDate }, index) => {
+      const year = alarmDate?.split('-')[0];
+      const month = alarmDate?.split('-')[1];
+      const day = alarmDate?.split('-')[2];
+      let today = new Date();
+      let dDay = new Date(year, month - 1, day);
+      let gap = dDay.getTime() - today.getTime();
+      let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+      return (
+        <ReserveTap
+          key={index}
+          index={index}
+          type='alarm'
+          clubName={panelStore?.teeListMap?.[clubId]?.name}
+          alarmDate={alarmDate}
+          dDay={dDayResult}
+          // deleteItem={deleteItem}
+          handleClick={() => setConfirmHidden(false)}
+        />
+      );
+    })
   ) : (
     <>
       {reserveAlarm?.length === 0 ? (

@@ -23,6 +23,7 @@ const ReserveTap = ({
   waitDate,
   waitTime,
   alarmDate,
+  dDay,
 }) => {
   const router = useRouter();
 
@@ -58,7 +59,7 @@ const ReserveTap = ({
       <div className={styles.reserveTapContainer}>
         <div className={styles.dateInfo}>
           <div className={styles.alert}>
-            <span>D-7</span>
+            <span>{`D-${dDay}`}</span>
             {type === 'reserve' && (
               <Image
                 className={styles.time}
