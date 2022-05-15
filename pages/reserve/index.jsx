@@ -19,7 +19,7 @@ const Reserve = () => {
   const [userInfo, setUserInfo] = useState([]);
   // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
-  // console.log('🚀 - reserveData', reserveData);
+  console.log('🚀 - reserveData', reserveData);
   const [reserveWait, setReserveWait] = useState([]);
   console.log('🚀 - reserveWait', reserveWait);
   const [reserveAlarm, setReserveAlarm] = useState([]);
@@ -90,6 +90,8 @@ const Reserve = () => {
         /** 예약 정보 APP->WEB 전송 */
         window.getSavedReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          console.log(data);
+          setReserveData(data);
           /* 예상 구조
             [
               {
@@ -145,8 +147,11 @@ const Reserve = () => {
             window.getSavedAuth(
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
             );
+            // window.getSavedReservation(
+            //   `[{"clubId:"6cbc1160-79af-11ec-b15c-0242ac110005", "reserved_date": "2022.05.09", "reserved_time": "05:25", "reserved_course": "SOUTH"}]`,
+            // );
             window.getSavedWaitReservation(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00"]}]`,
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00","05:30:00","05:31:00"]}]`,
             );
             window.getSavedOpenAlarm(
               `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-26"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-26"}]`,
