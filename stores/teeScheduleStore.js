@@ -4,6 +4,7 @@ class TeeScheduleStore {
   _teeSchedules = {}; // id : golfSchedule
   _reservedSchedules = {}; // id: golfSchedule
   _date;
+  _calenderUpdate = false;
   _times = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23,
@@ -15,6 +16,7 @@ class TeeScheduleStore {
       _teeSchedules: observable,
       _reservedSchedules: observable,
       _date: observable,
+      _calenderUpdate: observable,
       _times: observable,
       _areas: observable,
 
@@ -33,6 +35,7 @@ class TeeScheduleStore {
       addAreas: action,
       removeAreas: action,
       initFilter: action,
+      setCalenderUpdate: action,
     });
   }
 
@@ -103,6 +106,10 @@ class TeeScheduleStore {
       21, 22, 23,
     ];
     this._areas = ['수도권', '강원도', '충청도', '영남권', '호남권', '제주도'];
+  }
+
+  setCalenderUpdate(condition = true) {
+    this._calenderUpdate = condition;
   }
 }
 
