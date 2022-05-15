@@ -82,7 +82,8 @@ const Reserve = () => {
             }
 
             const data = dataList[i];
-            handleGetReservationInfo(data.clubId, data.id, data.password);
+            const pw = data.password || data.pw; // undefined 방지
+            handleGetReservationInfo(data.clubId, data.id, pw);
             // TODO 배열일 경우에는??
           }
         };
