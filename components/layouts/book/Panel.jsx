@@ -15,7 +15,7 @@ import teeScheduleStore from '@/stores/teeScheduleStore';
 const Panel = observer(() => {
   const router = useRouter();
   const { ...others } = router?.query;
-  const { panelStore, authStore, toastStore } = useStores();
+  const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -187,6 +187,8 @@ const Panel = observer(() => {
         return;
       }
     }
+
+    if (id === 'book') teeScheduleStore.setCalenderUpdate();
 
     router.push({
       href: '/home',

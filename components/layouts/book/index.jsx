@@ -162,6 +162,7 @@ export default function Book() {
                       yearMonth.month,
                     );
                     setYearMonth({ year, month });
+                    teeScheduleStore.setCalenderUpdate();
                   }}
                 >
                   <span className='offscreen'>이전달</span>
@@ -175,6 +176,7 @@ export default function Book() {
                       yearMonth.month,
                     );
                     setYearMonth({ year, month });
+                    teeScheduleStore.setCalenderUpdate();
                   }}
                 >
                   <span className='offscreen'>다음달</span>
