@@ -19,7 +19,7 @@ const Reserve = () => {
   const [userInfo, setUserInfo] = useState([]);
   // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
-  // console.log('🚀 - reserveData', reserveData);
+  console.log('🚀 - reserveData', reserveData);
   const [reserveWait, setReserveWait] = useState([]);
   console.log('🚀 - reserveWait', reserveWait);
   const [reserveAlarm, setReserveAlarm] = useState([]);
@@ -82,7 +82,8 @@ const Reserve = () => {
             }
 
             const data = dataList[i];
-            handleGetReservationInfo(data.clubId, data.id, data.password);
+            const pw = data.password || data.pw; // undefined 방지
+            handleGetReservationInfo(data.clubId, data.id, pw);
             // TODO 배열일 경우에는??
           }
         };
@@ -90,6 +91,8 @@ const Reserve = () => {
         /** 예약 정보 APP->WEB 전송 */
         window.getSavedReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);
+          console.log(data);
+          setReserveData(data);
           /* 예상 구조
             [
               {
@@ -145,8 +148,11 @@ const Reserve = () => {
             window.getSavedAuth(
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
             );
+            // window.getSavedReservation(
+            //   `[{"clubId:"6cbc1160-79af-11ec-b15c-0242ac110005", "reserved_date": "2022.05.09", "reserved_time": "05:25", "reserved_course": "SOUTH"}]`,
+            // );
             window.getSavedWaitReservation(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00"]}]`,
+              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00","05:30:00","05:31:00"]}]`,
             );
             window.getSavedOpenAlarm(
               `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-26"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-26"}]`,
@@ -187,6 +193,13 @@ const Reserve = () => {
       });
   };
 
+  let today = new Date();
+  let dDay = new Date(2022, 4, 16);
+  let gap = dDay.getTime() - today.getTime();
+
+  let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+  console.log('🚀 - dDayResult', dDayResult);
+
   return (
     <>
       <div className={styles.topNav}>
@@ -215,18 +228,29 @@ const Reserve = () => {
       <div className={styles.reserveContainer}>
         {reserveData?.data?.length > 0 ? (
           <>
-            {reserveData?.data?.map((reserve, index) => (
-              <ReserveTap
-                key={index}
-                index={index}
-                type='reserve'
-                userInfo={userInfo}
-                reserve={reserve}
-                reserveData={reserveData}
-                deleteItem={deleteItem}
-                handleClick={() => setConfirmHidden(false)}
-              />
-            ))}
+            {reserveData?.data?.map((reserve, index) => {
+              const year = reserve?.reserved_date?.split('.')[0];
+              const month = reserve?.reserved_date?.split('.')[1];
+              const day = reserve?.reserved_date?.split('.')[2];
+              let today = new Date();
+              let dDay = new Date(year, month - 1, day);
+              let gap = dDay.getTime() - today.getTime();
+              let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+
+              return (
+                <ReserveTap
+                  key={index}
+                  index={index}
+                  type='reserve'
+                  userInfo={userInfo}
+                  reserve={reserve}
+                  reserveData={reserveData}
+                  deleteItem={deleteItem}
+                  dDay={dDayResult}
+                  handleClick={() => setConfirmHidden(false)}
+                />
+              );
+            })}
           </>
         ) : (
           <>
@@ -279,6 +303,13 @@ const ReserveWaitList = observer(({ reserveWait }) => {
 
   return reserveWait?.length > 0 ? (
     reserveWait.map(({ clubId, waitDate, waitTime }, index) => {
+      const year = waitDate?.split('-')[0];
+      const month = waitDate?.split('-')[1];
+      const day = waitDate?.split('-')[2];
+      let today = new Date();
+      let dDay = new Date(year, month - 1, day);
+      let gap = dDay.getTime() - today.getTime();
+      let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
       return (
         <React.Fragment key={`${clubId}-wait-${index}`}>
           <ReserveTap
@@ -288,6 +319,7 @@ const ReserveWaitList = observer(({ reserveWait }) => {
             clubName={panelStore.teeListMap?.[clubId]?.name}
             waitDate={waitDate}
             waitTime={waitTime}
+            dDay={dDayResult}
             // deleteItem={deleteItem}
             handleClick={() => setConfirmHidden(false)}
           />
@@ -318,17 +350,27 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
   const { panelStore } = useStores();
 
   return reserveAlarm?.length > 0 ? (
-    reserveAlarm.map(({ clubId, alarmDate }, index) => (
-      <ReserveTap
-        key={index}
-        index={index}
-        type='alarm'
-        clubName={panelStore?.teeListMap?.[clubId]?.name}
-        alarmDate={alarmDate}
-        // deleteItem={deleteItem}
-        handleClick={() => setConfirmHidden(false)}
-      />
-    ))
+    reserveAlarm.map(({ clubId, alarmDate }, index) => {
+      const year = alarmDate?.split('-')[0];
+      const month = alarmDate?.split('-')[1];
+      const day = alarmDate?.split('-')[2];
+      let today = new Date();
+      let dDay = new Date(year, month - 1, day);
+      let gap = dDay.getTime() - today.getTime();
+      let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+      return (
+        <ReserveTap
+          key={index}
+          index={index}
+          type='alarm'
+          clubName={panelStore?.teeListMap?.[clubId]?.name}
+          alarmDate={alarmDate}
+          dDay={dDayResult}
+          // deleteItem={deleteItem}
+          handleClick={() => setConfirmHidden(false)}
+        />
+      );
+    })
   ) : (
     <>
       {reserveAlarm?.length === 0 ? (
