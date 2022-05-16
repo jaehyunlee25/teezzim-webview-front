@@ -8,14 +8,21 @@ const BookContainer = observer(() => {
   const router = useRouter();
   const { subTab } = router?.query ?? {};
   const { teeScheduleStore, loadStore, panelStore } = useStores();
-
   const registeredTee = useMemo(() => {
-    return Object.entries(teeScheduleStore.currentTeeSchedules).filter(
-      ([tee_id, schedules]) =>
-        panelStore.registeredKeys.includes(tee_id) &&
-        Object.keys(schedules).length > 0 &&
-        teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
-    );
+    return Object.entries(teeScheduleStore.currentTeeSchedules)
+      .filter(
+        ([tee_id, schedules]) =>
+          panelStore.registeredKeys.includes(tee_id) &&
+          Object.keys(schedules).length > 0 &&
+          teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
+      )
+      .sort((a, b) => {
+        const [aName, bName] = [
+          panelStore.teeListMap[a[0]].name,
+          panelStore.teeListMap[b[0]].name,
+        ];
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
   }, [
     teeScheduleStore.currentTeeSchedules,
     panelStore.registeredKeys,
@@ -24,12 +31,20 @@ const BookContainer = observer(() => {
   ]);
 
   const unregisteredTee = useMemo(() => {
-    return Object.entries(teeScheduleStore.currentTeeSchedules).filter(
-      ([tee_id, schedules]) =>
-        !panelStore.registeredKeys.includes(tee_id) &&
-        Object.keys(schedules).length > 0 &&
-        teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
-    );
+    return Object.entries(teeScheduleStore.currentTeeSchedules)
+      .filter(
+        ([tee_id, schedules]) =>
+          !panelStore.registeredKeys.includes(tee_id) &&
+          Object.keys(schedules).length > 0 &&
+          teeScheduleStore.areas.includes(panelStore.teeListMap?.[tee_id].area),
+      )
+      .sort((a, b) => {
+        const [aName, bName] = [
+          panelStore.teeListMap[a[0]].name,
+          panelStore.teeListMap[b[0]].name,
+        ];
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
   }, [
     teeScheduleStore.currentTeeSchedules,
     panelStore.registeredKeys,

@@ -221,7 +221,9 @@ const Panel = observer(() => {
                     </div>
                     <TeeListArea
                       registered
-                      list={panelStore.registeredTeeList}
+                      list={panelStore.registeredTeeList.sort((a, b) =>
+                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                      )}
                     />
                   </>
                 )}
@@ -233,7 +235,11 @@ const Panel = observer(() => {
                       <Counter type='unregistered' />
                       <CheckController type='unregistered' />
                     </div>
-                    <TeeListArea list={panelStore.unregisteredTeeList} />
+                    <TeeListArea
+                      list={panelStore.unregisteredTeeList.sort((a, b) =>
+                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                      )}
+                    />
                   </>
                 )}
                 {/* bookingwrap 예약/대기/알림 */}
