@@ -4,6 +4,7 @@ import ModalContainer from './ModalContainer';
 import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
+import axios from 'axios';
 
 const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   // golfInfo = {clubId, name, loc, img}
@@ -18,8 +19,30 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     setInputs({ ...inputs, [name]: value });
   };
 
-  const saveLoginInfo = e => {
+  const handleLogin = async e => {
     e.preventDefault();
+    const res = await axios
+      .post(`/teezzim/teeapi/v1/club/${modalStore.golfInfo.clubId}/login`, {
+        login_id: inputs.id,
+        login_password: inputs.pw,
+      })
+      .catch(err => {
+        console.warn(err);
+        modalStore.setErrCode(-500); // 통신장애 (-500)
+      });
+
+    if (res.status === 200) {
+      console.log(res.data);
+      if (res.data.message === 'login success') {
+        saveLoginInfo();
+      } else {
+        // login 실패 (-1)
+        modalStore.setErrCode(-1);
+      }
+    }
+  };
+
+  const saveLoginInfo = () => {
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
       // const sampleData = {
       //   clubId: '골프장식별자',
@@ -62,7 +85,8 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       setShowPwd(false);
       setSaveSuccess(false);
     }
-  }, [modalStore.hidden]);
+    modalStore.setErrCode(null);
+  }, [modalStore.hidden, modalStore]);
 
   return (
     <>
@@ -129,7 +153,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                   </div>
                 </div>
                 {modalStore.errCode && (
-                  <span className='text-warning'>
+                  <span className='text-warning' style={{ margin: '8px 0px' }}>
                     아이디 또는 비밀번호가 일치하지 않습니다.
                   </span>
                 )}
@@ -152,7 +176,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                     inputs.id && inputs.pw ? 'bg-action text-white' : 'disabled'
                   }
                   disabled={!inputs.id || !inputs.pw}
-                  onClick={saveLoginInfo}
+                  onClick={handleLogin}
                 >
                   로그인
                 </button>
@@ -170,6 +194,9 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
           opacity: 1;
           background-color: var(--neutrals-grey-5);
           color: var(--neutrals-gray-6);
+        }
+        button {
+          margin-top: 8px;
         }
       `}</style>
     </>
