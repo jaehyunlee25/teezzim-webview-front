@@ -30,7 +30,7 @@ const ReserveTap = ({
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
 
-  const handleCancel = async index => {
+  const handleReserveCancel = async index => {
     const { data } = reserveData;
     const { status } = await axios
       .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
@@ -80,6 +80,7 @@ const ReserveTap = ({
               />
             )}
           </div>
+
           {type === 'reserve' && (
             <div>
               <span>{reserve?.reserved_date}</span>
@@ -95,7 +96,10 @@ const ReserveTap = ({
               <span>{`${clubName} `}</span>
               <div className={styles.waitTime}>
                 {waitTime?.map((item, index) => (
-                  <p key={index} style={{ margin: '0.2rem' }}>
+                  <p
+                    key={index}
+                    style={{ margin: '0.1rem', fontSize: '0.5rem' }}
+                  >
                     {item.slice(0, 5).replace('', ' ')}
                   </p>
                 ))}
@@ -137,7 +141,7 @@ const ReserveTap = ({
         <PopUp
           buttonText='확인'
           onButtonClick={() => {
-            handleCancel(index);
+            handleReserveCancel(index);
           }}
           hidden={confirmHidden}
         >
