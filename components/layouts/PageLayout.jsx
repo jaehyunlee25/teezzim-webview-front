@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Toast from '@/components/common/Toast';
 import BottomMenu from '@/components/layouts/BottomMenu';
 import useStores from '@/stores/useStores';
@@ -5,10 +6,19 @@ import { observer } from 'mobx-react-lite';
 import LoginModal from '../common/Modal/LoginModal';
 import ModalContainer from '../common/Modal/ModalContainer';
 import ReLoginModal from '../common/Modal/ReLoginModal';
+import { Init } from '../../utils/Init';
 
 const PageTemplate = observer(({ children }) => {
   const { toastStore, modalStore } = useStores();
   const message = toastStore.message;
+
+  // 안드로이드 공통함수
+  const { test } = Init();
+
+  // 안드로이드 공통함수 선언
+  useEffect(() => {
+    test();
+  }, [test]);
 
   return (
     <>
