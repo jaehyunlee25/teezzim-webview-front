@@ -25,6 +25,8 @@ const Reserve = () => {
   const [reserveAlarm, setReserveAlarm] = useState([]);
   console.log('🚀 - reserveAlarm', reserveAlarm);
 
+  const [sortData, setSortData] = useState('분류');
+
   /** Tee 정보 가져오는 API 호출 */
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -155,7 +157,7 @@ const Reserve = () => {
               `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00","05:30:00","05:31:00"]}]`,
             );
             window.getSavedOpenAlarm(
-              `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-26"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-05-26"}]`,
+              `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-30"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-06-05"}]`,
             );
           }, 1000);
         }
@@ -193,13 +195,6 @@ const Reserve = () => {
       });
   };
 
-  let today = new Date();
-  let dDay = new Date(2022, 4, 16);
-  let gap = dDay.getTime() - today.getTime();
-
-  let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-  console.log('🚀 - dDayResult', dDayResult);
-
   return (
     <>
       <div className={styles.topNav}>
@@ -209,11 +204,28 @@ const Reserve = () => {
         >
           <Image src={IconImport} alt='Icon_Import' width={24} height={24} />
         </button>
-        {/* <div className={styles.centerMenu}>
-          <button>분류</button>
-          <button>날짜</button>
-          <button>골프장</button>
-        </div> */}
+        <div className={styles.centerMenu}>
+          <button
+            onClick={() => setSortData('분류')}
+            style={sortData === '분류' ? { backgroundColor: '#115B40' } : null}
+          >
+            분류
+          </button>
+          <button
+            onClick={() => setSortData('날짜')}
+            style={sortData === '날짜' ? { backgroundColor: '#115B40' } : null}
+          >
+            날짜
+          </button>
+          <button
+            onClick={() => setSortData('골프장')}
+            style={
+              sortData === '골프장' ? { backgroundColor: '#115B40' } : null
+            }
+          >
+            골프장
+          </button>
+        </div>
         <button
           className={styles.sideBtn}
           onClick={() => setDeleteItem(!deleteItem)}
@@ -275,21 +287,21 @@ const Reserve = () => {
       </div>
 
       {/* <span>
-              {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
-            </span> */}
+        {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
+      </span> */}
 
       <div className={styles.reserveState}>
         <p>예약 대기</p>
       </div>
       <div className={styles.reserveContainer}>
-        <ReserveWaitList reserveWait={reserveWait} />
+        <ReserveWaitList reserveWait={reserveWait} deleteItem={deleteItem} />
       </div>
 
       <div className={styles.reserveState}>
         <p>예약오픈 알림</p>
       </div>
       <div className={styles.reserveContainer}>
-        <ReserveAlarmList reserveAlarm={reserveAlarm} />
+        <ReserveAlarmList reserveAlarm={reserveAlarm} deleteItem={deleteItem} />
       </div>
       <BottomMenu />
     </>
@@ -298,7 +310,7 @@ const Reserve = () => {
 
 export default Reserve;
 
-const ReserveWaitList = observer(({ reserveWait }) => {
+const ReserveWaitList = observer(({ reserveWait, deleteItem }) => {
   const { panelStore } = useStores();
 
   return reserveWait?.length > 0 ? (
@@ -310,6 +322,7 @@ const ReserveWaitList = observer(({ reserveWait }) => {
       let dDay = new Date(year, month - 1, day);
       let gap = dDay.getTime() - today.getTime();
       let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+
       return (
         <React.Fragment key={`${clubId}-wait-${index}`}>
           <ReserveTap
@@ -320,7 +333,7 @@ const ReserveWaitList = observer(({ reserveWait }) => {
             waitDate={waitDate}
             waitTime={waitTime}
             dDay={dDayResult}
-            // deleteItem={deleteItem}
+            deleteItem={deleteItem}
             handleClick={() => setConfirmHidden(false)}
           />
         </React.Fragment>
@@ -346,7 +359,7 @@ const ReserveWaitList = observer(({ reserveWait }) => {
   );
 });
 
-const ReserveAlarmList = observer(({ reserveAlarm }) => {
+const ReserveAlarmList = observer(({ reserveAlarm, deleteItem }) => {
   const { panelStore } = useStores();
 
   return reserveAlarm?.length > 0 ? (
@@ -358,6 +371,7 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
       let dDay = new Date(year, month - 1, day);
       let gap = dDay.getTime() - today.getTime();
       let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+
       return (
         <ReserveTap
           key={index}
@@ -366,7 +380,7 @@ const ReserveAlarmList = observer(({ reserveAlarm }) => {
           clubName={panelStore?.teeListMap?.[clubId]?.name}
           alarmDate={alarmDate}
           dDay={dDayResult}
-          // deleteItem={deleteItem}
+          deleteItem={deleteItem}
           handleClick={() => setConfirmHidden(false)}
         />
       );

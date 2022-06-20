@@ -30,7 +30,7 @@ const ReserveTap = ({
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
 
-  const handleCancel = async index => {
+  const handleReserveCancel = async index => {
     const { data } = reserveData;
     const { status } = await axios
       .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
@@ -53,6 +53,8 @@ const ReserveTap = ({
       window.location.reload();
     }
   };
+
+  const handleWaitCancel = () => {};
 
   return (
     <>
@@ -80,6 +82,7 @@ const ReserveTap = ({
               />
             )}
           </div>
+
           {type === 'reserve' && (
             <div>
               <span>{reserve?.reserved_date}</span>
@@ -95,7 +98,10 @@ const ReserveTap = ({
               <span>{`${clubName} `}</span>
               <div className={styles.waitTime}>
                 {waitTime?.map((item, index) => (
-                  <p key={index} style={{ margin: '0.2rem' }}>
+                  <p
+                    key={index}
+                    style={{ margin: '0.1rem', fontSize: '0.5rem' }}
+                  >
                     {item.slice(0, 5).replace('', ' ')}
                   </p>
                 ))}
@@ -136,39 +142,38 @@ const ReserveTap = ({
 
         <PopUp
           buttonText='확인'
-          onButtonClick={() => {
-            handleCancel(index);
-          }}
+          onButtonClick={() => handleReserveCancel(index)}
           hidden={confirmHidden}
         >
           <div className='component-wrap'>
-            <div className='inner-container'>
-              <ul className='desc-list'>
-                <li className='desc-item'>
-                  <div className='tit'>
-                    <em>예약일자</em>
-                  </div>
-                  <div className='desc'>
-                    <span>{reserve?.reserved_date}</span>
-                  </div>
-                </li>
-                <li className='desc-item'>
-                  <div className='tit'>
-                    <em>시간</em>
-                  </div>
-                  <div className='desc'>
-                    <span>{reserve?.reserved_time}</span>
-                  </div>
-                </li>
-                <li className='desc-item'>
-                  <div className='tit'>
-                    <em>코스명</em>
-                  </div>
-                  <div className='desc'>
-                    <span>{reserve?.reserved_course}</span>
-                  </div>
-                </li>
-                {/* <li className='desc-item'>
+            {type === 'reserve' ? (
+              <div className='inner-container'>
+                <ul className='desc-list'>
+                  <li className='desc-item'>
+                    <div className='tit'>
+                      <em>예약일자</em>
+                    </div>
+                    <div className='desc'>
+                      <span>{reserve?.reserved_date}</span>
+                    </div>
+                  </li>
+                  <li className='desc-item'>
+                    <div className='tit'>
+                      <em>시간</em>
+                    </div>
+                    <div className='desc'>
+                      <span>{reserve?.reserved_time}</span>
+                    </div>
+                  </li>
+                  <li className='desc-item'>
+                    <div className='tit'>
+                      <em>코스명</em>
+                    </div>
+                    <div className='desc'>
+                      <span>{reserve?.reserved_course}</span>
+                    </div>
+                  </li>
+                  {/* <li className='desc-item'>
                 <div className='tit'>
                   <em>홀정보</em>
                 </div>
@@ -182,12 +187,79 @@ const ReserveTap = ({
                 </div>
                 <div className='desc'>123123123</div>
               </li> */}
-              </ul>
-            </div>
+                </ul>
+              </div>
+            ) : (
+              <>
+                {type === 'wait' ? (
+                  <div
+                    className='inner-container'
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <span>{waitDate}</span>
+                    <span>{`${clubName} `}</span>
+                    <div
+                      className={styles.waitTime}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {waitTime?.map((item, index) => (
+                        <p
+                          key={index}
+                          style={{ margin: '0.1rem', fontSize: '0.5rem' }}
+                        >
+                          {item.slice(0, 5).replace('', ' ')}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className='inner-container'
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <span>{alarmDate}</span>
+                    <span>{`${clubName} `}</span>
+                  </div>
+                )}
+              </>
+            )}
+
             <div className='message-box line2-top pt-15'>
-              <p>예약을 취소하시겠습니까?</p>
-              <span>취소한 날짜에는</span>
-              <span>다시 예약 할 수 없습니다.</span>
+              {type === 'reserve' ? (
+                <>
+                  <p>예약을 취소하시겠습니까?</p>
+                  <span>취소한 날짜에는</span>
+                  <span>다시 예약 할 수 없습니다.</span>
+                </>
+              ) : (
+                <>
+                  {type === 'wait' ? (
+                    <>
+                      <p>대기를 취소하시겠습니까?</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>알람 받기를 취소하시겠습니까?</p>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </PopUp>
