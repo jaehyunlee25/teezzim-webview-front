@@ -1,9 +1,11 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
+import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
-export function TeeItem({ img, registered, ...tee }) {
+export function TeeItem({ img, registered, type = 'home', ...tee }) {
   const { panelStore, modalStore } = useStores();
 
   const [loc1, loc2, loc3] = tee.address.split(' ');
@@ -27,16 +29,23 @@ export function TeeItem({ img, registered, ...tee }) {
           <Image className='tee-icon' src={img} width={56} height={56} alt='' />
           <div>
             <p className='tee-name'>{tee.name}</p>
-            <span className='tee-detail' onClick={handleClick}>
+            <span
+              className='tee-detail'
+              onClick={type === 'home' ? handleClick : undefined}
+            >
               {!registered ? (
                 <span className='badge bg-shade1'>{badgeMsg}</span>
               ) : null}
-              <span>{loc}</span>
+              {type === 'home' ? (
+                <span>{loc}</span>
+              ) : (
+                <HomepageLink id={tee?.id}>홈페이지 바로가기</HomepageLink>
+              )}
             </span>
           </div>
         </div>
         {/*//list_detail  */}
-        <TeeCheckInput {...tee} />
+        {type === 'home' ? <TeeCheckInput {...tee} /> : <b>{loc}</b>}
       </li>
       <style jsx>{`
         .badge {
@@ -56,6 +65,9 @@ export function TeeItem({ img, registered, ...tee }) {
           display: flex;
           align-items: center;
           justify-content: space-between;
+        }
+        li:after {
+          content: unset;
         }
         .list-detail {
           display: flex;

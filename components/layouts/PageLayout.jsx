@@ -5,8 +5,11 @@ import { observer } from 'mobx-react-lite';
 import LoginModal from '../common/Modal/LoginModal';
 import ModalContainer from '../common/Modal/ModalContainer';
 import ReLoginModal from '../common/Modal/ReLoginModal';
+import { useRouter } from 'next/router';
 
 const PageTemplate = observer(({ children }) => {
+  const router = useRouter();
+
   const { toastStore, modalStore } = useStores();
   const message = toastStore.message;
 
@@ -20,7 +23,7 @@ const PageTemplate = observer(({ children }) => {
         {`
           .container {
             height: 100%;
-            padding-bottom: 100px;
+            padding-bottom: ${router.pathname.startsWith('/home') ? 100 : 0}px;
             overflow-y: scroll;
           }
 

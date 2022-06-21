@@ -10,6 +10,7 @@ export default function SearchBar({
   hasCloseBtn,
   handleCloseBtn,
   onChangeKeyword,
+  ...others
 }) {
   /* 
     @Props
@@ -23,7 +24,7 @@ export default function SearchBar({
   return (
     <>
       {/* <div id='header'> */}
-      <div className='inner'>
+      <div className='inner' {...others}>
         <div className={textButton ? 'SearchWrapsmall' : 'SearchWrap bd'}>
           <div
             className={
