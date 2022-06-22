@@ -13,7 +13,11 @@ export default function Home() {
       /** APP->WEB */
       window.globalFunction = function (jsonStr) {
         console.log(jsonStr);
-        const params = JSON.parse(jsonStr);
+        try {
+          const params = JSON.parse(jsonStr);
+        } catch (error) {
+          console.log(error);
+        }
         // TODO .. 
       };
       /** WEB->APP */

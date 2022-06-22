@@ -4,7 +4,20 @@ import useStores from '@/stores/useStores';
 
 const HomepageLink = observer(({ id, children, ...props }) => {
   const { panelStore } = useStores();
-  const url = panelStore.teeListMap?.[id]?.homepage;
+
+  const handleClick = e => {
+    if (window) {
+      const url = panelStore.teeListMap?.[id]?.homepage;
+      /** WEB->APP */
+      if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
+        const params = { id, url };
+        window.BRIDGE.callHomepageLogin(JSON.stringify(params));
+      } else {
+        alert(url)
+      }
+    }
+  }
+
   return (
     <p
       className='text-link'
@@ -15,9 +28,12 @@ const HomepageLink = observer(({ id, children, ...props }) => {
         whiteSpace: 'nowrap',
       }}
     >
-      <Link href={{ pathname: '/golf_homepage/[url]', query: { url } }}>
-        <a {...props}>{children}</a>
-      </Link>
+      <a
+        {...props}
+        onClick={handleClick}
+      >
+        {children}
+        </a>
     </p>
   );
 });
