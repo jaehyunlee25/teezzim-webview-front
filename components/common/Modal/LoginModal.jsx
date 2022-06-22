@@ -21,25 +21,26 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
 
   const handleLogin = async e => {
     e.preventDefault();
-    const res = await axios
-      .post(`/teezzim/teeapi/v1/club/${modalStore.golfInfo.clubId}/login`, {
-        login_id: inputs.id,
-        login_password: inputs.pw,
-      })
-      .catch(err => {
-        console.warn(err);
-        modalStore.setErrCode(-500); // 통신장애 (-500)
-      });
+    saveLoginInfo();
+    // const res = await axios
+    //   .post(`/teezzim/teeapi/v1/club/${modalStore.golfInfo.clubId}/login`, {
+    //     login_id: inputs.id,
+    //     login_password: inputs.pw,
+    //   })
+    //   .catch(err => {
+    //     console.warn(err);
+    //     modalStore.setErrCode(-500); // 통신장애 (-500)
+    //   });
 
-    if (res.status === 200) {
-      console.log(res.data);
-      if (res.data.message === 'login success') {
-        saveLoginInfo();
-      } else {
-        // login 실패 (-1)
-        modalStore.setErrCode(-1);
-      }
-    }
+    // if (res.status === 200) {
+    //   console.log(res.data);
+    //   if (res.data.message === 'login success') {
+    //     saveLoginInfo();
+    //   } else {
+    //     // login 실패 (-1)
+    //     modalStore.setErrCode(-1);
+    //   }
+    // }
   };
 
   const saveLoginInfo = () => {
