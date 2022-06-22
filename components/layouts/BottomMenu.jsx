@@ -83,16 +83,16 @@ const BottomMenu = () => {
           </a>
           <ul>
             <li>
-              <Link href='/teezzim/home'>골프장 홈페이지 바로가기</Link>
+              <Link href='/golf_homepage/panel'>골프장 홈페이지 바로가기</Link>
             </li>
             <li>
-              <Link href='/teezzim/home'>이 앱 평가하기</Link>
+              <Link href='/home'>이 앱 평가하기</Link>
             </li>
             <li>
-              <Link href='/teezzim/home'>이 앱 추천하기</Link>
+              <Link href='/home'>이 앱 추천하기</Link>
             </li>
             <li>
-              <Link href='/teezzim/home'>이 앱에 관하여...</Link>
+              <Link href='/home'>이 앱에 관하여...</Link>
             </li>
           </ul>
         </div>
