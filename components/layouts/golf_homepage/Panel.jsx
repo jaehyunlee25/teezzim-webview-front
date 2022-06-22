@@ -84,12 +84,12 @@ const Panel = observer(() => {
           // setSavedAuthList(dataList);
         };
 
-        setTimeout(() => {
-          // 웹뷰에서는 테스트 데이터로!
-          window.getSavedAuth(
-            `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
-          );
-        }, 1000);
+        // setTimeout(() => {
+        //   // 웹뷰에서는 테스트 데이터로!
+        //   window.getSavedAuth(
+        //     `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
+        //   );
+        // }, 1000);
       }
       setIsInitSignal(true);
     }
