@@ -36,6 +36,8 @@ const BottomMenu = () => {
     // console.log(name);
     if (window && window.BRIDGE && window.BRIDGE.openNativePage) {
       window.BRIDGE.openNativePage(name);
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.openNativePage.postMessage(name);
     } else {
       alert('이 기능은 앱에서만 수행 가능합니다.');
     }

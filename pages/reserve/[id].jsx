@@ -61,6 +61,10 @@ const ReserveInfo = () => {
             /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
             window.BRIDGE.openWebMenu('MyReservation');
           }, 300); // 약간 지연
+        } else if (window.webkit && window.webkit.messageHandlers ) {
+          setTimeout(() => {
+            window.webkit.messageHandlers.openWebMenu.postMessage('MyReservation');
+          }, 100);
         } else {
           setTimeout(() => {
             // 웹뷰에서는 테스트 데이터로!

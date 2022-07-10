@@ -142,8 +142,7 @@ const Panel = observer(() => {
             window.BRIDGE.openWebMenu('Reservation');
           }, 100); // 약간 지연
         } else if (window.webkit && window.webkit.messageHandlers ) {
-            window.webkit.messageHandlers.openWebMenu.postMessage('Reservation ');
-            return;
+            window.webkit.messageHandlers.openWebMenu.postMessage('Reservation');
         } else {
           setTimeout(() => {
             // 웹뷰에서는 테스트 데이터로!
