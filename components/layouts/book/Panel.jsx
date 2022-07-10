@@ -53,8 +53,8 @@ const Panel = observer(() => {
   useEffect(() => {
     console.log(authStore.communicated);
     if (!isInitSignalSendApp || !authStore.communicated) {
+      // window 존재여부 체크 (nextjs 특징)
       if (window) {
-        // window 존재여부 체크 (nextjs 특징)
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
           console.log(jsonStr);
@@ -141,6 +141,9 @@ const Panel = observer(() => {
           setTimeout(() => {
             window.BRIDGE.openWebMenu('Reservation');
           }, 100); // 약간 지연
+        } else if (window.webkit && window.webkit.messageHandlers ) {
+            window.webkit.messageHandlers.openWebMenu.postMessage('Reservation ');
+            return;
         } else {
           setTimeout(() => {
             // 웹뷰에서는 테스트 데이터로!
