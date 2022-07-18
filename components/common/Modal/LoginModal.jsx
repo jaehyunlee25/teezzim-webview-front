@@ -44,17 +44,16 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   };
 
   const saveLoginInfo = () => {
+    // const sampleData = {
+    //   clubId: '골프장식별자',
+    //   id: '아이디',
+    //   pw: '패스워드',
+    // };
+    const data = {
+      clubId: modalStore.golfInfo.clubId,
+      ...inputs,
+    };
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
-      // const sampleData = {
-      //   clubId: '골프장식별자',
-      //   id: '아이디',
-      //   pw: '패스워드',
-      // };
-      const data = {
-        clubId: modalStore.golfInfo.clubId,
-        ...inputs,
-      };
-
       try {
         window.BRIDGE.saveLoginInfo(JSON.stringify(data));
         setSaveSuccess(true);
@@ -63,6 +62,16 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       } catch {
         if (errCb) errCb();
       }
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      try {
+        window.webkit.messageHandlers.saveLoginInfo.postMessage(JSON.stringify(data));
+        setSaveSuccess(true);
+        authStore.communicate(false);
+        if (cb) cb();
+      } catch {
+        if (errCb) errCb();
+      }
+      
     } else {
       alert('이 기능은 앱에서만 동작합니다.');
       return;

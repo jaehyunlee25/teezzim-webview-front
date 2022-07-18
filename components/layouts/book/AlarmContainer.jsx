@@ -97,23 +97,25 @@ const AlarmContainerComponent = observer(() => {
       ),
     );
     if (window) {
+      // 앱에 보내줄 데이터 형식
+      // const dataSample = [
+      //   {
+      //     clubId: '골프장id',
+      //     alarmDate: '예약일',
+      //   },
+      //   // ... 체크된 갯수만큼 반복
+      // ];
+      const data = alarmData.map(v => ({
+        clubId: v,
+        alarmDate: currentDate,
+      }));
+      console.log(data);
+      const jsonStr = JSON.stringify(data);
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.saveOpenAlarmList) {
-        // 앱에 보내줄 데이터 형식
-        // const dataSample = [
-        //   {
-        //     clubId: '골프장id',
-        //     alarmDate: '예약일',
-        //   },
-        //   // ... 체크된 갯수만큼 반복
-        // ];
-        const data = alarmData.map(v => ({
-          clubId: v,
-          alarmDate: currentDate,
-        }));
-        console.log(data);
-        const jsonStr = JSON.stringify(data);
         window.BRIDGE.saveOpenAlarmList(jsonStr);
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.saveOpenAlarmList.postMessage(jsonStr);
       }
       toastStore.setMessage(
         <>

@@ -182,15 +182,18 @@ const Reserve = () => {
         }
         setReserveData(respData.data);
         console.log(respData.data);
-        if (window && window.BRIDGE && window.BRIDGE.saveReservationList) {
+        if (window) {
+          const jsonStr = JSON.stringify({
+            club,
+            data: respData.data,
+            golf_info: respData.golf_club,
+          });
           // 앱으로 전송
-          window.BRIDGE.saveReservationList(
-            JSON.stringify({
-              club,
-              data: respData.data,
-              golf_info: respData.golf_club,
-            }),
-          );
+          if (window.BRIDGE && window.BRIDGE.saveReservationList) {
+            window.BRIDGE.saveReservationList(jsonStr);
+          } else if (window.webkit && window.webkit.messageHandlers ) {
+            window.webkit.messageHandlers.saveReservationList.postMessage(jsonStr);
+          }
         }
       })
       .catch(err => {

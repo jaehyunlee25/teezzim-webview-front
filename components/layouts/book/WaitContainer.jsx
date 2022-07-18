@@ -40,18 +40,20 @@ const WaitContainerComponent = observer(() => {
 
   const handleWaitButton = e => {
     if (window) {
+      // const dataSample = {
+      //   // 앱에 보내줄 데이터 형식
+      //   clubId: '골프장id',
+      //   waitDate: '예약일',
+      //   waitTime: ['예약시간' /* 0, 1개 선택해도 배열로! */],
+      // };
+      const jsonStr = JSON.stringify(waitData);
       /** 예약하기 탭 열림완료 WEB->APP 전송 */
       if (window.BRIDGE && window.BRIDGE.saveWaitReservation) {
         setTimeout(() => {
-          // const dataSample = {
-          //   // 앱에 보내줄 데이터 형식
-          //   clubId: '골프장id',
-          //   waitDate: '예약일',
-          //   waitTime: ['예약시간' /* 0, 1개 선택해도 배열로! */],
-          // };
-          const jsonStr = JSON.stringify(waitData);
           window.BRIDGE.saveWaitReservation(jsonStr);
         }, 100); // 약간 지연
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.saveWaitReservation.postMessage(jsonStr);
       }
       toastStore.setMessage(
         <>

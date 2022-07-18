@@ -8,10 +8,12 @@ const HomepageLink = observer(({ id, children, ...props }) => {
   const handleClick = e => {
     if (window) {
       const url = panelStore.teeListMap?.[id]?.homepage;
+      const params = { id, url };
       /** WEB->APP */
       if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
-        const params = { id, url };
         window.BRIDGE.callHomepageLogin(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.callHomepageLogin.postMessage(JSON.stringify(params));
       } else {
         alert(url)
       }

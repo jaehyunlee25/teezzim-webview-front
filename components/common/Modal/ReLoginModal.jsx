@@ -17,6 +17,15 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       } catch {
         if (errCb) errCb();
       }
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      try {
+        window.webkit.messageHandlers.removeLoginInfo.postMessage(modalStore.golfInfo.clubId);
+        modalStore.setRegistered(false);
+        authStore.communicate(false);
+        if (cb) cb();
+      } catch {
+        if (errCb) errCb();
+      }
     } else {
       alert('이 기능은 앱에서만 동작합니다.');
       return;
