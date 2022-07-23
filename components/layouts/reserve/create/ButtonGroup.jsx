@@ -12,37 +12,55 @@ const ButtonGroup = observer(
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const res = await axios
-        .post(
-          `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-          {
-            id,
-            password,
-            ...postInfo,
-          },
-          { cancelToken: source.token },
-        )
-        .catch(err => {
-          console.warn(err);
-        });
-
-      const {
-        data = null,
-        resultCode = null,
-        message = null,
-      } = res?.data ?? {};
-
-      if (res?.status === 200) {
-        if (resultCode === 1) {
-          if (cb) cb();
-        } else {
-          if (errCb) errCb();
-          console.warn(`[errorCode : ${resultCode}] ${message}`);
-        }
-      } else {
-        if (errCb) errCb();
-        console.warn('unhandled error');
+      const params = {
+        id, password, golfInfo
       }
+      // 예약하기 브릿지 메소드
+      try {
+      if (window.BRIDGE && window.BRIDGE.requestReserve) {
+          window.BRIDGE.requestReserve(JSON.stringify(data));
+        } else if (window.webkit && window.webkit.messageHandlers ) {
+          window.webkit.messageHandlers.requestReserve.postMessage(JSON.stringify(data));
+        } else {
+          alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
+        }
+        if (cb) cb();
+      } catch {
+        if (errCb) errCb();
+      }
+    };
+
+      // const res = await axios
+      //   .post(
+      //     `/teezzim/teeapi/v1/club/${id}/reservation/post`,
+      //     {
+      //       id,
+      //       password,
+      //       ...postInfo,
+      //     },
+      //     { cancelToken: source.token },
+      //   )
+      //   .catch(err => {
+      //     console.warn(err);
+      //   });
+
+      // const {
+      //   data = null,
+      //   resultCode = null,
+      //   message = null,
+      // } = res?.data ?? {};
+
+      // if (res?.status === 200) {
+      //   if (resultCode === 1) {
+      //     if (cb) cb();
+      //   } else {
+      //     if (errCb) errCb();
+      //     console.warn(`[errorCode : ${resultCode}] ${message}`);
+      //   }
+      // } else {
+      //   if (errCb) errCb();
+      //   console.warn('unhandled error');
+      // }
     };
 
     const handleRegisterAccount = () => {
