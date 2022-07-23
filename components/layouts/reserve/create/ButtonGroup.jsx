@@ -17,7 +17,7 @@ const ButtonGroup = observer(
       }
       // 예약하기 브릿지 메소드
       try {
-      if (window.BRIDGE && window.BRIDGE.requestReserve) {
+        if (window.BRIDGE && window.BRIDGE.requestReserve) {
           window.BRIDGE.requestReserve(JSON.stringify(data));
         } else if (window.webkit && window.webkit.messageHandlers ) {
           window.webkit.messageHandlers.requestReserve.postMessage(JSON.stringify(data));
@@ -28,7 +28,7 @@ const ButtonGroup = observer(
       } catch {
         if (errCb) errCb();
       }
-    };
+      
 
       // const res = await axios
       //   .post(
