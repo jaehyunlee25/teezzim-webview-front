@@ -66,6 +66,12 @@ const Reserve = () => {
       console.log('한번만 수행될까?');
       if (window) {
         // window 존재여부 체크 (nextjs 특징)
+        /** 크롤링 완료 신호 APP->WEB 전송 */
+        window.getMyReserveForApi = function (jsonStr) {
+          console.log(jsonStr); // device_id 필요
+          // TODO api 호출
+          alert(jsonStr);
+        };
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
           setUserInfo(JSON.parse(jsonStr));
@@ -83,13 +89,21 @@ const Reserve = () => {
               dataList[i].clubInfo = panelStore.teeList[findIndex];
             }
 
-            const data = dataList[i];
-            const pw = data.password || data.pw; // undefined 방지
-            handleGetReservationInfo(data.clubId, data.id, pw);
+            // const data = dataList[i];
+            // const pw = data.password || data.pw; // undefined 방지
+            // handleGetReservationInfo(data.clubId, data.id, pw);
             // TODO 배열일 경우에는??
+            const data = { club: dataList[i].clubInfo.eng, club_id: dataList[i].clubInfo.id };
+            console.log(data);
+            if (window.BRIDGE && window.BRIDGE.requestSearchReserve) {
+              window.BRIDGE.requestSearchReserve(JSON.stringify(data));
+            } else if (window.webkit && window.webkit.messageHandlers ) {
+              window.webkit.messageHandlers.requestSearchReserve.postMessage(JSON.stringify(data));
+            } else {
+              console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+            }
           }
         };
-
         /** 예약 정보 APP->WEB 전송 */
         window.getSavedReservation = function (jsonStr) {
           const data = JSON.parse(jsonStr);

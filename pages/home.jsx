@@ -21,12 +21,12 @@ export default function Home() {
         // TODO .. 
       };
       /** WEB->APP (호출의예) */
-      const params = { prop1: 0,  prop2: 1 };
-      if (window.BRIDGE && window.BRIDGE.globalMethod) {
-        window.BRIDGE.globalMethod(JSON.stringify(params));
-      } else if (window.webkit && window.webkit.messageHandlers ) {
-        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
-      }
+      // const params = { prop1: 0,  prop2: 1 };
+      // if (window.BRIDGE && window.BRIDGE.globalMethod) {
+      //   window.BRIDGE.globalMethod(JSON.stringify(params));
+      // } else if (window.webkit && window.webkit.messageHandlers ) {
+      //   window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      // }
     }
   }, []);
   
