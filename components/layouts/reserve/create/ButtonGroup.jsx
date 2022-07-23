@@ -12,7 +12,7 @@ const ButtonGroup = observer(
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
-      const params = {
+      const data = {
         id, password, golfInfo
       }
       // 예약하기 브릿지 메소드
