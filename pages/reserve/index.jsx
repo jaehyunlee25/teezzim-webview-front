@@ -69,8 +69,65 @@ const Reserve = () => {
         /** 크롤링 완료 신호 APP->WEB 전송 */
         window.getMyReserveForApi = function (jsonStr) {
           console.log(jsonStr); // device_id 필요
-          // TODO api 호출
-          alert(jsonStr);
+          const {device_id} = JSON.parse(jsonStr);
+          axios({
+            method:'post',
+            url: `/teezzim/teeapi/v1/club/reservation`,
+            data: { device_id },
+          }).then(resp=>{
+            console.log(resp);
+            // TODO 새로운 데이터 형식으로 뿌려줘야 함!
+            /* 샘플 데이터 구조
+            {
+              "resultCode": 1,
+              "message": "OK",
+              "data": [{
+                  "id": "165ec3da-0ab7-11ed-a93e-0242ac11000a",
+                  "device_id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
+                  "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
+                  "golf_course_id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
+                  "game_date": "20220809",
+                  "game_time": "1234",
+                  "isCancel": 1,
+                  "created_at": "2022-07-23T18:41:58.000Z",
+                  "updated_at": "2022-07-23T18:41:58.000Z",
+                  "createdAt": "2022-07-23T18:41:58.000Z",
+                  "updatedAt": "2022-07-23T18:41:58.000Z",
+                  "Device": {
+                      "id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
+                      "token": "fEGot2k1Sh2raE28s2pBoY:APA91bHDIdB-cBkyiYXC-4Ckyn5ZhZHVyHfLJ9V1Lewm9HieEKx78JoYmQF-VzPseqy1edlYc20cbYjosWYJ6zrV4qMNETSXAMYowPwAkSpaVDzBgWiwbJYso28qPSU1H08LgCN3Dymz",
+                      "type": "android",
+                      "created_at": "2022-07-23T16:22:31.000Z",
+                      "updated_at": "2022-07-23T16:22:31.000Z"
+                  },
+                  "GolfClub": {
+                      "id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
+                      "name": "백제",
+                      "address": "충청남도 부여군 은산면 충절로 3734-82",
+                      "phone": "041-830-0700",
+                      "area": "충청도",
+                      "email": "baekjecc0700@naver.com",
+                      "homepage": "https://www.baekjecc.com/index.asp",
+                      "corp_reg_number": "307-81-06923",
+                      "description": "백제컨트리클럽은 칠갑산 자락에 감싸 안겨 천혜의 지형 조건과 자연 상태를 코스에 담아내기 위해 친환경적인 시공 방법으로 골프장을 조성하였고, 2008년 개장한 이후 끊임없는 변화를 추구하며 항상 새로운 모습을 보여드리기 위해 노력해왔습니다.\n\n또한, 친환경적인 골프장으로서 현재 금강유역환경청, 고운식물원과 협약하여 천연기념물과 멸종위기 종인 동, 식물의 복원사업을 추진 중입니다.\n\n2008년 대중제 18홀 규모로 개장 하였고 8년간 정성을 다해 준비하여 2016년 10월 11일 한성코스 9홀을 추가로 오픈하여 규모 27홀의 대중제 골프장으로 새롭게 단장하였습니다.\n\n백제컨트리클럽은 모두가 즐길 수 있는 코스 레이아웃과 풍광이 주는 감동, 삼림욕을 즐기는 듯한 청량감에 좋은 사람과 편안한 휴식을 하시기에 최적의 골프장이라 자신합니다.\n\n최고의 골프장으로 발돋움 할 수 있도록 끊임없이 배우고 받아들이고 노력하겠습니다.\n\n백제 컨트리클럽을 방문하여 주셔서 감사합니다."
+                  },
+                  "GolfCourse": {
+                      "id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
+                      "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
+                      "name": "웅진",
+                      "description": "9홀",
+                      "createdAt": "2022-06-18T05:47:50.000Z",
+                      "updatedAt": "2022-06-18T05:47:50.000Z",
+                      "GolfClubId": "28fd237b-eeca-11ec-a93e-0242ac11000a"
+                  }
+                },
+                // ...
+              ],
+            }
+            */
+          }).catch(err=>{
+            console.log(err);
+          });
         };
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
