@@ -25,6 +25,7 @@ const ReserveTap = ({
   alarmDate,
   dDay,
 }) => {
+  console.log('🚀 - reserveData', reserveData);
   const router = useRouter();
 
   // 취소 팝업
@@ -85,9 +86,11 @@ const ReserveTap = ({
 
           {type === 'reserve' && (
             <div>
-              <span>{reserve?.reserved_date}</span>
+              <span>{reserve?.game_date}</span>
+              {/* <span>date</span> */}
               <span>
-                {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
+                {`${reserve?.game_time} | ${reserve?.GolfClub?.area} | ${reserve?.GolfCourse?.name} 코스`}
+                {/* time / area / course */}
               </span>
             </div>
           )}
@@ -131,7 +134,7 @@ const ReserveTap = ({
                 height={26}
                 onClick={() =>
                   router.push({
-                    pathname: `/reserve/${reserve?.golf_club?.id}`,
+                    pathname: `/reserve/${reserve?.GolfClub?.id}`,
                     query: { tab: 'my_book' },
                   })
                 }
@@ -154,7 +157,7 @@ const ReserveTap = ({
                       <em>예약일자</em>
                     </div>
                     <div className='desc'>
-                      <span>{reserve?.reserved_date}</span>
+                      <span>{reserve?.game_date}</span>
                     </div>
                   </li>
                   <li className='desc-item'>
@@ -162,7 +165,7 @@ const ReserveTap = ({
                       <em>시간</em>
                     </div>
                     <div className='desc'>
-                      <span>{reserve?.reserved_time}</span>
+                      <span>{reserve?.game_time}</span>
                     </div>
                   </li>
                   <li className='desc-item'>
@@ -170,7 +173,7 @@ const ReserveTap = ({
                       <em>코스명</em>
                     </div>
                     <div className='desc'>
-                      <span>{reserve?.reserved_course}</span>
+                      <span>{reserve?.GolfCourse?.name}</span>
                     </div>
                   </li>
                   {/* <li className='desc-item'>
