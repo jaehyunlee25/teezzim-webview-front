@@ -86,10 +86,21 @@ const ReserveTap = ({
 
           {type === 'reserve' && (
             <div>
-              <span>{reserve?.game_date}</span>
+              <span>{`${reserve?.game_date.substring(
+                0,
+                4,
+              )}-${reserve?.game_date.substring(
+                4,
+                6,
+              )}-${reserve?.game_date.substring(6, 8)}`}</span>
               {/* <span>date</span> */}
               <span>
-                {`${reserve?.game_time} | ${reserve?.GolfClub?.area} | ${reserve?.GolfCourse?.name} 코스`}
+                {`${reserve?.game_time.substring(
+                  0,
+                  2,
+                )}:${reserve?.game_time.substring(2, 4)} | ${
+                  reserve?.GolfClub?.area
+                } | ${reserve?.GolfCourse?.name} 코스`}
                 {/* time / area / course */}
               </span>
             </div>
@@ -157,7 +168,13 @@ const ReserveTap = ({
                       <em>예약일자</em>
                     </div>
                     <div className='desc'>
-                      <span>{reserve?.game_date}</span>
+                      <span>{`${reserve?.game_date.substring(
+                        0,
+                        4,
+                      )}-${reserve?.game_date.substring(
+                        4,
+                        6,
+                      )}-${reserve?.game_date.substring(6, 8)}`}</span>
                     </div>
                   </li>
                   <li className='desc-item'>
@@ -165,7 +182,10 @@ const ReserveTap = ({
                       <em>시간</em>
                     </div>
                     <div className='desc'>
-                      <span>{reserve?.game_time}</span>
+                      <span>{`${reserve?.game_time.substring(
+                        0,
+                        2,
+                      )}:${reserve?.game_time.substring(2, 4)}`}</span>
                     </div>
                   </li>
                   <li className='desc-item'>
