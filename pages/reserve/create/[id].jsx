@@ -16,6 +16,7 @@ import ButtonGroup from '@/components/layouts/reserve/create/ButtonGroup';
 export default function CreateReservation() {
   const router = useRouter();
   const { id, tee_id } = router.query;
+  const { teeScheduleStore } = useStores();
 
   const [tee, setTee] = useState({});
   const {
@@ -92,7 +93,10 @@ export default function CreateReservation() {
         <button
           type='button'
           className='btn-history-back'
-          onClick={() => router.back()}
+          onClick={() => {
+            router.back();
+            teeScheduleStore.setCalenderUpdate();
+          }}
         >
           <span className='offscreen'>이전</span>
         </button>
@@ -349,9 +353,11 @@ const ConnectWithApp = observer(() => {
           setTimeout(() => {
             window.BRIDGE.openWebMenu('Reservation');
           }, 100); // 약간 지연
-        } else if (window.webkit && window.webkit.messageHandlers ) {
+        } else if (window.webkit && window.webkit.messageHandlers) {
           setTimeout(() => {
-            window.webkit.messageHandlers.openWebMenu.postMessage('Reservation');
+            window.webkit.messageHandlers.openWebMenu.postMessage(
+              'Reservation',
+            );
           }, 100);
         } else {
           setTimeout(() => {

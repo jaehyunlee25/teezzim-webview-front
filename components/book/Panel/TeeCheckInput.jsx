@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useMemo } from 'react';
 
 const TeeCheckInput = observer(props => {
-  const { panelStore } = useStores();
+  const { panelStore, toastStore } = useStores();
   const isChecked = useMemo(
     () =>
       panelStore.checkedTeeList.has(
@@ -16,6 +16,16 @@ const TeeCheckInput = observer(props => {
     const value = JSON.stringify(panelStore.teeListMap?.[id]);
 
     if (!value) return;
+    if (panelStore.checkedTeeList.size >= 5) {
+      toastStore.setMessage(
+        <>
+          5개 이하의 골프장에서만
+          <br /> 예약을 할 수 있습니다.
+        </>,
+      );
+      toastStore.setHidden(false);
+      return;
+    }
     isChecked ? panelStore.removeChecked(value) : panelStore.addChecked(value);
   };
   return (
