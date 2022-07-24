@@ -7,14 +7,29 @@ const ReserveDetail = ({ detail }) => {
       <div className={styles.reserveDetailContainer}>
         <div className={styles.reserveInfo}>
           <span>라운드 예약일자</span>
-          <span>{detail && detail[0]?.game_date}</span>
+          <span>
+            {detail &&
+              `${detail[0]?.game_date.substring(
+                0,
+                4,
+              )}-${detail[0]?.game_date.substring(
+                4,
+                6,
+              )}-${detail[0]?.game_date.substring(6, 8)}`}
+          </span>
         </div>
 
         <div className={styles.divider} />
 
         <div className={styles.reserveInfo}>
           <span>시간</span>
-          <span>{detail && detail[0]?.game_time}</span>
+          <span>
+            {detail &&
+              `${detail[0]?.game_time.substring(
+                0,
+                2,
+              )}:${detail[0]?.game_time.substring(2, 4)}`}
+          </span>
         </div>
 
         <div className={styles.reserveInfo}>

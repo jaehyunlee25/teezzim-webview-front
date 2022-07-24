@@ -151,7 +151,8 @@ const ReserveInfo = () => {
         <p>{test?.data[0]?.GolfClub?.name}</p>
         <button
           onClick={() =>
-            router.push(`/reserve/info/${reserveDetailData?.golf_club?.id}`)
+            // router.push(`/reserve/info/${reserveDetailData?.golf_club?.id}`)
+            router.push(`/reserve/info/${test?.data[0]?.GolfClub?.id}`)
           }
           className={styles.sideBtn}
           style={{ width: '90px' }}
@@ -217,7 +218,15 @@ const ReserveInfo = () => {
                     {/* {reserveDetailData.status === 'okay'
                       ? reserveDetailData?.data[0]?.reserved_date
                       : null} */}
-                    {test.resultCode === 1 ? test?.data[0]?.game_date : null}
+                    {test.resultCode === 1
+                      ? `${test?.data[0]?.game_date.substring(
+                          0,
+                          4,
+                        )}-${test?.data[0]?.game_date.substring(
+                          4,
+                          6,
+                        )}-${test?.data[0]?.game_date.substring(6, 8)}`
+                      : null}
                   </span>
                 </div>
               </li>
@@ -230,7 +239,12 @@ const ReserveInfo = () => {
                     {/* {reserveDetailData.status === 'okay'
                       ? reserveDetailData?.data[0]?.reserved_time
                       : null} */}
-                    {test.resultCode === 1 ? test?.data[0]?.game_time : null}
+                    {test.resultCode === 1
+                      ? `${test?.data[0]?.game_time.substring(
+                          0,
+                          2,
+                        )}:${test?.data[0]?.game_time.substring(2, 4)}`
+                      : null}
                   </span>
                 </div>
               </li>

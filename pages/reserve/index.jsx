@@ -28,7 +28,8 @@ const Reserve = () => {
   const [test, setTest] = useState({
     resultCode: 1,
     message: 'OK',
-    data: [/*
+    data: [
+      /*
       {
         id: '09982dcb-0ab4-11ed-a93e-0242ac11000a',
         device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
