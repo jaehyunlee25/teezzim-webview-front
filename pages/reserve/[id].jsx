@@ -24,7 +24,7 @@ const ReserveInfo = () => {
     resultCode: 1,
     message: 'OK',
     data: [
-      {
+      /* {
         id: '09982dcb-0ab4-11ed-a93e-0242ac11000a',
         device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
         golf_club_id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
@@ -64,7 +64,7 @@ const ReserveInfo = () => {
           updatedAt: '2022-06-17T12:43:48.000Z',
           GolfClubId: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
         },
-      },
+      }, */
     ],
   });
   console.log('🚀 - test', test);

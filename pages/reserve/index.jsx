@@ -28,7 +28,7 @@ const Reserve = () => {
   const [test, setTest] = useState({
     resultCode: 1,
     message: 'OK',
-    data: [
+    data: [/*
       {
         id: '09982dcb-0ab4-11ed-a93e-0242ac11000a',
         device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
@@ -111,91 +111,7 @@ const Reserve = () => {
           updatedAt: '2022-06-18T16:14:51.000Z',
           GolfClubId: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
         },
-      },
-      {
-        id: '6f82c776-0aa9-11ed-a93e-0242ac11000a',
-        device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-        golf_club_id: 'b494a7c2-efc5-11ec-a93e-0242ac11000a',
-        golf_course_id: 'b4965a04-efc5-11ec-a93e-0242ac11000a',
-        game_date: '20220815',
-        game_time: '0600',
-        isCancel: 0,
-        created_at: '2022-07-23T17:04:15.000Z',
-        updated_at: '2022-07-23T17:04:15.000Z',
-        createdAt: '2022-07-23T17:04:15.000Z',
-        updatedAt: '2022-07-23T17:04:15.000Z',
-        Device: {
-          id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-          token:
-            'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
-          type: 'admin',
-          created_at: '2022-06-12T07:02:23.000Z',
-          updated_at: '2022-06-12T07:02:23.000Z',
-        },
-        GolfClub: {
-          id: 'b494a7c2-efc5-11ec-a93e-0242ac11000a',
-          name: '클럽디금강',
-          address: '전라북도 익산시 웅포면 강변로 130',
-          phone: '063-720-7777',
-          area: '호남권',
-          email: '',
-          homepage: 'https://www.clubd.com/m_clubd/gintro.do?iCoDiv=03',
-          corp_reg_number: '714-85-01309',
-          description:
-            '금강과 함라산의 혈맥이 만나\n절경을 이루어낸 골프장\n클럽디 금강 입니다.\n80여만평의 대지에 펼쳐진 대자연의 손길을 보고 있으면 새삼 겸허함과 함께\n이 곳 클럽디 금강의 아름다움을 더 널리 알려야겠다는 각오를 해보게 됩니다.\n클럽디 금강은 국내 최장거리 7.777yd로 이뤄져 있으며 천혜의 환경 조건을 무너뜨리지 않고\n부지 전체의 황토를 그대로 살려서 자연친화적 골프장으로 연중 따뜻한 기후와 적은 강수량으로 언제든 푸른 잔디 위에서 쾌적한 라운딩이 가능 합니다.\n또한 눈길을 조금만 돌려도 시선을 가득 채우는 금강의 풍광과 충청남도와 인접한 지리적 장점으로\n행정 수도와도 가까워 수도권의 골퍼들도 천안논산, 서해안 고속도로를 통해 2시간안에 진입이 가능하며\n천년의 숨결 백제 유적지와 영화 촬영지로 알려진 신성리 갈대밭 등 다양한 볼거리와 놀 곳이 갖춰진 종합 관광 레저 타운으로 주목받고있습니다.\n\n세계적인 명문 미국의 골프플랜사가 참여한 클럽디 금강의 설계는 함라산의 산세가 가진 웅장함과 남성다운 기운을\n그대로 옮겨놓는 것에서 시작하였으며 위협적인 벙커와 코스 면적의 1/3을 차지하는 워터해저드 등을 통해 철저하게 구현해 내었습니다.\n그리고 그중에서 가장 독창적인 한반도의 형상을 닮은 아일랜드 홀 8번 홀과 태극기의 태극과 건곤감리형상을 한 4번 홀은 대한민국을 대표하는 골프장이 되겠다는 자부심의 발현입니다.\n\n무엇보다 바람의 영향을 최소화하고 각 홀의 고유한 특성을 해치지 않도록 다르게 설계하여 라운딩의 진정한 재미를 만끽할 수 있는 것이 바로 클럽디 금강의 자랑 입니다.\n앞으로 클럽디 금강은 전문프로골퍼는 물론 열정적인 골퍼들로 부터 가장 먼저 라운딩을 하고 싶어하는 골프장을 목표로 끊임없는 노력과 감동을 드리는 서비스를 구현해 나가겠습니다.\n\n감사합니다.',
-        },
-        GolfCourse: {
-          id: 'b4965a04-efc5-11ec-a93e-0242ac11000a',
-          golf_club_id: 'b494a7c2-efc5-11ec-a93e-0242ac11000a',
-          name: 'West',
-          description: '9홀',
-          createdAt: '2022-06-19T11:48:28.000Z',
-          updatedAt: '2022-06-19T11:48:28.000Z',
-          GolfClubId: 'b494a7c2-efc5-11ec-a93e-0242ac11000a',
-        },
-      },
-      {
-        id: 'd96f05f4-0aab-11ed-a93e-0242ac11000a',
-        device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-        golf_club_id: '6bb08266-f05d-11ec-a93e-0242ac11000a',
-        golf_course_id: '6bb30b0e-f05d-11ec-a93e-0242ac11000a',
-        game_date: '20220821',
-        game_time: '0610',
-        isCancel: 0,
-        created_at: '2022-07-23T17:21:31.000Z',
-        updated_at: '2022-07-23T17:21:31.000Z',
-        createdAt: '2022-07-23T17:21:31.000Z',
-        updatedAt: '2022-07-23T17:21:31.000Z',
-        Device: {
-          id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-          token:
-            'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
-          type: 'admin',
-          created_at: '2022-06-12T07:02:23.000Z',
-          updated_at: '2022-06-12T07:02:23.000Z',
-        },
-        GolfClub: {
-          id: '6bb08266-f05d-11ec-a93e-0242ac11000a',
-          name: '클럽디속리산',
-          address: '충청북도 보은군 탄부면 평각상장로 230',
-          phone: '043-540-8000',
-          area: '충청도',
-          email: 'info_songnisan@clubd.com',
-          homepage: 'https://www.clubd.com/m_clubd/sintro.do?iCoDiv=02',
-          corp_reg_number: '286-85-00940',
-          description:
-            '처음 만나는 클럽디 속리산의 첫 이야기\n클럽디 속리산 으로\n레저문화의 새로운 장 을\n열겠습니다.\n클럽디 속리산이 자리한 탄부면 상장리는 충북 보은에서도 자연의 순수함이 가장 잘 보존된 지역입니다.\n저희는 그 순수의 자연미를 살리고 보호하기 위해 골프장 조성에 있어서도 자연의 훼손을 최소화하였습니다.\n\n또한 페어웨이와 그린 주변은 특색 있는 조경으로 눈을 즐겁게 하였습니다.\n자작나무, 벚나무, 백일홍, 매화, 감나무, 모과나무 등 홀마다 다양한 나무군락과 화초를 심어 자연이 주는 쾌적함과 계절에 따른 색다른 감흥을 선사할 것입니다.\n\n명문의 가치는 태어나는 것이 아니라 만들어 나가는 것입니다.\n\n저희 골프장건설에 정성을 다하고, 운영관리에도 만전을 기해 회원님들의 이용에 조금도 불편이 없도록 최선을 다하겠습니다.\n\n앞으로도 클럽디 속리산은 골퍼들의 새로운 욕구를 충족시키기 위해, 나아가 명문클럽으로서의 확고한 입지를 다지기 위해 끊임없이 노력할 것을 약속드립니다.\n\n감사합니다.',
-        },
-        GolfCourse: {
-          id: '6bb30b0e-f05d-11ec-a93e-0242ac11000a',
-          golf_club_id: '6bb08266-f05d-11ec-a93e-0242ac11000a',
-          name: 'West',
-          description: '9홀',
-          createdAt: '2022-06-20T05:54:29.000Z',
-          updatedAt: '2022-06-20T05:54:29.000Z',
-          GolfClubId: '6bb08266-f05d-11ec-a93e-0242ac11000a',
-        },
-      },
+      }, */
     ],
   });
   console.log('🚀 - test', test.data);
