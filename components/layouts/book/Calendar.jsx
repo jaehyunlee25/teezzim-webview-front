@@ -19,16 +19,45 @@ const Calendar = observer(
     const mountRef = useRef(true);
     const getSchedule = useCallback(async () => {
       if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
-      const checkedTeeList = [...panelStore._checkedTeeList].map(
-        v => JSON.parse(v).id,
+      const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
+        JSON.parse(v),
       );
+      axios.interceptors.response.use(
+        res => {
+          console.log(res);
+          if (res.data.data?.length === 0) {
+            /** WEB->APP requestSearch 요청 */
+            const params = {
+              club: res.config.params.eng,
+              club_id: res.config.params.club,
+              command: 'search', // 고정 문자열
+            };
+            if (window.BRIDGE && window.BRIDGE.requestSearch) {
+              window.BRIDGE.requestSearch(JSON.stringify(params));
+            } else if (window.webkit && window.webkit.messageHandlers) {
+              window.webkit.messageHandlers.requestSearch.postMessage(
+                JSON.stringify(params),
+              );
+            } else {
+              alert(JSON.stringify(params));
+            }
+          }
+          return res;
+
+          // 앱에서 추가 요청 하거나 -> 앱에서 크롤러 함수 진행 완료 상황을 받아서 재요청 해야할듯
+          // return axios.request(config)
+        },
+        err => Promise.reject(err),
+      );
+
       const res = await Promise.all(
-        checkedTeeList.map(id =>
+        checkedTeeList.map(({ id, eng }) =>
           axios.get('/teezzim/teeapi/v1/schedule', {
-            params: { date: `${yearMonth}-01`, club: id },
+            params: { date: `${yearMonth}-01`, club: id, eng },
           }),
         ),
       ).catch(err => console.log(err));
+
       // console.log(res);
       let curSchedule = {};
 
@@ -36,7 +65,7 @@ const Calendar = observer(
         const {
           data: { resultCode = 1, message = '', data = [] },
         } = v;
-        console.log(resultCode, message, data);
+        // console.log(resultCode, message, data);
         if (resultCode === 1) {
           // yearMonth: yyyy-mm, date: yyyy-mm-dd
           curSchedule = data.reduce(
@@ -59,6 +88,13 @@ const Calendar = observer(
     }, [yearMonth, setSchedule, panelStore._checkedTeeList, teeScheduleStore]);
 
     useEffect(() => {
+      /** web test only
+       * if (!window.BRIDGE || !window.BRIDGE.requestSearch) {
+       *  window.BRIDGE = {};
+       *  window.BRIDGE.requestSearch = params => alert(JSON.stringify(params));
+       * }
+       */
+
       mountRef.current = true;
       if (
         teeScheduleStore._calenderUpdate &&
