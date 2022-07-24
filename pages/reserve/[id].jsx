@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import axios from 'axios';
-import useSWR from 'swr';
 
 import ReserveDetail from '@/components/common/ReserveDetail/ReserveDetail';
 import PopUp from '@/components/common/PopUp';
@@ -11,14 +10,15 @@ import BottomMenu from '@/components/layouts/BottomMenu';
 import Back from '/assets/images/Icon_Back.svg';
 
 import styles from '@/styles/Reserve.module.scss';
+import useStores from '@/stores/useStores';
 
 const ReserveInfo = () => {
   const router = useRouter();
+  const { authStore } = useStores();
   const [userInfo, setUserInfo] = useState([]);
-  // console.log('🚀 - userInfo', userInfo);
   const [reserveDetailData, setReserveDetailData] = useState([]);
-  // console.log('🚀 - reserveDetailData', reserveDetailData);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약>상세페이지로 이동했음을 App에 알렸는지 여부
 
   const [test, setTest] = useState({
     resultCode: 1,
@@ -71,97 +71,7 @@ const ReserveInfo = () => {
 
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
-
-  // const { data } = useSWR(
-  //   `/teezzim/teeapi/v1/schedule/club/${router.query.id}`,
-  // );
-  // console.log('🚀 - data', data);
-
-  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
   const [reserveData, setReserveData] = useState({});
-  /** APP->WEB 브릿지 함수 선언 */
-  useEffect(() => {
-    if (isInitSignalSendApp == false) {
-      console.log('한번만 수행될까?');
-      if (window) {
-        // window 존재여부 체크 (nextjs 특징)
-        /** 로그인 APP->WEB 전송 */
-        window.getSavedAuth = function (jsonStr) {
-          setUserInfo(JSON.parse(jsonStr));
-          // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
-          const dataList = JSON.parse(jsonStr);
-          // console.log(dataList);
-          for (let i = 0; i < dataList.length; i++) {
-            const data = dataList[i];
-            handleGetReservationInfo(data.clubId, data.id, data.password);
-            // TODO 배열일 경우에는??
-          }
-        };
-
-        /** 예약 정보 APP->WEB 전송 */
-        // window.getAppData = function (jsonStr) {
-        //   const data = JSON.parse(jsonStr);
-        //   console.log(data);
-        //   // TODO 예약 확정 메뉴에 띄움?
-        // };
-
-        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
-          setTimeout(() => {
-            /** 나의 예약 탭 열림 여부 WEB->APP 전송 */
-            window.BRIDGE.openWebMenu('MyReservation');
-          }, 300); // 약간 지연
-        } else if (window.webkit && window.webkit.messageHandlers) {
-          setTimeout(() => {
-            window.webkit.messageHandlers.openWebMenu.postMessage(
-              'MyReservation',
-            );
-          }, 100);
-        } else {
-          setTimeout(() => {
-            // 웹뷰에서는 테스트 데이터로!
-            window.getSavedAuth(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
-            );
-          }, 1000);
-        }
-      }
-      setIsInitSignal(true);
-    }
-  }, []);
-
-  const handleGetReservationInfo = function (club, id, password) {
-    console.log(club);
-    axios({
-      method: 'POST',
-      url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
-      data: { id, password },
-    })
-      .then(({ data: respData }) => {
-        for (let idx = 0; idx < respData.data.data.length; idx++) {
-          respData.data.data[idx].golf_club = respData.data.golf_club;
-        }
-        setReserveData(respData.data);
-        if (window) {
-          const jsonStr = JSON.stringify({
-            club,
-            data: respData.data,
-            golf_info: respData.golf_club,
-          });
-          // 앱으로 전송
-          if (window.BRIDGE && window.BRIDGE.saveReservationList) {
-            window.BRIDGE.saveReservationList(jsonStr);
-          } else if (window.webkit && window.webkit.messageHandlers) {
-            window.webkit.messageHandlers.saveReservationList.postMessage(
-              jsonStr,
-            );
-          }
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
-      });
-  };
 
   const handleCancel = async () => {
     const { data } = reserveData;
@@ -186,83 +96,39 @@ const ReserveInfo = () => {
   };
 
   useEffect(() => {
-    if (window) {
-      window.getMyReserveForApi = function (jsonStr) {
-        console.log('getMyReserveForApi', jsonStr); // device_id 필요
-        const { device_id } = JSON.parse(jsonStr);
-        axios({
-          method: 'post',
-          url: `/teezzim/teeapi/v1/club/reservation`,
-          data: { device_id },
-        })
-          .then(resp => {
+    if (isInitSignalSendApp == false) {
+      console.log('한번만 수행되야 할텐데..');
+      if (window) {
+        window.getMyReserveDetailForApi = function (jsonStr) {
+          console.log('getMyReserveDetailForApi', jsonStr); // device_id 필요
+          const { device_id } = JSON.parse(jsonStr);
+          axios({
+            method: 'post',
+            url: `/teezzim/teeapi/v1/club/reservation`,
+            data: { device_id },
+          }).then(resp => {
             console.log(resp);
-            setTest(resp);
-            // TODO 새로운 데이터 형식으로 뿌려줘야 함!
-            /* 샘플 데이터 구조
-          {
-            "resultCode": 1,
-            "message": "OK",
-            "data": [{
-                "id": "165ec3da-0ab7-11ed-a93e-0242ac11000a",
-                "device_id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
-                "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                "golf_course_id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
-                "game_date": "20220809",
-                "game_time": "1234",
-                "isCancel": 1,
-                "created_at": "2022-07-23T18:41:58.000Z",
-                "updated_at": "2022-07-23T18:41:58.000Z",
-                "createdAt": "2022-07-23T18:41:58.000Z",
-                "updatedAt": "2022-07-23T18:41:58.000Z",
-                "Device": {
-                    "id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
-                    "token": "fEGot2k1Sh2raE28s2pBoY:APA91bHDIdB-cBkyiYXC-4Ckyn5ZhZHVyHfLJ9V1Lewm9HieEKx78JoYmQF-VzPseqy1edlYc20cbYjosWYJ6zrV4qMNETSXAMYowPwAkSpaVDzBgWiwbJYso28qPSU1H08LgCN3Dymz",
-                    "type": "android",
-                    "created_at": "2022-07-23T16:22:31.000Z",
-                    "updated_at": "2022-07-23T16:22:31.000Z"
-                },
-                "GolfClub": {
-                    "id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                    "name": "백제",
-                    "address": "충청남도 부여군 은산면 충절로 3734-82",
-                    "phone": "041-830-0700",
-                    "area": "충청도",
-                    "email": "baekjecc0700@naver.com",
-                    "homepage": "https://www.baekjecc.com/index.asp",
-                    "corp_reg_number": "307-81-06923",
-                    "description": "백제컨트리클럽은 칠갑산 자락에 감싸 안겨 천혜의 지형 조건과 자연 상태를 코스에 담아내기 위해 친환경적인 시공 방법으로 골프장을 조성하였고, 2008년 개장한 이후 끊임없는 변화를 추구하며 항상 새로운 모습을 보여드리기 위해 노력해왔습니다.\n\n또한, 친환경적인 골프장으로서 현재 금강유역환경청, 고운식물원과 협약하여 천연기념물과 멸종위기 종인 동, 식물의 복원사업을 추진 중입니다.\n\n2008년 대중제 18홀 규모로 개장 하였고 8년간 정성을 다해 준비하여 2016년 10월 11일 한성코스 9홀을 추가로 오픈하여 규모 27홀의 대중제 골프장으로 새롭게 단장하였습니다.\n\n백제컨트리클럽은 모두가 즐길 수 있는 코스 레이아웃과 풍광이 주는 감동, 삼림욕을 즐기는 듯한 청량감에 좋은 사람과 편안한 휴식을 하시기에 최적의 골프장이라 자신합니다.\n\n최고의 골프장으로 발돋움 할 수 있도록 끊임없이 배우고 받아들이고 노력하겠습니다.\n\n백제 컨트리클럽을 방문하여 주셔서 감사합니다."
-                },
-                "GolfCourse": {
-                    "id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
-                    "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                    "name": "웅진",
-                    "description": "9홀",
-                    "createdAt": "2022-06-18T05:47:50.000Z",
-                    "updatedAt": "2022-06-18T05:47:50.000Z",
-                    "GolfClubId": "28fd237b-eeca-11ec-a93e-0242ac11000a"
-                }
-              },
-            ],
-          }
-          */
-          })
-          .catch(err => {
+            setTest(resp.data);
+          }).catch(err => {
             console.log(err);
           });
-      };
-    }
-    const fetchData = async () => {
-      const data = await axios.post(
-        `/teezzim/teeapi/v1/club/${router.query.id}/reservation/confirm`,
-        { id: userInfo[0]?.id, password: userInfo[0]?.password },
-      );
-      const res = await data?.data;
-      setReserveDetailData(res?.data);
-    };
+        };
 
-    fetchData();
-  }, [router?.query?.id, userInfo]);
+        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+          setTimeout(() => {
+            window.BRIDGE.openWebMenu('MyReservationDetail');
+          }, 100); // 약간 지연
+        } else if (window.webkit && window.webkit.messageHandlers) {
+          setTimeout(() => {
+            window.webkit.messageHandlers.openWebMenu.postMessage('MyReservationDetail');
+          }, 100);
+        } else {
+          // TODO 웹뷰에서 불가능..
+        }
+      }
+    }
+    setIsInitSignal(true);
+  }, [isInitSignalSendApp]);
 
   return (
     <>

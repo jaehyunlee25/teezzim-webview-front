@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 
 const Reserve = () => {
-  const { panelStore } = useStores();
+  const { panelStore, authStore } = useStores();
   const [userInfo, setUserInfo] = useState([]);
   // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
@@ -161,6 +161,7 @@ const Reserve = () => {
         window.getMyReserveForApi = function (jsonStr) {
           console.log('getMyReserveForApi', jsonStr); // device_id 필요
           const { device_id } = JSON.parse(jsonStr);
+          authStore.setDeviceId(device_id);
           axios({
             method: 'post',
             url: `/teezzim/teeapi/v1/club/reservation`,
@@ -248,17 +249,17 @@ const Reserve = () => {
               club_id: dataList[i].clubInfo.id,
             };
             console.log(data);
-            if (window.BRIDGE && window.BRIDGE.requestSearchReserve) {
-              window.BRIDGE.requestSearchReserve(JSON.stringify(data));
-            } else if (window.webkit && window.webkit.messageHandlers) {
-              window.webkit.messageHandlers.requestSearchReserve.postMessage(
-                JSON.stringify(data),
-              );
-            } else {
-              console.warn(
-                '이 기능은 앱에서만 동작합니다.' + JSON.stringify(data),
-              );
-            }
+            // if (window.BRIDGE && window.BRIDGE.requestSearchReserve) {
+            //   window.BRIDGE.requestSearchReserve(JSON.stringify(data));
+            // } else if (window.webkit && window.webkit.messageHandlers) {
+            //   window.webkit.messageHandlers.requestSearchReserve.postMessage(
+            //     JSON.stringify(data),
+            //   );
+            // } else {
+            //   console.warn(
+            //     '이 기능은 앱에서만 동작합니다.' + JSON.stringify(data),
+            //   );
+            // }
           }
         };
         /** 예약 정보 APP->WEB 전송 */
@@ -313,12 +314,12 @@ const Reserve = () => {
 
         if (window.BRIDGE && window.BRIDGE.openWebMenu) {
           setTimeout(() => {
-            window.BRIDGE.openWebMenu('Reservation');
+            window.BRIDGE.openWebMenu('MyReservation');
           }, 100); // 약간 지연
         } else if (window.webkit && window.webkit.messageHandlers) {
           setTimeout(() => {
             window.webkit.messageHandlers.openWebMenu.postMessage(
-              'Reservation',
+              'MyReservation',
             );
           }, 100);
         } else {
@@ -343,39 +344,39 @@ const Reserve = () => {
     }
   }, [isInitSignalSendApp, panelStore]);
 
-  const handleGetReservationInfo = function (club, id, password) {
-    axios({
-      method: 'POST',
-      url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
-      data: { id, password },
-    })
-      .then(({ data: respData }) => {
-        for (let idx = 0; idx < respData.data.data.length; idx++) {
-          respData.data.data[idx].golf_club = respData.data.golf_club;
-        }
-        setReserveData(respData.data);
-        console.log(respData.data);
-        if (window) {
-          const jsonStr = JSON.stringify({
-            club,
-            data: respData.data,
-            golf_info: respData.golf_club,
-          });
-          // 앱으로 전송
-          if (window.BRIDGE && window.BRIDGE.saveReservationList) {
-            window.BRIDGE.saveReservationList(jsonStr);
-          } else if (window.webkit && window.webkit.messageHandlers) {
-            window.webkit.messageHandlers.saveReservationList.postMessage(
-              jsonStr,
-            );
-          }
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
-      });
-  };
+  // const handleGetReservationInfo = function (club, id, password) {
+  //   axios({
+  //     method: 'POST',
+  //     url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
+  //     data: { id, password },
+  //   })
+  //     .then(({ data: respData }) => {
+  //       for (let idx = 0; idx < respData.data.data.length; idx++) {
+  //         respData.data.data[idx].golf_club = respData.data.golf_club;
+  //       }
+  //       setReserveData(respData.data);
+  //       console.log(respData.data);
+  //       if (window) {
+  //         const jsonStr = JSON.stringify({
+  //           club,
+  //           data: respData.data,
+  //           golf_info: respData.golf_club,
+  //         });
+  //         // 앱으로 전송
+  //         if (window.BRIDGE && window.BRIDGE.saveReservationList) {
+  //           window.BRIDGE.saveReservationList(jsonStr);
+  //         } else if (window.webkit && window.webkit.messageHandlers) {
+  //           window.webkit.messageHandlers.saveReservationList.postMessage(
+  //             jsonStr,
+  //           );
+  //         }
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //       alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
+  //     });
+  // };
 
   return (
     <>
