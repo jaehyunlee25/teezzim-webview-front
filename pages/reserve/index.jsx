@@ -251,8 +251,8 @@ const Reserve = () => {
             data: { device_id },
           })
             .then(resp => {
-              console.log(resp);
-              setTest(resp);
+              //console.log("###", resp.data);
+              setTest(resp.data);
               // TODO 새로운 데이터 형식으로 뿌려줘야 함!
               /* 샘플 데이터 구조
             {

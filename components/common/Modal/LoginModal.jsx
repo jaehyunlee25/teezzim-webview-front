@@ -46,11 +46,13 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const saveLoginInfo = () => {
     // const sampleData = {
     //   clubId: '골프장식별자',
+    //   club: '골프장영문식별자',
     //   id: '아이디',
     //   pw: '패스워드',
     // };
     const data = {
       clubId: modalStore.golfInfo.clubId,
+      club: modalStore.golfInfo.eng,
       ...inputs,
     };
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {

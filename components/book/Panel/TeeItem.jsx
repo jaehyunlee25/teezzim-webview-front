@@ -16,7 +16,7 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
   // Handler - showModal
   const handleClick = () => {
     modalStore.setRegistered(registered);
-    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img });
+    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img, eng: tee.eng });
     modalStore.setModalHidden(false);
   };
 
