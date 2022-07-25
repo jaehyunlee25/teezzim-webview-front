@@ -431,6 +431,8 @@ const Reserve = () => {
           let gap = dDay.getTime() - today.getTime();
           let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 
+          console.log("###1", reserve);
+
           return (
             <ReserveTap
               key={index}
@@ -445,59 +447,7 @@ const Reserve = () => {
             />
           );
         })}
-
-        {/* 기존 예약 확정 */}
-        {/* {reserveData?.data?.length > 0 ? (
-          <>
-            {reserveData?.data?.map((reserve, index) => {
-              const year = reserve?.reserved_date?.split('.')[0];
-              const month = reserve?.reserved_date?.split('.')[1];
-              const day = reserve?.reserved_date?.split('.')[2];
-              let today = new Date();
-              let dDay = new Date(year, month - 1, day);
-              let gap = dDay.getTime() - today.getTime();
-              let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-
-              return (
-                <ReserveTap
-                  key={index}
-                  index={index}
-                  type='reserve'
-                  userInfo={userInfo}
-                  reserve={reserve}
-                  reserveData={reserveData}
-                  deleteItem={deleteItem}
-                  dDay={dDayResult}
-                  handleClick={() => setConfirmHidden(false)}
-                />
-              );
-            })}
-          </>
-        ) : (
-          <>
-            {reserveData?.data?.length === 0 ? (
-              <p>예약 내역이 없습니다.</p>
-            ) : (
-              <div className='message-box loading-box'>
-                <div className='loading-box'>
-                  <div className='loading-icon'>
-                    <span className='offscreen'>
-                      데이터를 가져오고 있습니다.
-                    </span>
-                  </div>
-                  <div className='loading-text ml-10'>
-                    데이터를 가져오고 있습니다.
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )} */}
       </div>
-
-      {/* <span>
-        {`${reserve?.reserved_time} | ${reserve?.golf_club?.area} | ${reserve?.reserved_course} 코스`}
-      </span> */}
 
       <div className={styles.reserveState}>
         <p>예약 대기</p>

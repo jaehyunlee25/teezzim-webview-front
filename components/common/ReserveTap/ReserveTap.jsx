@@ -12,22 +12,23 @@ import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
 
-const ReserveTap = ({
-  type,
-  index,
-  userInfo,
-  reserve,
-  reserveData,
-  deleteItem,
-  clubName,
-  waitDate,
-  waitTime,
-  alarmDate,
-  dDay,
-}) => {
+const ReserveTap = (props) => {
+  // console.log("###props", props);
+  const {
+    type,
+    index,
+    userInfo,
+    reserve,
+    reserveData,
+    deleteItem,
+    clubName,
+    waitDate,
+    waitTime,
+    alarmDate,
+    dDay,
+  } = props;
   console.log('🚀 - reserveData', reserveData);
   const router = useRouter();
-
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
 
@@ -56,6 +57,8 @@ const ReserveTap = ({
   };
 
   const handleWaitCancel = () => {};
+
+  console.log("###2", reserve);
 
   return (
     <>
@@ -145,7 +148,7 @@ const ReserveTap = ({
                 height={26}
                 onClick={() =>
                   router.push({
-                    pathname: `/reserve/${reserve?.GolfClub?.id}`,
+                    pathname: `/reserve/${reserve.id}`,
                     query: { tab: 'my_book' },
                   })
                 }

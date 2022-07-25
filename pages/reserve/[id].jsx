@@ -68,36 +68,60 @@ const ReserveInfo = () => {
     ],
   });
   console.log('🚀 - test', test);
-
+  let idx = 0;
+  if( test && test.data && router.query.id) {
+    idx = test.data.findIndex(item =>{
+      console.log(item);
+      return item.id == router.query.id
+    });
+  }
+  
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
   const [reserveData, setReserveData] = useState({});
 
   const handleCancel = async () => {
-    const { data } = reserveData;
-    const { status } = await axios
-      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
-        id: userInfo[0]?.id,
-        password: userInfo[0]?.password,
-        year: data[0]?.reserved_date.split('.')[0],
-        month: data[0]?.reserved_date.split('.')[1],
-        date: data[0]?.reserved_date.split('.')[2],
-        course: data[0]?.reserved_course,
-        time: data[0]?.reserved_time.replace(':', ''),
-      })
-      .catch(err => console.warn(err));
-
-    if (status === 200) {
-      router.push({
-        pathname: '/reserve',
-        query: { tab: 'my_book' },
-      });
+    const item = test.data[idx];
+    const data = {
+      club: item.GolfClub.GolfClubEng.eng_id,
+      club_id: item.GolfClub.id,
+      year: item.game_date.substring(0,4),
+      month: item.game_date.substring(4,6),
+      date: item.game_date.substring(6,8),
+      time: item.game_time,
+      course: item.GolfCourse.name,
     }
+    // console.log("###", data);
+    // 예약하기 브릿지 메소드 호출
+    if (window.BRIDGE && window.BRIDGE.requestReserveCancel) {
+      window.BRIDGE.requestReserveCancel(JSON.stringify(data));
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.requestReserveCancel.postMessage(JSON.stringify(data));
+    } else {
+      alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
+    }
+    // const { status } = await axios
+    //   .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
+    //     id: userInfo[0]?.id,
+    //     password: userInfo[0]?.password,
+    //     year: data[idx]?.reserved_date.split('.')[0],
+    //     month: data[idx]?.reserved_date.split('.')[1],
+    //     date: data[idx]?.reserved_date.split('.')[2],
+    //     course: data[idx]?.reserved_course,
+    //     time: data[idx]?.reserved_time.replace(':', ''),
+    //   })
+    //   .catch(err => console.warn(err));
+    // if (status === 200) {
+    //   router.push({
+    //     pathname: '/reserve',
+    //     query: { tab: 'my_book' },
+    //   });
+    // }
   };
 
   useEffect(() => {
     if (isInitSignalSendApp == false) {
-      console.log('한번만 수행되야 할텐데..');
+      // console.log('한번만 수행되야 할텐데..');
       if (window) {
         window.getMyReserveDetailForApi = function (jsonStr) {
           console.log('getMyReserveDetailForApi', jsonStr); // device_id 필요
@@ -148,11 +172,11 @@ const ReserveInfo = () => {
 
       <div className={styles.reserveTitle}>
         {/* <p>{reserveDetailData?.golf_club?.name}</p> */}
-        <p>{test?.data[0]?.GolfClub?.name}</p>
+        <p>{test?.data[idx]?.GolfClub?.name}</p>
         <button
           onClick={() =>
             // router.push(`/reserve/info/${reserveDetailData?.golf_club?.id}`)
-            router.push(`/reserve/info/${test?.data[0]?.GolfClub?.id}`)
+            router.push(`/reserve/info/${test?.data[idx]?.GolfClub?.id}`)
           }
           className={styles.sideBtn}
           style={{ width: '90px' }}
@@ -184,11 +208,11 @@ const ReserveInfo = () => {
           <li
             onClick={() =>
               // window.open(`${reserveDetailData?.golf_club?.homepage}`)
-              window.open(`${test?.data[0]?.GolfClub?.homepage}`)
+              window.open(`${test?.data[idx]?.GolfClub?.homepage}`)
             }
           >
             {/* {reserveDetailData?.golf_club?.name} [바로가기] */}
-            {test?.data[0]?.GolfClub?.name} [바로가기]
+            {test?.data[idx]?.GolfClub?.name} [바로가기]
           </li>
         </ul>
       </div>
@@ -216,16 +240,16 @@ const ReserveInfo = () => {
                 <div className='desc'>
                   <span>
                     {/* {reserveDetailData.status === 'okay'
-                      ? reserveDetailData?.data[0]?.reserved_date
+                      ? reserveDetailData?.data[idx]?.reserved_date
                       : null} */}
                     {test.resultCode === 1
-                      ? `${test?.data[0]?.game_date.substring(
+                      ? `${test?.data[idx]?.game_date.substring(
                           0,
                           4,
-                        )}-${test?.data[0]?.game_date.substring(
+                        )}-${test?.data[idx]?.game_date.substring(
                           4,
                           6,
-                        )}-${test?.data[0]?.game_date.substring(6, 8)}`
+                        )}-${test?.data[idx]?.game_date.substring(6, 8)}`
                       : null}
                   </span>
                 </div>
@@ -237,13 +261,13 @@ const ReserveInfo = () => {
                 <div className='desc'>
                   <span>
                     {/* {reserveDetailData.status === 'okay'
-                      ? reserveDetailData?.data[0]?.reserved_time
+                      ? reserveDetailData?.data[idx]?.reserved_time
                       : null} */}
                     {test.resultCode === 1
-                      ? `${test?.data[0]?.game_time.substring(
+                      ? `${test?.data[idx]?.game_time.substring(
                           0,
                           2,
-                        )}:${test?.data[0]?.game_time.substring(2, 4)}`
+                        )}:${test?.data[idx]?.game_time.substring(2, 4)}`
                       : null}
                   </span>
                 </div>
@@ -255,10 +279,10 @@ const ReserveInfo = () => {
                 <div className='desc'>
                   <span>
                     {/* {reserveDetailData.status === 'okay'
-                      ? `${reserveDetailData?.data[0]?.reserved_course} 코스`
+                      ? `${reserveDetailData?.data[idx]?.reserved_course} 코스`
                       : null} */}
                     {test.resultCode === 1
-                      ? test?.data[0]?.GolfCourse?.name
+                      ? test?.data[idx]?.GolfCourse?.name
                       : null}
                   </span>
                 </div>
