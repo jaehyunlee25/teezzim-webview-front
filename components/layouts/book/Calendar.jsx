@@ -32,6 +32,18 @@ const Calendar = observer(
               club_id: res.config.params.club,
               command: 'search', // 고정 문자열
             };
+            const timeKey = 'search-' + params.club_id;
+            let savedTime = window.localStorage.getItem(timeKey);
+            // console.log("###", savedTime);
+            if( savedTime ){
+              savedTime = Number(savedTime);
+              if( savedTime + 5000 > (new Date()).getTime() ) {
+                return res;
+              }
+            }
+            const nowTime = (new Date()).getTime();
+            window.localStorage.setItem(timeKey, nowTime);
+            // console.log("###", nowTime);
             if (window.BRIDGE && window.BRIDGE.requestSearch) {
               window.BRIDGE.requestSearch(JSON.stringify(params));
             } else if (window.webkit && window.webkit.messageHandlers) {
