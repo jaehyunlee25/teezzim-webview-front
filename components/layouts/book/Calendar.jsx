@@ -106,7 +106,7 @@ const Calendar = observer(
         panelStore._checkedTeeList.size > 0 &&
         panelStore._panelHidden
       )
-        // getSchedule();
+        getSchedule();
       return () => {
         mountRef.current = false;
       };
