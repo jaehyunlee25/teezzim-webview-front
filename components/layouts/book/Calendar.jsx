@@ -100,20 +100,13 @@ const Calendar = observer(
     }, [yearMonth, setSchedule, panelStore._checkedTeeList, teeScheduleStore]);
 
     useEffect(() => {
-      /** web test only
-       * if (!window.BRIDGE || !window.BRIDGE.requestSearch) {
-       *  window.BRIDGE = {};
-       *  window.BRIDGE.requestSearch = params => alert(JSON.stringify(params));
-       * }
-       */
-
       mountRef.current = true;
       if (
         teeScheduleStore._calenderUpdate &&
         panelStore._checkedTeeList.size > 0 &&
         panelStore._panelHidden
       )
-        getSchedule();
+        // getSchedule();
       return () => {
         mountRef.current = false;
       };
@@ -124,6 +117,15 @@ const Calendar = observer(
       panelStore._checkedTeeList,
       panelStore._panelHidden,
     ]);
+
+    useEffect(() => {
+      if(window){
+        /** APP->WEB */
+        window.teeSearchFinished = function () {
+          getSchedule();
+        };
+      }
+    }, []);
 
     return (
       <>
