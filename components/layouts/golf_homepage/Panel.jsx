@@ -167,28 +167,31 @@ const Panel = observer(() => {
             {/*list_Areawrap 지역 골프장리스트  */}
             <div className='list_Areawrap'>
               <div className='list_Areawrap_inner'>
-                <div className='list_AreaTop'>
-                  <Counter type='registered' />
-                  <hr />
-                </div>
-                <div className='list_Golfarea'>
-                  <ul>
-                    {registeredList
-                      .sort((a, b) =>
-                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
-                      )
-                      ?.map((tee, i) => (
-                        <TeeItem
-                          key={tee.id}
-                          img={globalStore.TeeImages[i % 7]}
-                          type='golf_homepage'
-                          registered
-                          {...tee}
-                        />
-                      ))}
-                  </ul>
-                </div>
-
+                { registeredList.length > 0 &&
+                  <>
+                    <div className='list_AreaTop'>
+                      <Counter type='registered' />
+                      <hr />
+                    </div>
+                    <div className='list_Golfarea'>
+                      <ul>
+                        {registeredList
+                          .sort((a, b) =>
+                            a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                          )
+                          ?.map((tee, i) => (
+                            <TeeItem
+                              key={tee.id}
+                              img={globalStore.TeeImages[i % 7]}
+                              type='golf_homepage'
+                              registered
+                              {...tee}
+                            />
+                          ))}
+                      </ul>
+                    </div>
+                  </>
+                }
                 <>
                   <div className='list_AreaTop'>
                     <Counter type='unregistered' />
