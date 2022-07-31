@@ -80,6 +80,25 @@ const ReserveInfo = () => {
   const [confirmHidden, setConfirmHidden] = useState(true);
   const [reserveData, setReserveData] = useState({});
 
+  useEffect(() => {
+    if(window){
+      console.log("### responseReserveCancel 바인딩됨");
+      /** APP->WEB */
+      window.responseReserveCancel = function (result) {
+        console.log("### responseReserveCancel 호출됨 " + result);
+        if ( result == "OK" ){
+          // TODO 성공 팝업으로 처리하도록 변경
+          router.push({
+            pathname: '/reserve',
+            query: { tab: 'my_book' },
+          });
+        } else {
+          alert("취소에 실패했습니다."); // TODO 웹뷰 팝업으로 처리
+        }
+      };
+    }
+  }, []);
+
   const handleCancel = async () => {
     const item = test.data[idx];
     const data = {
@@ -229,6 +248,7 @@ const ReserveInfo = () => {
           handleCancel();
         }}
         hidden={confirmHidden}
+        cancelButtonClick={()=>setConfirmHidden(true)}
       >
         <div className='component-wrap'>
           <div className='inner-container'>

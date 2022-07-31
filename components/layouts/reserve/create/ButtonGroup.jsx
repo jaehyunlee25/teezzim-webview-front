@@ -12,7 +12,7 @@ const ButtonGroup = observer(
 
     useEffect(() => {
       if(window){
-        console.log("### responseReserve 바인딩됨");
+        // console.log("### responseReserve 바인딩됨");
         /** APP->WEB */
         window.responseReserve = function (result) {
           console.log("### responseReserve 호출됨 " + result);
@@ -27,7 +27,7 @@ const ButtonGroup = observer(
 
     const handleCreateReserve = async () => {
       if (!id || !password) return;
-      if (onButtonClick) onButtonClick();
+      // if (onButtonClick) onButtonClick(); // 예약중 팝업 off
       const club_id = golfInfo.id;
       const resp = await axios.get(`/teezzim/teeapi/v1/club/eng/${club_id}`);
       const club = resp.data.data.eng_id;

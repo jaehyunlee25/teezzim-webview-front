@@ -5,6 +5,7 @@ const PopUp = ({
   buttonText = '확인',
   buttonType = 'primary',
   onButtonClick,
+  cancelButtonClick,
   hidden,
 }) => {
   return (
@@ -26,6 +27,17 @@ const PopUp = ({
                     {buttonText}
                   </button>
                 </li>
+                { cancelButtonClick && 
+                  <li>
+                    <button
+                      type='button'
+                      className={`btn large warning-medium full`}
+                      onClick={cancelButtonClick}
+                    >
+                      닫기
+                    </button>
+                  </li>
+                }
               </ul>
             </div>
           </div>
