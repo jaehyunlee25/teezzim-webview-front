@@ -191,17 +191,19 @@ const Panel = observer(() => {
 
     if (id === 'book'){
       teeScheduleStore.setCalenderUpdate();
-      // let ctl = Array.from(panelStore.checkedTeeList);
-      // ctl = JSON.parse(ctl[0]);
-      // // console.log(ctl);
-      // const data = { club: ctl.eng, club_id: ctl.id };
-      // if (window.BRIDGE && window.BRIDGE.requestSearchReserve) {
-      //   window.BRIDGE.requestSearchReserve(JSON.stringify(data));
-      // } else if (window.webkit && window.webkit.messageHandlers ) {
-      //   window.webkit.messageHandlers.requestSearchReserve.postMessage(JSON.stringify(data));
-      // } else {
-      //   console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
-      // }
+      // const ctl = Array.from(panelStore.checkedTeeList);
+      let data = [];
+      for (const item of panelStore.checkedTeeList) {
+        const ctl = JSON.parse(item);
+        data.push({ club: ctl.eng, club_id: ctl.id });
+      }
+      if (window.BRIDGE && window.BRIDGE.requestSearch) {
+        window.BRIDGE.requestSearch(JSON.stringify(data));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.requestSearch.postMessage(JSON.stringify(data));
+      } else {
+        console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+      }
     }
 
     router.push({
