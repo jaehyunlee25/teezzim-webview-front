@@ -9,6 +9,21 @@ const ButtonGroup = observer(
     const [{ id, password } = {}] =
       authStore.authList?.filter(auth => auth.clubId == clubId) ?? [];
 
+    useEffect(() => {
+      if(window){
+        console.log("### responseReserve 바인딩됨");
+        /** APP->WEB */
+        window.responseReserve = function (result) {
+          console.log("### responseReserve 호출됨 " + result);
+          if ( result == "OK" ){
+            cb();
+          } else {
+            errCb();
+          }
+        };
+      }
+    }, []);
+
     const handleCreateReserve = async () => {
       if (!id || !password) return;
       if (onButtonClick) onButtonClick();
@@ -25,41 +40,10 @@ const ButtonGroup = observer(
         } else {
           alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
         }
-        if (cb) cb();
+        // if (cb) cb();
       } catch {
         if (errCb) errCb();
       }
-      // const res = await axios
-      //   .post(
-      //     `/teezzim/teeapi/v1/club/${id}/reservation/post`,
-      //     {
-      //       id,
-      //       password,
-      //       ...postInfo,
-      //     },
-      //     { cancelToken: source.token },
-      //   )
-      //   .catch(err => {
-      //     console.warn(err);
-      //   });
-
-      // const {
-      //   data = null,
-      //   resultCode = null,
-      //   message = null,
-      // } = res?.data ?? {};
-
-      // if (res?.status === 200) {
-      //   if (resultCode === 1) {
-      //     if (cb) cb();
-      //   } else {
-      //     if (errCb) errCb();
-      //     console.warn(`[errorCode : ${resultCode}] ${message}`);
-      //   }
-      // } else {
-      //   if (errCb) errCb();
-      //   console.warn('unhandled error');
-      // }
     };
 
     const handleRegisterAccount = () => {
