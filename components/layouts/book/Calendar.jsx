@@ -37,7 +37,7 @@ const Calendar = observer(
             // console.log("###", savedTime);
             if( savedTime ){
               savedTime = Number(savedTime);
-              if( savedTime + 5000 > (new Date()).getTime() ) {
+              if( savedTime + 60000 > (new Date()).getTime() ) {
                 return res;
               }
             }
@@ -45,13 +45,13 @@ const Calendar = observer(
             window.localStorage.setItem(timeKey, nowTime);
             // console.log("###", nowTime);
             if (window.BRIDGE && window.BRIDGE.requestSearch) {
-              window.BRIDGE.requestSearch(JSON.stringify(params));
+              window.BRIDGE.requestSearch(JSON.stringify([params]));
             } else if (window.webkit && window.webkit.messageHandlers) {
               window.webkit.messageHandlers.requestSearch.postMessage(
-                JSON.stringify(params),
+                JSON.stringify([params]),
               );
             } else {
-              alert(JSON.stringify(params));
+              alert(JSON.stringify([params]));
             }
           }
           return res;
