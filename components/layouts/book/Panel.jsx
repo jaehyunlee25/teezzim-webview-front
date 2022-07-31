@@ -196,6 +196,9 @@ const Panel = observer(() => {
       for (const item of panelStore.checkedTeeList) {
         const ctl = JSON.parse(item);
         data.push({ club: ctl.eng, club_id: ctl.id });
+        const timeKey = 'search-' + ctl.id;
+        const nowTime = (new Date()).getTime();
+        window.localStorage.setItem(timeKey, nowTime);
       }
       if (window.BRIDGE && window.BRIDGE.requestSearch) {
         window.BRIDGE.requestSearch(JSON.stringify(data));

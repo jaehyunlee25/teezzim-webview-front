@@ -120,6 +120,7 @@ const Calendar = observer(
 
     useEffect(() => {
       if(window){
+        console.log("### teeSearchFinished 호출됨");
         /** APP->WEB */
         window.teeSearchFinished = function () {
           getSchedule();
