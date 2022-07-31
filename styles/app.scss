@@ -309,7 +309,7 @@ input[type="submit"] {
   --neutrals-black: #000;
   --neutrals-grey-2: #f0f0ef;
   --neutrals-grey-7: #494c4f;
-  --brand-primary: #115b40;
+  --brand-primary: #00977c;
   --neutrals-grey-9: #212121;
   --brand-shade-1: #e1eae7;
   --brand-shade-2: #627870;
@@ -1349,12 +1349,15 @@ input {
 }
 
 .head-headline {
+  display: flex;
+  align-items: center;
   font-size: 16px;
   font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.31;
   letter-spacing: 0.5px;
+  font-family: Spoqa Han Sans Neo; 
 }
 
 .head-caption1 {
@@ -1365,7 +1368,35 @@ input {
   line-height: 1.33;
   letter-spacing: 0.05px;
 }
-
+.allim_reservation {
+  display: flex; 
+  justify-content: flex-start; 
+  align-items: center; 
+  grid-gap: 15px;
+}
+.allimg_icon {
+  position: relative;
+  width: 22px;
+  height: 26px;
+  background-image: url('../assets/images/icon_2.png'); 
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.allim_num {
+  position: absolute;
+  top: 2px;
+  right: -5px;
+  min-width: 15px;
+  min-height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--neutrals-white);
+  background-color: #f73d3d;
+}
 /* Body */
 
 .text-main {
@@ -1381,11 +1412,14 @@ input {
 }
 
 .text-sub {
-  font-size: 14px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.36;
-  letter-spacing: 0.25px;
+  font-size: 16px;
+  font-weight: 400; 
+  font-stretch: normal; 
+  font-style: normal; 
+  line-height: 1.36; 
+  letter-spacing: 0.25px; 
+  font-family: Spoqa Han Sans Neo;
+  color: #5d5d5d;
 
   &.bold {
     font-weight: 600;
@@ -2564,20 +2598,24 @@ input {
   }
 
   .rollsheet {
-    width: 100%;
-    height: 60px;
-    flex: 1 1 auto;
-    padding: 4px 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-shadow: 0 6px 8px 1px var(--alpha-black-a-7), 0 4px 4px -3px var(--alpha-black-20),
-      0 2px 2px 0 rgba(0, 0, 0, 0.15);
-    background-color: var(--neutrals-grey-1);
+    position: relative;
+    width:100%;
+    height: auto; 
+    flex:1 1 auto; 
+    padding: 16px 30px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    border-bottom: 1px solid #b8b8b8; 
+    background-color: var(--neutrals-white);
     border-radius: 0 0 24px 24px;
 
+    box-shadow: 0 6px 8px 1px var(--alpha-black-a-7), 0 4px 4px -3px var(--alpha-black-20),
+      0 2px 2px 0 rgba(0, 0, 0, 0.15);
+
+
     .handle {
-      position: absolute;
+      position:absolute;
       bottom: 0;
       left: 50%;
       width: 80px;
@@ -2621,10 +2659,6 @@ input {
     font-weight: 600;
 
     .day,
-    .head-headline {
-      font-size: 13px;
-      font-weight: 600;
-    }
 
     .handle {
       position: absolute;
