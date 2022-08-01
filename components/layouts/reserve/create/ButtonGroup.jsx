@@ -70,7 +70,7 @@ const ButtonGroup = observer(
               <li>
                 <button
                   type='button'
-                  className='btn large rest full'
+                  className='btn large primary roundbtn full'
                   onClick={handleCreateReserve}
                 >
                   간편예약
@@ -80,7 +80,7 @@ const ButtonGroup = observer(
                 <HomepageLink
                   id={clubId}
                   type='button'
-                  className='btn large rest full'
+                  className='btn large primary roundbtn full'
                 >
                   홈페이지예약
                 </HomepageLink>
@@ -93,7 +93,7 @@ const ButtonGroup = observer(
               <HomepageLink
                 id={clubId}
                 type='button'
-                className='btn large rest full'
+                className='btn large primary roundbtn full'
               >
                 골프장 회원가입
               </HomepageLink>
@@ -101,7 +101,7 @@ const ButtonGroup = observer(
               <li>
                 <button
                   type='button'
-                  className='btn large rest full'
+                  className='btn large primary roundbtn full'
                   onClick={handleRegisterAccount}
                 >
                   골프장 계정등록
@@ -113,7 +113,6 @@ const ButtonGroup = observer(
         <style jsx>{`
           .btn-group {
             display: flex;
-            bottom: 72px;
           }
         `}</style>
       </>

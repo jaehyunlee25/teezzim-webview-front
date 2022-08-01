@@ -606,7 +606,7 @@
 .booking-box {
   padding: 10px;
   padding: 0.625rem;
-  border: solid 1px var(--brand-secondary);
+  // border: solid 1px var(--brand-secondary);
   background-color: var(--neutrals-white);
 }
 
@@ -2415,8 +2415,11 @@ div.spinner {
   }
 
   &.w160 {
-    display: inline-block;
-    width: 160px !important;
+    display: inline-block; 
+    min-width: 160px !important; 
+    height: auto; 
+    border-radius: 20px; 
+    padding: 10px 20px;
   }
 }
 
