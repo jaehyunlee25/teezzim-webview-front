@@ -45,7 +45,7 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
           </div>
         </div>
         {/*//list_detail  */}
-        {type === 'home' ? <TeeCheckInput {...tee} /> : <b>{loc}</b>}
+        {type === 'home' ? <TeeCheckInput {...tee} registered /> : <b>{loc}</b>}
       </li>
       <style jsx>{`
         .badge {
