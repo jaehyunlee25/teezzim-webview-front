@@ -170,6 +170,15 @@ const Panel = observer(() => {
     const { id } = e.target;
     if (!id) return;
     if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
+    if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
+      const params = { command: 'showPopupWait', data: ''};
+      if (window.BRIDGE && window.BRIDGE.globalMethod) {
+        window.BRIDGE.globalMethod(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      }
+      return;
+    }
 
     if (selectedLength <= 0) {
       toastStore.setMessage('골프장을 1개 이상 선택해 주세요.');
