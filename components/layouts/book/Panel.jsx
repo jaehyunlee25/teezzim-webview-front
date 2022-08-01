@@ -2,7 +2,6 @@ import Link from 'next/link';
 import NavTab from '@/components/book/Panel/NavTab';
 import SearchContainer from '@/components/book/Panel/SearchContainer';
 import TeeListArea from '@/components/book/Panel/TeeListArea';
-import CheckController from '@/components/book/Panel/CheckController';
 
 import useStores from '@/stores/useStores';
 import { useState, useCallback, useEffect, useRef } from 'react';
@@ -10,7 +9,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
-import teeScheduleStore from '@/stores/teeScheduleStore';
 
 const Panel = observer(() => {
   const router = useRouter();

@@ -12,6 +12,15 @@ const TeeCheckInput = observer(props => {
     [panelStore.checkedTeeList, panelStore.teeListMap, props],
   );
   const handleChecked = e => {
+    if(props.registered && props.registered == true) {
+      const params = { command: 'showToast', data: '먼저 로그인 정보를 입력하세요'};
+      if (window.BRIDGE && window.BRIDGE.globalMethod) {
+        window.BRIDGE.globalMethod(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      }
+      return;
+    }
     const id = e.target.id;
     const value = JSON.stringify(panelStore.teeListMap?.[id]);
 
