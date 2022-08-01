@@ -140,13 +140,13 @@ const Calendar = observer(
         >
           <div className='calendar'>
             <div className='day-of-week'>
-              <div>일</div>
-              <div>월</div>
-              <div>화</div>
-              <div>수</div>
-              <div>목</div>
-              <div>금</div>
-              <div>토</div>
+              <div className='sunday'>S</div>
+              <div>M</div>
+              <div>T</div>
+              <div>W</div>
+              <div>T</div>
+              <div>F</div>
+              <div>S</div>
             </div>
             <div className='date-grid'>
               {Array.from({ length: day }, (_, i) => (
@@ -157,7 +157,7 @@ const Calendar = observer(
                   key={v}
                   className={`${
                     v === today ? 'today' : v < today ? 'prev-mon' : ''
-                  }${v === date ? ' on' : ' '}`}
+                  }${v === date ? 'selected' : ' '}`}
                   date={v}
                   count={schedule?.[yearMonth]?.[v] ?? 0}
                   onClick={v >= today ? handleDate : null}
@@ -174,9 +174,10 @@ const Calendar = observer(
 export default Calendar;
 
 const DateButton = ({ date, count, className, onClick, ...others }) => {
-  const dateText = date?.split('-')[2];
-  const day = new Date(date).getUTCDay();
   const classes = className ?? '';
+  const dateText = classes === 'selected'? `: ${date?.split('-')[2]}`:date?.split('-')[2];
+  const day = new Date(date).getUTCDay();
+  
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
