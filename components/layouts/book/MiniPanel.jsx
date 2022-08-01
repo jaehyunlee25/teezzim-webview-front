@@ -34,7 +34,7 @@ const MiniPanel = observer(() => {
                 ?.map(v => JSON.parse(v).name)
                 .join(', ')}
             </p>
-            <div className='handle'></div>
+            {/* <div className='handle'></div> */}
           </div>
         </div>
       </div>

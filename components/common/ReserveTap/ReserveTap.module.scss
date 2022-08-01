@@ -9,17 +9,26 @@
     @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
 
     .alert {
-        @include flex($flexDirection: column, $alignItems: center, $justifyContent: center);
-        margin-right: 1rem;
-        width: 50px;
+        // @include flex($flexDirection: column, $alignItems: center, $justifyContent: center);
+        // margin-right: 1rem;
+        // width: 50px;
 
-        .time {
-            filter: invert(17%) sepia(7%) saturate(117%) hue-rotate(202deg) brightness(90%) contrast(88%);
-        }
+        // .time {
+        //     filter: invert(17%) sepia(7%) saturate(117%) hue-rotate(202deg) brightness(90%) contrast(88%);
+        // }
 
-        .bell {
-            filter: invert(35%) sepia(59%) saturate(1725%) hue-rotate(195deg) brightness(88%) contrast(96%);
-        }
+        // .bell {
+        //     filter: invert(35%) sepia(59%) saturate(1725%) hue-rotate(195deg) brightness(88%) contrast(96%);
+        // }
+        margin-left: 16px;
+        margin-right: 15px;
+        padding: 11px;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f2f2f2;
+        border-radius: 10px;
     }
 
     div {

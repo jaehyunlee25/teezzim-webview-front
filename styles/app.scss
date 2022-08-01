@@ -347,7 +347,7 @@ html {
 .wrap {
   height: 100%;
   width: 100%;
-  background-color: var(--neutrals-grey-3);
+  background-color: var(--neutrals-white);
   color: var(--neutrals-grey-8-text);
 
   &.modal-wrap {
@@ -2608,7 +2608,6 @@ input {
     text-overflow: ellipsis; 
     border-bottom: 1px solid #b8b8b8; 
     background-color: var(--neutrals-white);
-    border-radius: 0 0 24px 24px;
 
     box-shadow: 0 6px 8px 1px var(--alpha-black-a-7), 0 4px 4px -3px var(--alpha-black-20),
       0 2px 2px 0 rgba(0, 0, 0, 0.15);

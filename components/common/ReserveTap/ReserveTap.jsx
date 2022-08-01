@@ -66,25 +66,6 @@ const ReserveTap = (props) => {
         <div className={styles.dateInfo}>
           <div className={styles.alert}>
             <span>{`D-${dDay}`}</span>
-            {type === 'reserve' && (
-              <Image
-                className={styles.time}
-                src={Time}
-                alt='time'
-                width={26}
-                height={26}
-              />
-            )}
-
-            {type === 'wait' && (
-              <Image
-                className={styles.bell}
-                src={Bell}
-                alt='bell'
-                width={26}
-                height={26}
-              />
-            )}
           </div>
 
           {type === 'reserve' && (
@@ -98,12 +79,11 @@ const ReserveTap = (props) => {
               )}-${reserve?.game_date.substring(6, 8)}`}</span>
               {/* <span>date</span> */}
               <span>
-                {`${reserve?.game_time.substring(
-                  0,
-                  2,
-                )}:${reserve?.game_time.substring(2, 4)} | ${
-                  reserve?.GolfClub?.area
-                } | ${reserve?.GolfCourse?.name} 코스`}
+                {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
+                <b class="bar"></b>
+                {`${reserve?.GolfClub?.area}`}
+                <b class="bar"></b>
+                {`${reserve?.GolfCourse?.name} 코스`}
                 {/* time / area / course */}
               </span>
             </div>

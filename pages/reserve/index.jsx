@@ -8,7 +8,8 @@ import ReserveTap from '@/components/common/ReserveTap/ReserveTap';
 import PopUp from '@/components/common/PopUp';
 import BottomMenu from '@/components/layouts/BottomMenu';
 
-import IconImport from '/assets/images/Icon_Import.svg';
+// import IconImport from '/assets/images/Icon_Import.svg';
+import IconImport from '/assets/images/icon_11.png';
 
 import styles from '../../styles/Reserve.module.scss';
 import { observer } from 'mobx-react-lite';
@@ -386,32 +387,36 @@ const Reserve = () => {
           className={styles.sideBtn}
           onClick={() => window.location.reload()}
         >
-          <Image src={IconImport} alt='Icon_Import' width={24} height={24} />
+          <Image src={IconImport} alt='Icon_Import' width={18} height={18}/> 
         </button>
-        <div className={styles.centerMenu}>
-          <button
-            onClick={() => setSortData('분류')}
-            style={sortData === '분류' ? { backgroundColor: '#115B40' } : null}
-          >
-            분류
-          </button>
-          <button
-            onClick={() => setSortData('날짜')}
-            style={sortData === '날짜' ? { backgroundColor: '#115B40' } : null}
-          >
-            날짜
-          </button>
-          <button
-            onClick={() => setSortData('골프장')}
-            style={
-              sortData === '골프장' ? { backgroundColor: '#115B40' } : null
-            }
-          >
-            골프장
-          </button>
+        <div className={styles.centerMenuWrap}>
+          <div className={styles.centerBgWhite}>
+          <div className={styles.centerMenu}>
+            <button
+              onClick={() => setSortData('분류')}
+              style={sortData === '분류' ? { backgroundColor: '#323233', color:'#fff' } : null}
+            >
+              분류
+            </button>
+            <button
+              onClick={() => setSortData('날짜')}
+              style={sortData === '날짜' ? { backgroundColor: '#323233', color:'#fff' } : null}
+            >
+              날짜
+            </button>
+            <button
+              onClick={() => setSortData('골프장')}
+              style={
+                sortData === '골프장' ? { backgroundColor: '#323233', color:'#fff' } : null
+              }
+            >
+              골프장
+            </button>
+          </div>
+          </div>
         </div>
         <button
-          className={styles.sideBtn}
+          className={styles.sideBtnCom}
           onClick={() => setDeleteItem(!deleteItem)}
         >
           {deleteItem ? '완료' : '편집'}
