@@ -307,7 +307,7 @@ input[type="submit"] {
   --neutrals-grey-1: #f5f5f5;
   --neutrals-gray-6: #a8aaaa;
   --neutrals-black: #000;
-  --neturals-black2: #1f1f1f;
+  --neutrals-black2: #1f1f1f;
   --neutrals-grey-2: #f0f0ef;
   --neutrals-grey-7: #494c4f;
   --brand-primary: #00977c;
@@ -2949,7 +2949,7 @@ input {
 
     &:active,
     &.selected {
-      background-color: var(--neturals-black2);
+      background-color: var(--neutrals-black2);
       color: var(--neutrals-white);
       border-radius: 8px;
     }

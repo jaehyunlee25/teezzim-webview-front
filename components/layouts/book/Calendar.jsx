@@ -194,7 +194,7 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
           )}
         </p>
       </button>
-      <style jsx>{`
+      {/* <style jsx>{`
         button:hover,
         button:focus {
           background-color: initial;
@@ -207,11 +207,11 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
         }
 
         button.on {
-          background-color: var(--brand-primary);
+          background-color: var(--naturals-black2);
           color: var(--neutrals-white);
           border-radius: 8px;
         }
-      `}</style>
+      `}</style> */}
     </>
   );
 };

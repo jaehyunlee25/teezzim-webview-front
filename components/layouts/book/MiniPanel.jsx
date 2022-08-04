@@ -21,12 +21,12 @@ const MiniPanel = observer(() => {
       >
         <div className='rollsheet-container'>
           <div className='rollsheet'>
-            <div class="allim_reservation">
+            <div className="allim_reservation">
               <h1 className='head-headline text-primary'>
                 {panelName()}
               </h1>
-              <div class="allimg_icon">
-                <span class="allim_num">{panelStore.checkedTeeList.size}</span>
+              <div className="allimg_icon">
+                <span className="allim_num">{panelStore.checkedTeeList.size}</span>
               </div>
             </div>
             <p className='text-sub'>
