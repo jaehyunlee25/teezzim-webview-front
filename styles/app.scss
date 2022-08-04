@@ -1938,16 +1938,11 @@ input {
   }
 
   &.btn-group__fixed {
-    position: fixed;
     display: -webkit-box;
     display: -ms-flexbox;
-
-    /*display: flex; */
-
-    bottom: 108px;
-    left: 16px;
-    right: 16px;
     z-index: 100;
+    margin-bottom: 68px;
+    padding: 20px;
 
     li {
       display: block;

@@ -76,14 +76,13 @@ const ReserveTap = (props) => {
               )}-${reserve?.game_date.substring(
                 4,
                 6,
-              )}-${reserve?.game_date.substring(6, 8)}`}</span>
-              {/* <span>date</span> */}
+              )}-${reserve?.game_date.substring(6, 8)}`}&nbsp;&nbsp;{`${reserve?.GolfClub?.name}`}</span>
               <span>
                 {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
                 <b class="bar"></b>
                 {`${reserve?.GolfClub?.area}`}
                 <b class="bar"></b>
-                {`${reserve?.GolfCourse?.name} 코스`}
+                {`${reserve?.GolfCourse?.name??'단일'} 코스`}
                 {/* time / area / course */}
               </span>
             </div>
