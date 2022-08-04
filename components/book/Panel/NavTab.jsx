@@ -41,7 +41,6 @@ const NavTab = () => {
         }
 
         .SecArea {
-          border-bottom: 2px solid rgba(120, 128, 128, 0.16);
           height: max-content;
           width: 100%;
           overflow-x: scroll;

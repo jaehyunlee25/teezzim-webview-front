@@ -16,15 +16,17 @@ const TeeCheckInput = observer(props => {
     const value = JSON.stringify(panelStore.teeListMap?.[id]);
 
     if (!value) return;
-    if (panelStore.checkedTeeList.size >= 5) {
-      toastStore.setMessage(
-        <>
-          5개 이하의 골프장에서만
-          <br /> 예약을 할 수 있습니다.
-        </>,
-      );
-      toastStore.setHidden(false);
-      return;
+    if(!isChecked){
+      if (panelStore.checkedTeeList.size >= 5) {
+        toastStore.setMessage(
+          <>
+            5개 이하의 골프장에서만
+            <br /> 예약을 할 수 있습니다.
+          </>,
+        );
+        toastStore.setHidden(false);
+        return;
+      }
     }
     isChecked ? panelStore.removeChecked(value) : panelStore.addChecked(value);
   };

@@ -251,6 +251,7 @@ const Panel = observer(() => {
                   <>
                     <div className='list_AreaTop'>
                       <Counter type='unregistered' />
+                      {/* <span className="fr">전체선택</span> */}
                     </div>
                     <TeeListArea
                       list={panelStore.unregisteredTeeList.sort((a, b) =>
