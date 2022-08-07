@@ -129,7 +129,9 @@ const ReserveTap = (props) => {
               )}-${reserve?.game_date.substring(
                 4,
                 6,
-              )}-${reserve?.game_date.substring(6, 8)}`}</span>
+              )}-${reserve?.game_date.substring(6, 8)}`}
+              <strong>{ " "+ reserve?.GolfClub?.name }</strong>
+              </span>
               {/* <span>date</span> */}
               <span>
                 {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
