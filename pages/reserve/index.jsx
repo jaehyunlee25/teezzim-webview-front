@@ -17,13 +17,9 @@ import useStores from '@/stores/useStores';
 const Reserve = () => {
   const { panelStore, authStore } = useStores();
   const [userInfo, setUserInfo] = useState([]);
-  // console.log('🚀 - userInfo', userInfo);
   const [reserveData, setReserveData] = useState([]);
-  // console.log('🚀 - reserveData', reserveData);
   const [reserveWait, setReserveWait] = useState([]);
-  // console.log('🚀 - reserveWait', reserveWait);
   const [reserveAlarm, setReserveAlarm] = useState([]);
-  // console.log('🚀 - reserveAlarm', reserveAlarm);
 
   const [test, setTest] = useState({
     resultCode: 1,
@@ -345,39 +341,31 @@ const Reserve = () => {
     }
   }, [isInitSignalSendApp, panelStore]);
 
-  // const handleGetReservationInfo = function (club, id, password) {
-  //   axios({
-  //     method: 'POST',
-  //     url: `/teezzim/teeapi/v1/club/${club}/reservation/confirm`,
-  //     data: { id, password },
-  //   })
-  //     .then(({ data: respData }) => {
-  //       for (let idx = 0; idx < respData.data.data.length; idx++) {
-  //         respData.data.data[idx].golf_club = respData.data.golf_club;
-  //       }
-  //       setReserveData(respData.data);
-  //       console.log(respData.data);
-  //       if (window) {
-  //         const jsonStr = JSON.stringify({
-  //           club,
-  //           data: respData.data,
-  //           golf_info: respData.golf_club,
-  //         });
-  //         // 앱으로 전송
-  //         if (window.BRIDGE && window.BRIDGE.saveReservationList) {
-  //           window.BRIDGE.saveReservationList(jsonStr);
-  //         } else if (window.webkit && window.webkit.messageHandlers) {
-  //           window.webkit.messageHandlers.saveReservationList.postMessage(
-  //             jsonStr,
-  //           );
-  //         }
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //       alert('통신중 문제가 발생하였습니다. 관리자에게 문의해주세요.');
-  //     });
-  // };
+  let sortedData = [...test.data];
+  if( test && test.data && test.data.length > 0) {
+    if ( sortData == '날짜') {
+      // console.log("#### 날짜")
+      sortedData.sort((a,b) => {
+        var nameA = a.game_date + a.game_time;
+        var nameB = b.game_date + b.game_time;
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      });
+    } else 
+    if ( sortData == '골프장') {
+      // console.log("#### 골프장");
+      sortedData.sort((a,b) => {
+        var nameA = a.GolfClub.name;
+        var nameB = b.GolfClub.name;
+        console.log(nameA, nameB);
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      });
+    }
+  }
+  // console.log("####", sortedData)
 
   return (
     <>
@@ -422,7 +410,7 @@ const Reserve = () => {
         <p>예약 확정</p>
       </div>
       <div className={styles.reserveContainer}>
-        {test?.data?.map((reserve, index) => {
+        {sortedData.map((reserve, index) => {
           const year = reserve?.game_date?.substring(0, 4);
           const month = reserve?.game_date?.substring(4, 6);
           const day = reserve?.game_date?.substring(6, 8);
@@ -435,7 +423,7 @@ const Reserve = () => {
 
           return (
             <ReserveTap
-              key={index}
+              key={reserve.id}
               index={index}
               type='reserve'
               userInfo={userInfo}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import axios from 'axios';
@@ -32,27 +32,44 @@ const ReserveTap = (props) => {
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
 
-  const handleReserveCancel = async index => {
-    const { data } = reserveData;
-    const { status } = await axios
-      .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
-        id: userInfo[0]?.id,
-        password: userInfo[0]?.password,
-        year: data[index]?.reserved_date.split('.')[0],
-        month: data[index]?.reserved_date.split('.')[1],
-        date: data[index]?.reserved_date.split('.')[2],
-        course: data[index]?.reserved_course,
-        time: data[index]?.reserved_time.replace(':', ''),
-      })
-      .catch(err => console.warn(err));
+  useEffect(() => {
+    if(window){
+      console.log("### responseReserveCancel 바인딩됨");
+      /** APP->WEB */
+      window.responseReserveCancel = function (result) {
+        console.log("### responseReserveCancel 호출됨 " + result);
+        if ( result == "OK" ){
+          // TODO 성공 팝업으로 처리하도록 변경
+          router.push({
+            pathname: '/reserve',
+            query: { tab: 'my_book' },
+          });
+        } else {
+          alert("취소에 실패했습니다."); // TODO 웹뷰 팝업으로 처리
+        }
+      };
+    }
+  }, []);
 
-    if (status === 200) {
-      setConfirmHidden(true);
-      router.push({
-        pathname: '/reserve',
-        query: { tab: 'my_book' },
-      });
-      window.location.reload();
+  const handleReserveCancel = async index => {
+    const item = reserve;
+    const data = {
+      club: item.GolfClub.GolfClubEng.eng_id,
+      club_id: item.GolfClub.id,
+      year: item.game_date.substring(0,4),
+      month: item.game_date.substring(4,6),
+      date: item.game_date.substring(6,8),
+      time: item.game_time,
+      course: item.GolfCourse.name,
+    }
+    // console.log("###", data);
+    // 예약하기 브릿지 메소드 호출
+    if (window.BRIDGE && window.BRIDGE.requestReserveCancel) {
+      window.BRIDGE.requestReserveCancel(JSON.stringify(data));
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.requestReserveCancel.postMessage(JSON.stringify(data));
+    } else {
+      alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
     }
   };
 
