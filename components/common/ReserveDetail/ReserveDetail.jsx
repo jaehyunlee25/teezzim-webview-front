@@ -1,6 +1,6 @@
 import styles from './ReserveDetail.module.scss';
 
-const ReserveDetail = ({ detail }) => {
+const ReserveDetail = ({ detail, idx }) => {
   console.log('🚀 - detail', detail);
   return (detail && detail.GolfCourse) ? (
     <div className={styles.reserveDetailContainer}>
