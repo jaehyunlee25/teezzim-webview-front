@@ -16,7 +16,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 
 const Reserve = () => {
-  const { panelStore, authStore } = useStores();
+  const { panelStore, authStore, reserveTabStore } = useStores();
   const [userInfo, setUserInfo] = useState([]);
   const [reserveData, setReserveData] = useState([]);
   const [reserveWait, setReserveWait] = useState([]);
@@ -167,6 +167,7 @@ const Reserve = () => {
             .then(resp => {
               //console.log("###", resp.data);
               setTest(resp.data);
+              reserveTabStore.setMyReserveList(resp.data); // Mobx에 저장
               // TODO 새로운 데이터 형식으로 뿌려줘야 함!
               /* 샘플 데이터 구조
             {

@@ -11,12 +11,14 @@ import Back from '/assets/images/Icon_Back.svg';
 
 import styles from '@/styles/Reserve.module.scss';
 import useStores from '@/stores/useStores';
+import { observer } from 'mobx-react-lite';
 
-const ReserveInfo = () => {
+const ReserveInfo = observer(() => {
   const router = useRouter();
-  const { authStore } = useStores();
+  const { authStore, reserveTabStore } = useStores();
+  console.log("***", reserveTabStore.selectedReserve);
   const [userInfo, setUserInfo] = useState([]);
-  const [reserveDetailData, setReserveDetailData] = useState([]);
+  const [reserveDetailData, setReserveDetailData] = useState(reserveTabStore.selectedReserve);
   const [cancelLoading, setCancelLoading] = useState(false);
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약>상세페이지로 이동했음을 App에 알렸는지 여부
 
@@ -99,6 +101,10 @@ const ReserveInfo = () => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   setReserveDetailData(reserveTabStore.selectedReserve);
+  // }, [reserveTabStore.selectedReserve]);
+  
   const handleCancel = async () => {
     const item = test.data[idx];
     const data = {
@@ -155,8 +161,7 @@ const ReserveInfo = () => {
     }
     setIsInitSignal(true);
   }, [isInitSignalSendApp]);
-
-  return (
+  return (reserveDetailData && reserveDetailData.GolfClub) ? (
     <>
       <div className={styles.topNav} style={{ backgroundColor: 'white' }}>
         <Image
@@ -173,12 +178,10 @@ const ReserveInfo = () => {
       </div>
 
       <div className={styles.reserveTitle}>
-        {/* <p>{reserveDetailData?.golf_club?.name}</p> */}
-        <p>{test?.data[idx]?.GolfClub?.name}</p>
+        <p>{reserveDetailData.GolfClub.name}</p>
         <button
           onClick={() =>
-            // router.push(`/reserve/info/${reserveDetailData?.golf_club?.id}`)
-            router.push(`/reserve/info/${test?.data[idx]?.GolfClub?.id}`)
+            router.push(`/reserve/info/${reserveDetailData.GolfClub.id}`)
           }
           className={styles.sideBtn}
           style={{ width: '90px' }}
@@ -188,8 +191,7 @@ const ReserveInfo = () => {
       </div>
 
       <div className={styles.reserveContainer}>
-        {/* <ReserveDetail detail={reserveDetailData.data} /> */}
-        <ReserveDetail detail={test.data} idx={idx} />
+        <ReserveDetail detail={reserveDetailData} />
       </div>
 
       <div className={styles.ruleContainer}>
@@ -209,12 +211,10 @@ const ReserveInfo = () => {
           <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
           <li
             onClick={() =>
-              // window.open(`${reserveDetailData?.golf_club?.homepage}`)
-              window.open(`${test?.data[idx]?.GolfClub?.homepage}`)
+              window.open(`${reserveDetailData.GolfClub.homepage}`)
             }
           >
-            {/* {reserveDetailData?.golf_club?.name} [바로가기] */}
-            {test?.data[idx]?.GolfClub?.name} [바로가기]
+            {reserveDetailData.GolfClub.name} [바로가기]
           </li>
         </ul>
       </div>
@@ -242,17 +242,14 @@ const ReserveInfo = () => {
                 </div>
                 <div className='desc'>
                   <span>
-                    {/* {reserveDetailData.status === 'okay'
-                      ? reserveDetailData?.data[idx]?.reserved_date
-                      : null} */}
                     {test.resultCode === 1
-                      ? `${test?.data[idx]?.game_date.substring(
+                      ? `${reserveDetailData.game_date.substring(
                           0,
                           4,
-                        )}-${test?.data[idx]?.game_date.substring(
+                        )}-${reserveDetailData.game_date.substring(
                           4,
                           6,
-                        )}-${test?.data[idx]?.game_date.substring(6, 8)}`
+                        )}-${reserveDetailData.game_date.substring(6, 8)}`
                       : null}
                   </span>
                 </div>
@@ -263,14 +260,11 @@ const ReserveInfo = () => {
                 </div>
                 <div className='desc'>
                   <span>
-                    {/* {reserveDetailData.status === 'okay'
-                      ? reserveDetailData?.data[idx]?.reserved_time
-                      : null} */}
                     {test.resultCode === 1
-                      ? `${test?.data[idx]?.game_time.substring(
+                      ? `${reserveDetailData.game_time.substring(
                           0,
                           2,
-                        )}:${test?.data[idx]?.game_time.substring(2, 4)}`
+                        )}:${reserveDetailData.game_time.substring(2, 4)}`
                       : null}
                   </span>
                 </div>
@@ -281,11 +275,8 @@ const ReserveInfo = () => {
                 </div>
                 <div className='desc'>
                   <span>
-                    {/* {reserveDetailData.status === 'okay'
-                      ? `${reserveDetailData?.data[idx]?.reserved_course} 코스`
-                      : null} */}
                     {test.resultCode === 1
-                      ? test?.data[idx]?.GolfCourse?.name
+                      ? reserveDetailData.GolfCourse.name
                       : null}
                   </span>
                 </div>
@@ -317,7 +308,7 @@ const ReserveInfo = () => {
       {/* <Toast message='골프장을 1개 이상 선택해 주세요.' /> */}
       <BottomMenu />
     </>
-  );
-};
+  ) : (<></>);
+});
 
 export default ReserveInfo;
