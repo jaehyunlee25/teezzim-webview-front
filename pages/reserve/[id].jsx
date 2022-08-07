@@ -119,23 +119,6 @@ const ReserveInfo = () => {
     } else {
       alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
     }
-    // const { status } = await axios
-    //   .post(`/teezzim/teeapi/v1/club/${router?.query?.id}/reservation/cancel`, {
-    //     id: userInfo[0]?.id,
-    //     password: userInfo[0]?.password,
-    //     year: data[idx]?.reserved_date.split('.')[0],
-    //     month: data[idx]?.reserved_date.split('.')[1],
-    //     date: data[idx]?.reserved_date.split('.')[2],
-    //     course: data[idx]?.reserved_course,
-    //     time: data[idx]?.reserved_time.replace(':', ''),
-    //   })
-    //   .catch(err => console.warn(err));
-    // if (status === 200) {
-    //   router.push({
-    //     pathname: '/reserve',
-    //     query: { tab: 'my_book' },
-    //   });
-    // }
   };
 
   useEffect(() => {

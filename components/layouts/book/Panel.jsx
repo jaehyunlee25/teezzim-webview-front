@@ -170,12 +170,12 @@ const Panel = observer(() => {
     if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
     if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
       const params = { command: 'showPopupWait', data: ''};
-      if (window.BRIDGE && window.BRIDGE.globalMethod) {
-        window.BRIDGE.globalMethod(JSON.stringify(params));
-      } else if (window.webkit && window.webkit.messageHandlers ) {
-        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
-      }
-      return;
+      // if (window.BRIDGE && window.BRIDGE.globalMethod) {
+      //   window.BRIDGE.globalMethod(JSON.stringify(params));
+      // } else if (window.webkit && window.webkit.messageHandlers ) {
+      //   window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      // }
+      // return;
     }
 
     if (selectedLength <= 0) {
