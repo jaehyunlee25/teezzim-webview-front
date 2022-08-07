@@ -13,6 +13,7 @@ import loadStore from '@/stores/loadStore';
 import authStore from '@/stores/authStore';
 import toastStore from '@/stores/toastStore';
 import modalStore from '@/stores/modalStore';
+import reserveTabStore from '@/stores/reserveTabStore';
 
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
@@ -29,6 +30,7 @@ export default function MyApp({ Component, pageProps }) {
     authStore,
     toastStore,
     modalStore,
+    reserveTabStore,
   };
 
   return (

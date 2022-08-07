@@ -11,8 +11,10 @@ import Bell from '/assets/images/Icon_bell.svg';
 import Trash from '/assets/images/Icon_trash.svg';
 
 import styles from './ReserveTap.module.scss';
+import useStores from '@/stores/useStores';
 
 const ReserveTap = (props) => {
+  const { reserveTabStore } = useStores();
   // console.log("###props", props);
   const {
     type,
@@ -34,10 +36,10 @@ const ReserveTap = (props) => {
 
   useEffect(() => {
     if(window){
-      console.log("### responseReserveCancel 바인딩됨");
+      // console.log("### responseReserveCancel 바인딩됨");
       /** APP->WEB */
       window.responseReserveCancel = function (result) {
-        console.log("### responseReserveCancel 호출됨 " + result);
+        // console.log("### responseReserveCancel 호출됨 " + result);
         if ( result == "OK" ){
           // TODO 성공 팝업으로 처리하도록 변경
           router.push({
@@ -75,7 +77,17 @@ const ReserveTap = (props) => {
 
   const handleWaitCancel = () => {};
 
-  console.log("###2", reserve);
+  /* 상세보기 화살표 아이콘을 눌렀을 경우 */
+  const handleDetailIconClick = e => {
+    console.log(reserve);
+    reserveTabStore.setSelectReserve(reserve);
+    router.push({
+      pathname: `/reserve/${reserve.id}`,
+      query: { tab: 'my_book' },
+    });
+  };
+
+  // console.log("###2", reserve);
 
   return (
     <>
@@ -165,12 +177,7 @@ const ReserveTap = (props) => {
                 alt='arrow'
                 width={5}
                 height={26}
-                onClick={() =>
-                  router.push({
-                    pathname: `/reserve/${reserve.id}`,
-                    query: { tab: 'my_book' },
-                  })
-                }
+                onClick={handleDetailIconClick}
               />
             ) : null}
           </>
