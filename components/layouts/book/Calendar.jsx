@@ -140,13 +140,13 @@ const Calendar = observer(
         >
           <div className='calendar'>
             <div className='day-of-week'>
-              <div className='sunday'>S</div>
-              <div>M</div>
-              <div>T</div>
-              <div>W</div>
-              <div>T</div>
-              <div>F</div>
-              <div>S</div>
+              <div className='sunday'>일</div>
+              <div>월</div>
+              <div>화</div>
+              <div>수</div>
+              <div>목</div>
+              <div>금</div>
+              <div>토</div>
             </div>
             <div className='date-grid'>
               {Array.from({ length: day }, (_, i) => (
