@@ -31,6 +31,13 @@ const ReserveTap = (props) => {
   const router = useRouter();
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
+  const year = reserve?.game_date.substring(0, 4);
+  const month = reserve?.game_date.substring(4,6);
+  const day = reserve?.game_date.substring(6, 8);
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+  const reserveDate = new Date(`${year}-${month}-${day}`);
+  const waitDay = new Date(waitDate);
+  const alarmDay = new Date(alarmDate);
 
   const handleReserveCancel = async index => {
     const { data } = reserveData;
@@ -65,18 +72,29 @@ const ReserveTap = (props) => {
       <div className={styles.reserveTapContainer}>
         <div className={styles.dateInfo}>
           <div className={styles.alert}>
-            <span>{`D-${dDay}`}</span>
+            {
+              type === 'reserve' && (
+                <span>{`D-${dDay}`}</span>
+              )
+            }
+            {
+              type === 'wait' && (
+                <div class="info_top fl">
+                  <b class="icon-time">time</b>
+                </div>
+              )
+            }
+            {
+              type === 'alarm' && (
+                <div class="info_top fl">
+                  <b class="icon-bell">bell</b>
+                </div>
+              )
+            }
           </div>
-
           {type === 'reserve' && (
             <div>
-              <span>{`${reserve?.game_date.substring(
-                0,
-                4,
-              )}-${reserve?.game_date.substring(
-                4,
-                6,
-              )}-${reserve?.game_date.substring(6, 8)}`}&nbsp;&nbsp;{`${reserve?.GolfClub?.name}`}</span>
+              <span>{`${month}월 ${day}일(${week[reserveDate.getDay()]}요일)`}&nbsp;&nbsp;{`${reserve?.GolfClub?.name}`}</span>
               <span>
                 {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
                 <b className="bar"></b>
@@ -90,9 +108,9 @@ const ReserveTap = (props) => {
 
           {type === 'wait' && (
             <div>
-              <span>{waitDate}</span>
+              <span>{`${waitDate.substring(5,7)}월 ${waitDate.substring(8,10)}일(${week[waitDay.getDay()]}요일)`}</span>
               <span>{`${clubName} `}</span>
-              <div className={styles.waitTime}>
+              {/* <div className={styles.waitTime}>
                 {waitTime?.map((item, index) => (
                   <p
                     key={index}
@@ -101,13 +119,13 @@ const ReserveTap = (props) => {
                     {item.slice(0, 5).replace('', ' ')}
                   </p>
                 ))}
-              </div>
+              </div> */}
             </div>
           )}
 
           {type === 'alarm' && (
             <div>
-              <span>{alarmDate}</span>
+              <span>{`${alarmDate.substring(5,7)}월 ${alarmDate.substring(8,10)}일(${week[alarmDay.getDay()]}요일)`}</span>
               <span>{`${clubName} `}</span>
             </div>
           )}

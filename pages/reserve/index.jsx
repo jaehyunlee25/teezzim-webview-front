@@ -30,90 +30,89 @@ const Reserve = () => {
     resultCode: 1,
     message: 'OK',
     data: [
-      /*
-      {
-        id: '09982dcb-0ab4-11ed-a93e-0242ac11000a',
-        device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-        golf_club_id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
-        golf_course_id: '1b0590d0-ee3b-11ec-a93e-0242ac11000a',
-        game_date: '20220819',
-        game_time: '0616',
-        isCancel: 0,
-        created_at: '2022-07-23T18:20:08.000Z',
-        updated_at: '2022-07-23T18:20:08.000Z',
-        createdAt: '2022-07-23T18:20:08.000Z',
-        updatedAt: '2022-07-23T18:20:08.000Z',
-        Device: {
-          id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-          token:
-            'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
-          type: 'admin',
-          created_at: '2022-06-12T07:02:23.000Z',
-          updated_at: '2022-06-12T07:02:23.000Z',
-        },
-        GolfClub: {
-          id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
-          name: '클럽모우',
-          address: '강원도 홍천군 서면 장락동길 111',
-          phone: '033-439-9000',
-          area: '강원도',
-          email: '',
-          homepage: 'http://www.clubmow.com/_mobile/index.asp',
-          corp_reg_number: '227-86-01869',
-          description: '3년연속소비자만족10대골프장',
-        },
-        GolfCourse: {
-          id: '1b0590d0-ee3b-11ec-a93e-0242ac11000a',
-          golf_club_id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
-          name: '마운틴',
-          description: '9홀',
-          createdAt: '2022-06-17T12:43:48.000Z',
-          updatedAt: '2022-06-17T12:43:48.000Z',
-          GolfClubId: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
-        },
-      },
-      {
-        id: '67614a41-0abb-11ed-a93e-0242ac11000a',
-        device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-        golf_club_id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
-        golf_course_id: 'c0c0a4c8-ef21-11ec-a93e-0242ac11000a',
-        game_date: '20220813',
-        game_time: '1740',
-        isCancel: 0,
-        created_at: '2022-07-23T19:12:52.000Z',
-        updated_at: '2022-07-23T19:12:52.000Z',
-        createdAt: '2022-07-23T19:12:52.000Z',
-        updatedAt: '2022-07-23T19:12:52.000Z',
-        Device: {
-          id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
-          token:
-            'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
-          type: 'admin',
-          created_at: '2022-06-12T07:02:23.000Z',
-          updated_at: '2022-06-12T07:02:23.000Z',
-        },
-        GolfClub: {
-          id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
-          name: '큐로',
-          address: '경기도 광주시 곤지암읍 오향길 180',
-          phone: '031-799-6000',
-          area: '수도권',
-          email: '',
-          homepage: 'http://www.curocc.com/mobile/index.asp',
-          corp_reg_number: '107-86-92969',
-          description:
-            '큐로컨트리클럽을 찾아주신 고객 여러분 감사드립니다.\n\n큐로컨트리클럽은 경기도 광주 곤지암에 위치한 30년 전통의 27홀 ‘Prestige Public(프레스티지 퍼블릭)’ 골프장입니다.\n서울에서 40분 거리의 뛰어난 접근성과, 해발 460미터의 산자락에 무성하게 펼쳐진 자연림에 살포시 자리한 27홀 골프코스는 매 홀 독특한 개성으로 마치 수목원에 와있는 듯한 경험을 제공하고 있습니다.\n\n큐로컨트리클럽은 ‘Prestige Public(프레스티지 퍼블릭)’이라는 확고한 운영방침에 따라 코스 및 시설 개선을 위해 신속하고도 과감한 투자를 진행하고 있으며, 동시에 최고의 서비스를 제공할 수 있도록 임직원, 캐디, 파트너사 구성원들의 서비스역량 향상을 위한 교육, 근무환경 및 복지의 향상에도 아낌없는 노력을 기울이고 있습니다.\n\n감사합니다.',
-        },
-        GolfCourse: {
-          id: 'c0c0a4c8-ef21-11ec-a93e-0242ac11000a',
-          golf_club_id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
-          name: '파인힐',
-          description: '9홀',
-          createdAt: '2022-06-18T16:14:51.000Z',
-          updatedAt: '2022-06-18T16:14:51.000Z',
-          GolfClubId: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
-        },
-      }, */
+      // {
+      //   id: '09982dcb-0ab4-11ed-a93e-0242ac11000a',
+      //   device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
+      //   golf_club_id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
+      //   golf_course_id: '1b0590d0-ee3b-11ec-a93e-0242ac11000a',
+      //   game_date: '20220819',
+      //   game_time: '0616',
+      //   isCancel: 0,
+      //   created_at: '2022-07-23T18:20:08.000Z',
+      //   updated_at: '2022-07-23T18:20:08.000Z',
+      //   createdAt: '2022-07-23T18:20:08.000Z',
+      //   updatedAt: '2022-07-23T18:20:08.000Z',
+      //   Device: {
+      //     id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
+      //     token:
+      //       'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
+      //     type: 'admin',
+      //     created_at: '2022-06-12T07:02:23.000Z',
+      //     updated_at: '2022-06-12T07:02:23.000Z',
+      //   },
+      //   GolfClub: {
+      //     id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
+      //     name: '클럽모우',
+      //     address: '강원도 홍천군 서면 장락동길 111',
+      //     phone: '033-439-9000',
+      //     area: '강원도',
+      //     email: '',
+      //     homepage: 'http://www.clubmow.com/_mobile/index.asp',
+      //     corp_reg_number: '227-86-01869',
+      //     description: '3년연속소비자만족10대골프장',
+      //   },
+      //   GolfCourse: {
+      //     id: '1b0590d0-ee3b-11ec-a93e-0242ac11000a',
+      //     golf_club_id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
+      //     name: '마운틴',
+      //     description: '9홀',
+      //     createdAt: '2022-06-17T12:43:48.000Z',
+      //     updatedAt: '2022-06-17T12:43:48.000Z',
+      //     GolfClubId: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
+      //   },
+      // },
+      // {
+      //   id: '67614a41-0abb-11ed-a93e-0242ac11000a',
+      //   device_id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
+      //   golf_club_id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
+      //   golf_course_id: 'c0c0a4c8-ef21-11ec-a93e-0242ac11000a',
+      //   game_date: '20220813',
+      //   game_time: '1740',
+      //   isCancel: 0,
+      //   created_at: '2022-07-23T19:12:52.000Z',
+      //   updated_at: '2022-07-23T19:12:52.000Z',
+      //   createdAt: '2022-07-23T19:12:52.000Z',
+      //   updatedAt: '2022-07-23T19:12:52.000Z',
+      //   Device: {
+      //     id: '95b7a543-ea1d-11ec-a93e-0242ac11000a',
+      //     token:
+      //       'dojdZqaQRR-Xf-7sl05bY6:APA91bGNoMmJZZTERSqD311_6GTtAZoZH2ZTStXbrEZ6vCMTa50dkcD0xf64LfbOJHgtjtGeUcnI_VwgexrNbLY0bB30AbtW9jlImnkQDRF2jFyXqewSvQJ_yCFP22OcwUGa9MUCYRIp',
+      //     type: 'admin',
+      //     created_at: '2022-06-12T07:02:23.000Z',
+      //     updated_at: '2022-06-12T07:02:23.000Z',
+      //   },
+      //   GolfClub: {
+      //     id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
+      //     name: '큐로',
+      //     address: '경기도 광주시 곤지암읍 오향길 180',
+      //     phone: '031-799-6000',
+      //     area: '수도권',
+      //     email: '',
+      //     homepage: 'http://www.curocc.com/mobile/index.asp',
+      //     corp_reg_number: '107-86-92969',
+      //     description:
+      //       '큐로컨트리클럽을 찾아주신 고객 여러분 감사드립니다.\n\n큐로컨트리클럽은 경기도 광주 곤지암에 위치한 30년 전통의 27홀 ‘Prestige Public(프레스티지 퍼블릭)’ 골프장입니다.\n서울에서 40분 거리의 뛰어난 접근성과, 해발 460미터의 산자락에 무성하게 펼쳐진 자연림에 살포시 자리한 27홀 골프코스는 매 홀 독특한 개성으로 마치 수목원에 와있는 듯한 경험을 제공하고 있습니다.\n\n큐로컨트리클럽은 ‘Prestige Public(프레스티지 퍼블릭)’이라는 확고한 운영방침에 따라 코스 및 시설 개선을 위해 신속하고도 과감한 투자를 진행하고 있으며, 동시에 최고의 서비스를 제공할 수 있도록 임직원, 캐디, 파트너사 구성원들의 서비스역량 향상을 위한 교육, 근무환경 및 복지의 향상에도 아낌없는 노력을 기울이고 있습니다.\n\n감사합니다.',
+      //   },
+      //   GolfCourse: {
+      //     id: 'c0c0a4c8-ef21-11ec-a93e-0242ac11000a',
+      //     golf_club_id: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
+      //     name: '파인힐',
+      //     description: '9홀',
+      //     createdAt: '2022-06-18T16:14:51.000Z',
+      //     updatedAt: '2022-06-18T16:14:51.000Z',
+      //     GolfClubId: 'c0bb80e9-ef21-11ec-a93e-0242ac11000a',
+      //   },
+      // },
     ],
   });
   console.log('🚀 - test', test.data);
@@ -486,10 +485,9 @@ const ReserveWaitList = observer(({ reserveWait, deleteItem }) => {
       let dDay = new Date(year, month - 1, day);
       let gap = dDay.getTime() - today.getTime();
       let dDayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-
       return (
         <React.Fragment key={`${clubId}-wait-${index}`}>
-          {dDayResult > 0 ? null : (
+          {dDayResult < 0 ? null : (
             <ReserveTap
               key={index}
               index={index}
@@ -527,7 +525,7 @@ const ReserveWaitList = observer(({ reserveWait, deleteItem }) => {
 
 const ReserveAlarmList = observer(({ reserveAlarm, deleteItem }) => {
   const { panelStore } = useStores();
-
+  console.log(reserveAlarm)
   return reserveAlarm?.length > 0 ? (
     reserveAlarm.map(({ clubId, alarmDate }, index) => {
       const year = alarmDate?.split('-')[0];
@@ -540,7 +538,7 @@ const ReserveAlarmList = observer(({ reserveAlarm, deleteItem }) => {
 
       return (
         <React.Fragment key={index}>
-          {dDayResult > 0 ? null : (
+          {dDayResult < 0 ? null : (
             <ReserveTap
               key={index}
               index={index}
