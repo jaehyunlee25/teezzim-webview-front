@@ -1,6 +1,6 @@
 import styles from './ReserveDetail.module.scss';
 
-const ReserveDetail = ({ detail }) => {
+const ReserveDetail = ({ detail, idx }) => {
   console.log('🚀 - detail', detail);
   return (detail && detail.GolfCourse) ? (
     <div className={styles.reserveDetailContainer}>
@@ -31,10 +31,10 @@ const ReserveDetail = ({ detail }) => {
         </span>
       </div>
 
-      <div className={styles.reserveInfo}>
-        <span>코스명</span>
-        <span>{detail && `${detail.GolfCourse.name} 코스`}</span>
-      </div>
+        <div className={styles.reserveInfo}>
+          <span>코스명</span>
+          <span>{detail && `${detail[idx]?.GolfCourse?.name} 코스`}</span>
+        </div>
 
       <div className={styles.reserveInfo}>
         <span>홀정보</span>
