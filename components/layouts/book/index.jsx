@@ -65,73 +65,79 @@ export default function Book() {
     }
   };
 
+  const getDayScadules = async function () {
+    const dateTime = teeScheduleStore._date;
+    loadStore.reset();
+    loadStore.setLoading(true);
+    const {
+      status,
+      data: { resultCode, message, data },
+    } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
+      params: {
+        dates: dateTime,
+        clubId: panelStore.checkedKeys.join(','),
+      },
+    });
+
+    loadStore.setLoading(false);
+
+    if (status === 200) {
+      if (resultCode === 1) {
+        const nameMap = panelStore.checkedKeys.reduce(
+          (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
+          {},
+        );
+        // console.log("@@@", data);
+        const daySchedule = data?.[dateTime]
+          ? Object.entries(data[dateTime]).reduce(
+              (acc, [course, schedules]) => {
+                let nextAcc = acc;
+                for (let [hour, scheduleList] of Object.entries(schedules)) {
+                  for (let schedule of scheduleList) {
+                    const { golf_club_name } = schedule;
+                    if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
+                    // 여기에서 SavedReservation Data로 필터링
+                    // nextAcc.nameMap[golf_club_name];
+                    // teeScheduleStore.reservedSchedules[golf]
+                    nextAcc[nameMap[golf_club_name]] = {
+                      ...(nextAcc[nameMap[golf_club_name]] || {}),
+                      [course]: [
+                        ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
+                        { ...schedule, hour },
+                      ],
+                    };
+                  }
+                }
+                return nextAcc;
+              },
+              panelStore.checkedKeys.reduce(
+                (acc, v) => ({ ...acc, [v]: {} }),
+                {},
+              ),
+            )
+          : panelStore.checkedKeys.reduce(
+              (acc, v) => ({ ...acc, [v]: {} }),
+              {},
+            );
+
+        // console.log(daySchedule);
+        teeScheduleStore.setTeeSchedules(daySchedule);
+      } else console.warn(message);
+    } else {
+      loadStore.setError(true);
+      console.warn(`error code: ${status}`);
+    }
+  }
+
   useEffect(() => {
     if(window){
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
-      window.teeSearchTimeFinished = async function () {
+      window.teeSearchTimeFinished = function(){
         console.log("### teeSearchTimeFinished 호출됨");
-        const dateTime = teeScheduleStore._date;
-        loadStore.reset();
-        loadStore.setLoading(true);
-        const {
-          status,
-          data: { resultCode, message, data },
-        } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
-          params: {
-            dates: dateTime,
-            clubId: panelStore.checkedKeys.join(','),
-          },
-        });
-
-        loadStore.setLoading(false);
-
-        if (status === 200) {
-          if (resultCode === 1) {
-            const nameMap = panelStore.checkedKeys.reduce(
-              (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
-              {},
-            );
-
-            const daySchedule = data?.[dateTime]
-              ? Object.entries(data[dateTime]).reduce(
-                  (acc, [course, schedules]) => {
-                    let nextAcc = acc;
-                    for (let [hour, scheduleList] of Object.entries(schedules)) {
-                      for (let schedule of scheduleList) {
-                        const { golf_club_name } = schedule;
-                        if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
-                        // 여기에서 SavedReservation Data로 필터링
-                        // nextAcc.nameMap[golf_club_name];
-                        // teeScheduleStore.reservedSchedules[golf]
-                        nextAcc[nameMap[golf_club_name]] = {
-                          ...(nextAcc[nameMap[golf_club_name]] || {}),
-                          [course]: [
-                            ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
-                            { ...schedule, hour },
-                          ],
-                        };
-                      }
-                    }
-                    return nextAcc;
-                  },
-                  panelStore.checkedKeys.reduce(
-                    (acc, v) => ({ ...acc, [v]: {} }),
-                    {},
-                  ),
-                )
-              : panelStore.checkedKeys.reduce(
-                  (acc, v) => ({ ...acc, [v]: {} }),
-                  {},
-                );
-
-            // console.log(daySchedule);
-            teeScheduleStore.setTeeSchedules(daySchedule);
-          } else console.warn(message);
-        } else {
-          loadStore.setError(true);
-          console.warn(`error code: ${status}`);
-        }
+        setTimeout(()=>{
+          getDayScadules();
+        }, 500);
       };
     }
   }, []);
@@ -271,7 +277,7 @@ export default function Book() {
         </div>
       </div>
       <div className='component-wrap time-select'>
-        {!date && (
+        {!teeScheduleStore._date && (
           <div className='inner-container'>
             <div className='no-data mt-50'>
               <p className='text-main'>라운딩 희망일을 선택해 주세요.</p>

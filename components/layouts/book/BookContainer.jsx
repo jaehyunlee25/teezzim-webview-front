@@ -62,9 +62,9 @@ const BookContainer = observer(() => {
           (registeredTee.length === 0 && unregisteredTee.length === 0) ? (
           <div className='no-data mt-50'>
             <p className='text-main'>
-              {subTab === 'tabContent01'
+              {/* {subTab === 'tabContent01'
                 ? '예약 가능한 Tee-off가 없습니다.'
-                : '고급 필터와 일치하는 골프장이 없습니다.'}
+                : '고급 필터와 일치하는 골프장이 없습니다.'} */}
             </p>
           </div>
         ) : (
