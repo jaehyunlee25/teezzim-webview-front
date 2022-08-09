@@ -66,7 +66,7 @@ const ButtonGroup = observer(
       <>
         {panelStore.registeredKeys.includes(clubId) ? (
           <div className='component-wrap'>
-            <ul className='btn-group btn-group__fixed'>
+            <ul className='btn-group btn-group__booking'>
               <li>
                 <button
                   type='button'
