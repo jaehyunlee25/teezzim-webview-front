@@ -25,6 +25,7 @@ const Calendar = observer(
       axios.interceptors.response.use(
         res => {
           console.log(res);
+          res.data.club_id = res.config.params.club;
           if (res.data.data?.length === 0) {
             /** WEB->APP requestSearch 요청 */
             const params = {
@@ -64,15 +65,15 @@ const Calendar = observer(
 
       const res = await Promise.all(
         checkedTeeList.map(({ id, eng }) =>
-          axios.get('/teezzim/teeapi/v1/schedule', {
+          axios.get('/teezzim/teeapi/v1/schedule/date', {
             params: { date: `${yearMonth}-01`, club: id, eng },
           }),
         ),
       ).catch(err => console.log(err));
 
-      // console.log(res);
       let curSchedule = {};
 
+      //console.log("$$$", res);
       res.forEach(v => {
         const {
           data: { resultCode = 1, message = '', data = [] },
@@ -128,7 +129,7 @@ const Calendar = observer(
         };
       }
     }, []);
-
+    
     return (
       <>
         <div

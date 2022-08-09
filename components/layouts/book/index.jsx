@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import useStores from '@/stores/useStores';
 import {
   getPrevYearMonth,
@@ -52,68 +52,89 @@ export default function Book() {
     teeScheduleStore.setDate(dateTime);
     // console.log(dateTime);
     // if (container !== 'book') return;
+    if (container === 'book') {
+      let checkedTeeList = [];
+      for (const item of panelStore._checkedTeeList) checkedTeeList.push( JSON.parse(item).eng );
+      const data = { date: dateTime, club_list: checkedTeeList.join(',') };
+      const params = { command: 'resquestSearchTime', data: JSON.stringify(data) };
+      if (window.BRIDGE && window.BRIDGE.globalMethod) {
+        window.BRIDGE.globalMethod(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      }
+    }
+  };
 
-    loadStore.reset();
-    loadStore.setLoading(true);
-    const {
-      status,
-      data: { resultCode, message, data },
-    } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
-      params: {
-        dates: dateTime,
-        clubId: panelStore.checkedKeys.join(','),
-      },
-    });
+  useEffect(() => {
+    if(window){
+      // console.log("### teeSearchTimeFinished 바인딩됨");
+      /** APP->WEB */
+      window.teeSearchTimeFinished = async function () {
+        console.log("### teeSearchTimeFinished 호출됨");
+        const dateTime = teeScheduleStore._date;
+        loadStore.reset();
+        loadStore.setLoading(true);
+        const {
+          status,
+          data: { resultCode, message, data },
+        } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
+          params: {
+            dates: dateTime,
+            clubId: panelStore.checkedKeys.join(','),
+          },
+        });
 
-    loadStore.setLoading(false);
+        loadStore.setLoading(false);
 
-    if (status === 200) {
-      if (resultCode === 1) {
-        const nameMap = panelStore.checkedKeys.reduce(
-          (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
-          {},
-        );
-
-        const daySchedule = data?.[dateTime]
-          ? Object.entries(data[dateTime]).reduce(
-              (acc, [course, schedules]) => {
-                let nextAcc = acc;
-                for (let [hour, scheduleList] of Object.entries(schedules)) {
-                  for (let schedule of scheduleList) {
-                    const { golf_club_name } = schedule;
-                    if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
-                    // 여기에서 SavedReservation Data로 필터링
-                    // nextAcc.nameMap[golf_club_name];
-                    // teeScheduleStore.reservedSchedules[golf]
-                    nextAcc[nameMap[golf_club_name]] = {
-                      ...(nextAcc[nameMap[golf_club_name]] || {}),
-                      [course]: [
-                        ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
-                        { ...schedule, hour },
-                      ],
-                    };
-                  }
-                }
-                return nextAcc;
-              },
-              panelStore.checkedKeys.reduce(
-                (acc, v) => ({ ...acc, [v]: {} }),
-                {},
-              ),
-            )
-          : panelStore.checkedKeys.reduce(
-              (acc, v) => ({ ...acc, [v]: {} }),
+        if (status === 200) {
+          if (resultCode === 1) {
+            const nameMap = panelStore.checkedKeys.reduce(
+              (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
               {},
             );
 
-        // console.log(daySchedule);
-        teeScheduleStore.setTeeSchedules(daySchedule);
-      } else console.warn(message);
-    } else {
-      loadStore.setError(true);
-      console.warn(`error code: ${status}`);
+            const daySchedule = data?.[dateTime]
+              ? Object.entries(data[dateTime]).reduce(
+                  (acc, [course, schedules]) => {
+                    let nextAcc = acc;
+                    for (let [hour, scheduleList] of Object.entries(schedules)) {
+                      for (let schedule of scheduleList) {
+                        const { golf_club_name } = schedule;
+                        if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
+                        // 여기에서 SavedReservation Data로 필터링
+                        // nextAcc.nameMap[golf_club_name];
+                        // teeScheduleStore.reservedSchedules[golf]
+                        nextAcc[nameMap[golf_club_name]] = {
+                          ...(nextAcc[nameMap[golf_club_name]] || {}),
+                          [course]: [
+                            ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
+                            { ...schedule, hour },
+                          ],
+                        };
+                      }
+                    }
+                    return nextAcc;
+                  },
+                  panelStore.checkedKeys.reduce(
+                    (acc, v) => ({ ...acc, [v]: {} }),
+                    {},
+                  ),
+                )
+              : panelStore.checkedKeys.reduce(
+                  (acc, v) => ({ ...acc, [v]: {} }),
+                  {},
+                );
+
+            // console.log(daySchedule);
+            teeScheduleStore.setTeeSchedules(daySchedule);
+          } else console.warn(message);
+        } else {
+          loadStore.setError(true);
+          console.warn(`error code: ${status}`);
+        }
+      };
     }
-  };
+  }, []);
 
   /** Panel Component */
 
