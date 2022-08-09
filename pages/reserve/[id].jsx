@@ -173,7 +173,7 @@ const ReserveInfo = observer(() => {
         />
 
         <div className={styles.centerMenu}>
-          <h4>예약정보</h4>
+          <h1>예약정보</h1>
         </div>
       </div>
 
@@ -183,16 +183,14 @@ const ReserveInfo = observer(() => {
           onClick={() =>
             router.push(`/reserve/info/${reserveDetailData.GolfClub.id}`)
           }
-          className={styles.sideBtn}
-          style={{ width: '90px' }}
+          className='btn small round infoBtn'
         >
           골프장 정보
         </button>
       </div>
 
       <div className={styles.reserveContainer}>
-        {/* <ReserveDetail detail={reserveDetailData.data} /> */}
-        <ReserveDetail detail={test.data} idx={idx} />
+        <ReserveDetail detail={reserveDetailData} />
       </div>
 
       <div className={styles.ruleContainer}>
@@ -225,8 +223,8 @@ const ReserveInfo = observer(() => {
           홈페이지 예약 취소
         </button>
       </div>
-
       <PopUp
+        reverse={true}
         buttonText='확인'
         onButtonClick={() => {
           handleCancel();
@@ -234,8 +232,8 @@ const ReserveInfo = observer(() => {
         hidden={confirmHidden}
         cancelButtonClick={()=>setConfirmHidden(true)}
       >
-        <div className='component-wrap'>
-          <div className='inner-container'>
+        <div className='component-wrap mt-15'>
+          <div className='mb-15'>
             <ul className='desc-list'>
               <li className='desc-item'>
                 <div className='tit'>

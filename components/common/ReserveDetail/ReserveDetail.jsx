@@ -1,6 +1,6 @@
 import styles from './ReserveDetail.module.scss';
 
-const ReserveDetail = ({ detail, idx }) => {
+const ReserveDetail = ({ detail }) => {
   console.log('🚀 - detail', detail);
   return (detail && detail.GolfCourse) ? (
     <div className={styles.reserveDetailContainer}>
@@ -18,8 +18,6 @@ const ReserveDetail = ({ detail, idx }) => {
         </span>
       </div>
 
-      <div className={styles.divider} />
-
       <div className={styles.reserveInfo}>
         <span>시간</span>
         <span>
@@ -33,7 +31,7 @@ const ReserveDetail = ({ detail, idx }) => {
 
         <div className={styles.reserveInfo}>
           <span>코스명</span>
-          <span>{detail && `${detail[idx]?.GolfCourse?.name} 코스`}</span>
+          <span>{detail && `${detail.GolfCourse?.name} 코스`}</span>
         </div>
 
       <div className={styles.reserveInfo}>

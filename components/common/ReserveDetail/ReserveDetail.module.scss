@@ -1,24 +1,52 @@
 @import "@/styles/common.scss";
 
 .reserveDetailContainer {
-    padding: 1rem;
-    margin: 24px 20px 8px;
-    border: 1px solid var(--secondary);
-    background-color: var(--white);
+    margin: 15px 0 8px;
+    padding: 30px 20px;
+    border-radius: 20px;
+    background-color: var(--neutrals-white);
+    box-shadow: 0 1px 30px 0 rgba(0, 0, 0, 0.13);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    flex-direction: column;
+    grid-gap: 20px;
 
     .reserveInfo {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 1rem;
-        margin-bottom: 1rem;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 100%;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+
+        :first-child {
+            -ms-flex: 1;
+            -webkit-box-flex: 1;
+            flex: 1;
+            width: 50%;
+            color: #444444;
+            text-align: left;
+            font-weight: 400;
+            transform: rotate(0.04deg);
+        }
+
+        :last-child {
+            -ms-flex: 1;
+            -webkit-box-flex: 1;
+            flex: 1;
+            width: 50%;
+            text-align: left;
+            font-size: 18px;
+            font-weight: 500;
+            transform: rotate(0.04deg);
+        }
     }
 
     div:last-child {
         margin-bottom: 0;
     }
-}
-
-.divider {
-    border-bottom: 2px solid var(--grey3);
-    margin: 1rem 0;
 }

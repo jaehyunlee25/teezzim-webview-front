@@ -6,10 +6,11 @@
     // position: absolute;
     // top: 0;
     // right: 0;
-    height: 66px;
+    height: 65px;
     width: 100%;
     padding: 0 1rem;
     background-color: var(--white);
+    z-index: 100; 
 
     .centerMenuWrap {
         font-family: Spoqa Han Sans Neo;
@@ -23,15 +24,28 @@
         display: flex;
         grid-gap: 5px;
     }
-    .centerMenu {
-        flex-grow: 1;
+    .centerMenu {flex-grow: 1;
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        margin: 1rem 0;
+        margin: 1rem 0 1rem -1rem;
         background: #fff;
         // border-bottom: 2px solid rgba(120, 128, 128, 0.16);
-
+    
+        h1 {
+            margin: 0;
+            padding: 0 44px;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 44px;
+            letter-spacing: normal;
+            text-align: center;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-family: Spoqa Han Sans Neo;
+        }
+    
         button {
             display:inline-block;
             width: 30%;
@@ -79,6 +93,9 @@
     @include flex($flexDirection: row, $alignItems: center, $justifyContent: space-between);
     margin: 0 1rem;
     padding-top: 1rem;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--primary);
 }
 
 .marginB {
@@ -143,14 +160,14 @@
 }
 
 .btnContainer {
-    margin: 60px 0 38px;
+    margin: 30px 0 125px;
     text-align: center;
 
     button {
-        width: 160px;
-        height: 48px;
+        width: 90vw;
+        height: 70px;
         padding: 0.5rem 0;
-        border-radius: 8px;
+        border-radius: 15px;
         color: var(--neutrals-white);
         background-color: var(--warning-surface-1);
         box-shadow: 0 2px 2px 1px rgb(0 0 0 / 6%), 0 1px 1px 0 rgb(0 0 0 / 10%);
