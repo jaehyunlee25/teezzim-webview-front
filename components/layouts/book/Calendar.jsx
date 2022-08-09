@@ -25,8 +25,8 @@ const Calendar = observer(
       axios.interceptors.response.use(
         res => {
           console.log(res);
-          res.data.club_id = res.config.params.club;
           if (res.data.data?.length === 0) {
+            // res.data.club_id = res.config.params.club;
             /** WEB->APP requestSearch 요청 */
             const params = {
               club: res.config.params.eng,
@@ -187,7 +187,7 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
         <p className='number'>
           {count ? (
             <>
-              <strong>{count}</strong>T
+              <strong>{count}</strong>G
             </>
           ) : (
             <>&nbsp;</>
