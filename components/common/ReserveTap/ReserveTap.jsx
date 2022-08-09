@@ -41,11 +41,8 @@ const ReserveTap = (props) => {
       window.responseReserveCancel = function (result) {
         // console.log("### responseReserveCancel 호출됨 " + result);
         if ( result == "OK" ){
-          // TODO 성공 팝업으로 처리하도록 변경
-          router.push({
-            pathname: '/reserve',
-            query: { tab: 'my_book' },
-          });
+          setConfirmHidden(true);
+          window.location.reload();
         } else {
           alert("취소에 실패했습니다."); // TODO 웹뷰 팝업으로 처리
         }
@@ -186,6 +183,7 @@ const ReserveTap = (props) => {
         <PopUp
           buttonText='확인'
           onButtonClick={() => handleReserveCancel(index)}
+          cancelButtonClick={()=>setConfirmHidden(true)}
           hidden={confirmHidden}
         >
           <div className='component-wrap'>
@@ -296,8 +294,8 @@ const ReserveTap = (props) => {
               {type === 'reserve' ? (
                 <>
                   <p>예약을 취소하시겠습니까?</p>
-                  <span>취소한 날짜에는</span>
-                  <span>다시 예약 할 수 없습니다.</span>
+                  <span>골프장에 따라 취소한 날짜에는</span>
+                  <span>재예약 불가할 수 있습니다.</span>
                 </>
               ) : (
                 <>

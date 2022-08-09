@@ -299,8 +299,8 @@ const ReserveInfo = observer(() => {
           </div>
           <div className='message-box line2-top pt-15'>
             <p>예약을 취소하시겠습니까?</p>
-            <span>취소한 날짜에는</span>
-            <span>다시 예약 할 수 없습니다.</span>
+            <span>골프장에 따라 취소한 날짜에는</span>
+            <span>재예약 불가할 수 있습니다.</span>
           </div>
         </div>
       </PopUp>
