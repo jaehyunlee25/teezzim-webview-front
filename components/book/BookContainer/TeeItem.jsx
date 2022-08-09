@@ -37,9 +37,9 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
 
   return (
     <>
-      {teeSchedules.map(([course, scheduleList]) => (
+      {teeSchedules.map(([course, scheduleList], idx) => (
         <>
-          <div className='time-head title-group'>
+          <div className='time-head title-group' key={idx}>
             <h1 className='head-headline'>
               {name}
               <span className='bar'>{course}</span>
