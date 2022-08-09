@@ -410,7 +410,6 @@ const Reserve = () => {
           {deleteItem ? '완료' : '편집'}
         </button>
       </div>
-
       <div className={styles.reserveState}>
         <p>예약 확정</p>
       </div>
@@ -454,6 +453,8 @@ const Reserve = () => {
       </div>
       <div className={styles.reserveContainer}>
         <ReserveAlarmList reserveAlarm={reserveAlarm} deleteItem={deleteItem} />
+      </div>
+      <div className={styles.marginB}>
       </div>
       <BottomMenu />
     </>
