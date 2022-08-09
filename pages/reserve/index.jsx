@@ -322,6 +322,7 @@ const Reserve = () => {
   return (
     <>
       <PopUp
+        reverse={true}
         hidden={isHidePopupRefesh}
         onButtonClick={e=>{
           setHidePopupRefesh(true);
@@ -332,7 +333,8 @@ const Reserve = () => {
           reqMyReserveApi(reserveTabStore.deviceId);
         }}
       >
-        <div>데이터를 새로고침 하시겠습니까?</div>
+        <div className='refresh mt-25' />
+        <div className='mb-20'><strong>데이터를 새로고침 하시겠습니까?</strong></div>
       </PopUp>
       <div className={styles.topNav}>
         <button

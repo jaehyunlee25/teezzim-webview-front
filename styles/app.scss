@@ -1890,6 +1890,10 @@ input {
   font-size: 0;
   text-align: center;
 
+  .flex {
+    display: flex;
+  }
+
   li {
     display: inline-block;
     vertical-align: top;
@@ -1939,11 +1943,14 @@ input {
   }
 
   &.btn-group__fixed {
+    position: fixed;
     display: -webkit-box;
     display: -ms-flexbox;
-    z-index: 100;
-    margin-bottom: 68px;
-    padding: 20px;
+    /*display: flex; */
+    bottom: 108px;
+    left: 16px;
+    right: 16px;
+    z-index: 100
 
     li {
       display: block;
@@ -1984,8 +1991,8 @@ input {
   }
 
   &.secondary {
-    background-color: var(--brand-shade-2);
-    color: var(--neutrals-white);
+    background-color: #cacaca; 
+    color: #000000; 
   }
 
   &.rest {
@@ -2393,11 +2400,24 @@ input {
   transition: transform 0.3s ease;
   transition: transform 0.3s ease, -webkit-transform 0.3s ease;
 }
-
 /* Common Type */
+.refresh {
+  content: '';
+  width: 46px;
+  height: 46px;
+  display: inline-block;
+  background-image: url('../assets/images/refresh.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
 
 .popup-wrap {
-  &[data-popup="content"] .popup,
+  &[data-popup="content"] .popup{
+   -webkit-transform: translate(0, 50px);
+    -ms-transform: translate(0, 50px);
+    transform: translate(0, 50px);
+  }
+
   &[data-popup="alert"] .popup {
     -webkit-transform: translate(0, 50px);
     -ms-transform: translate(0, 50px);
@@ -2435,7 +2455,10 @@ input {
 /* Modal */
 
 .popup-modal {
-  width: 280px;
+  width: 50%;
+  min-width: 280px;
+  height: auto;
+  border-radius: 20px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -2443,6 +2466,7 @@ input {
   object-fit: contain;
   box-shadow: 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 3px 5px -1px var(--alpha-black-20);
   background-color: var(--neutrals-white);
+  overflow: hidden;
 
   .popup-head {
     border-bottom: 1px solid #ddd;
@@ -2450,6 +2474,11 @@ input {
 
   .popup-body {
     padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 20px;
 
     .message-box {
       min-height: 40px;
@@ -2462,6 +2491,7 @@ input {
       p + {
         p {
           margin-top: 20px;
+          font-size: 14px;
         }
 
         span {
