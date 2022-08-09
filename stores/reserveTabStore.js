@@ -3,6 +3,8 @@ const { makeObservable, observable, computed, action } = require('mobx');
 class ReserveTabStore {
   myReserveList = [];
   selectedReserve = null;
+  isFirstTabMove = true;
+  deviceId = "";
 
   constructor() {
     makeObservable(this, {
