@@ -20,6 +20,7 @@ const Reserve = () => {
   const [reserveData, setReserveData] = useState([]);
   const [reserveWait, setReserveWait] = useState([]);
   const [reserveAlarm, setReserveAlarm] = useState([]);
+  const [isHidePopupRefesh, setHidePopupRefesh] = useState(true);
 
   const [test, setTest] = useState({
     resultCode: 1,
@@ -149,6 +150,36 @@ const Reserve = () => {
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 나의예약 탭으로 이동했음을 App에 알렸는지 여부
 
   /** APP->WEB 브릿지 함수 선언 */
+  function openWebMenu() {
+    if (window.BRIDGE && window.BRIDGE.openWebMenu) {
+      setTimeout(() => {
+        window.BRIDGE.openWebMenu('MyReservation');
+      }, 100); // 약간 지연
+    } else if (window.webkit && window.webkit.messageHandlers) {
+      setTimeout(() => {
+        window.webkit.messageHandlers.openWebMenu.postMessage(
+          'MyReservation',
+        );
+      }, 100);
+    } else {
+      console.log('앱에서만 가능한 기능입니다.');
+    }
+  }
+  function reqMyReserveApi(device_id) {
+    axios({
+      method: 'post',
+      url: `/teezzim/teeapi/v1/club/reservation`,
+      data: { device_id },
+    })
+      .then(resp => {
+        setTest(resp.data);
+        reserveTabStore.setMyReserveList(resp.data); // Mobx에 저장
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     if (isInitSignalSendApp == false) {
       console.log('한번만 수행될까?');
@@ -159,67 +190,8 @@ const Reserve = () => {
           console.log('getMyReserveForApi', jsonStr); // device_id 필요
           const { device_id } = JSON.parse(jsonStr);
           authStore.setDeviceId(device_id);
-          axios({
-            method: 'post',
-            url: `/teezzim/teeapi/v1/club/reservation`,
-            data: { device_id },
-          })
-            .then(resp => {
-              //console.log("###", resp.data);
-              setTest(resp.data);
-              reserveTabStore.setMyReserveList(resp.data); // Mobx에 저장
-              // TODO 새로운 데이터 형식으로 뿌려줘야 함!
-              /* 샘플 데이터 구조
-            {
-              "resultCode": 1,
-              "message": "OK",
-              "data": [{
-                  "id": "165ec3da-0ab7-11ed-a93e-0242ac11000a",
-                  "device_id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
-                  "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                  "golf_course_id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
-                  "game_date": "20220809",
-                  "game_time": "1234",
-                  "isCancel": 1,
-                  "created_at": "2022-07-23T18:41:58.000Z",
-                  "updated_at": "2022-07-23T18:41:58.000Z",
-                  "createdAt": "2022-07-23T18:41:58.000Z",
-                  "updatedAt": "2022-07-23T18:41:58.000Z",
-                  "Device": {
-                      "id": "9b2d40ad-0aa3-11ed-a93e-0242ac11000a",
-                      "token": "fEGot2k1Sh2raE28s2pBoY:APA91bHDIdB-cBkyiYXC-4Ckyn5ZhZHVyHfLJ9V1Lewm9HieEKx78JoYmQF-VzPseqy1edlYc20cbYjosWYJ6zrV4qMNETSXAMYowPwAkSpaVDzBgWiwbJYso28qPSU1H08LgCN3Dymz",
-                      "type": "android",
-                      "created_at": "2022-07-23T16:22:31.000Z",
-                      "updated_at": "2022-07-23T16:22:31.000Z"
-                  },
-                  "GolfClub": {
-                      "id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                      "name": "백제",
-                      "address": "충청남도 부여군 은산면 충절로 3734-82",
-                      "phone": "041-830-0700",
-                      "area": "충청도",
-                      "email": "baekjecc0700@naver.com",
-                      "homepage": "https://www.baekjecc.com/index.asp",
-                      "corp_reg_number": "307-81-06923",
-                      "description": "백제컨트리클럽은 칠갑산 자락에 감싸 안겨 천혜의 지형 조건과 자연 상태를 코스에 담아내기 위해 친환경적인 시공 방법으로 골프장을 조성하였고, 2008년 개장한 이후 끊임없는 변화를 추구하며 항상 새로운 모습을 보여드리기 위해 노력해왔습니다.\n\n또한, 친환경적인 골프장으로서 현재 금강유역환경청, 고운식물원과 협약하여 천연기념물과 멸종위기 종인 동, 식물의 복원사업을 추진 중입니다.\n\n2008년 대중제 331ㅎ 규모로 개장 하였고 8년간 정성을 다해 준비하여 2016년 10월 11일 한성코스 9홀을 추가로 오픈하여 규모 27홀의 대중제 골프장으로 새롭게 단장하였습니다.\n\n백제컨트리클럽은 모두가 즐길 수 있는 코스 레이아웃과 풍광이 주는 감동, 삼림욕을 즐기는 듯한 청량감에 좋은 사람과 편안한 휴식을 하시기에 최적의 골프장이라 자신합니다.\n\n최고의 골프장으로 발돋움 할 수 있도록 끊임없이 배우고 받아들이고 노력하겠습니다.\n\n백제 컨트리클럽을 방문하여 주셔서 감사합니다."
-                  },
-                  "GolfCourse": {
-                      "id": "28ff717a-eeca-11ec-a93e-0242ac11000a",
-                      "golf_club_id": "28fd237b-eeca-11ec-a93e-0242ac11000a",
-                      "name": "웅진",
-                      "description": "9홀",
-                      "createdAt": "2022-06-18T05:47:50.000Z",
-                      "updatedAt": "2022-06-18T05:47:50.000Z",
-                      "GolfClubId": "28fd237b-eeca-11ec-a93e-0242ac11000a"
-                  }
-                },
-              ],
-            }
-            */
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          reserveTabStore.deviceId = device_id;
+          reqMyReserveApi(device_id);
         };
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
@@ -310,33 +282,12 @@ const Reserve = () => {
           */
         };
 
-        if (window.BRIDGE && window.BRIDGE.openWebMenu) {
-          setTimeout(() => {
-            window.BRIDGE.openWebMenu('MyReservation');
-          }, 100); // 약간 지연
-        } else if (window.webkit && window.webkit.messageHandlers) {
-          setTimeout(() => {
-            window.webkit.messageHandlers.openWebMenu.postMessage(
-              'MyReservation',
-            );
-          }, 100);
+        if( reserveTabStore.isFirstTabMove ) {
+          reserveTabStore.isFirstTabMove = false;
+          openWebMenu();
         } else {
-          setTimeout(() => {
-            // 웹뷰에서는 테스트 데이터로!
-            window.getSavedAuth(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","id":"newrison","password":"ilovegolf778"}]`,
-            );
-            // window.getSavedReservation(
-            //   `[{"clubId:"6cbc1160-79af-11ec-b15c-0242ac110005", "reserved_date": "2022.05.09", "reserved_time": "05:25", "reserved_course": "SOUTH"}]`,
-            // );
-            window.getSavedWaitReservation(
-              `[{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","waitDate":"2022-05-12","waitTime":["05:22:00","05:29:00","05:22:00","16:13:00","05:22:00","05:29:00","05:30:00","05:31:00"]}]`,
-            );
-            window.getSavedOpenAlarm(
-              `[{"clubId":"fccb4e5e-bf95-11ec-a93e-0242ac11000a","alarmDate":"2022-05-30"},{"clubId":"6cbc1160-79af-11ec-b15c-0242ac110005","alarmDate":"2022-06-05"}]`,
-            );
-          }, 1000);
-        }
+          setHidePopupRefesh(false);
+        } 
       }
       setIsInitSignal(true);
     }
@@ -370,6 +321,19 @@ const Reserve = () => {
 
   return (
     <>
+      <PopUp
+        hidden={isHidePopupRefesh}
+        onButtonClick={e=>{
+          setHidePopupRefesh(true);
+          openWebMenu();
+        }}
+        cancelButtonClick={e=>{
+          setHidePopupRefesh(true);
+          reqMyReserveApi(reserveTabStore.deviceId);
+        }}
+      >
+        <div>데이터를 새로고침 하시겠습니까?</div>
+      </PopUp>
       <div className={styles.topNav}>
         <button
           className={styles.sideBtn}
