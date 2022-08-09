@@ -116,6 +116,7 @@ export default function CreateReservation() {
               </div>
             </div>
           </div>
+          <div className='pt-15 pr-15 pl-15 pb-15'>
           <div className='component-wrap'>
             <div className='inner-container'>
               <div className='title-group'>
@@ -193,6 +194,7 @@ export default function CreateReservation() {
                 </li>
               </ul>
             </div>
+          </div>
           </div>
           {/** 기획에서는 간편예약이 가능한 골프장에 한해서만 간편예약을 렌더링하라고 기재되어있는데 어디에서 받아야할지 모르겠음 */}
           {tee && (

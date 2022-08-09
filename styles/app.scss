@@ -1959,6 +1959,20 @@ input {
       flex: 1;
     }
   }
+  &.btn-group__booking {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    z-index: 100;
+    margin-bottom: 68px;
+    padding: 20px;
+
+    li {
+      display: block;
+      -ms-flex: 1;
+      -webkit-box-flex: 1;
+      flex: 1;
+    }
+  }
 }
 
 /* Emboss */

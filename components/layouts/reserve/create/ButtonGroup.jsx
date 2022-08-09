@@ -89,7 +89,7 @@ const ButtonGroup = observer(
           </div>
         ) : (
           <div className='component-wrap'>
-            <ul className='btn-group btn-group__fixed'>
+            <ul className='btn-group btn-group__booking'>
               <HomepageLink
                 id={clubId}
                 type='button'
