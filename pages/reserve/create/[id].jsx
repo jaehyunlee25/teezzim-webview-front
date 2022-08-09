@@ -15,6 +15,7 @@ import ButtonGroup from '@/components/layouts/reserve/create/ButtonGroup';
 
 export default function CreateReservation() {
   const router = useRouter();
+  console.log(router.query);
   const { id, tee_id } = router.query;
   const { teeScheduleStore } = useStores();
 

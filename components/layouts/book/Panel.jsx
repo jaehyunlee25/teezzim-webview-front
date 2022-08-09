@@ -168,6 +168,8 @@ const Panel = observer(() => {
     const { id } = e.target;
     if (!id) return;
     if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
+
+    teeScheduleStore.setDate(0);
     if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
       const params = { command: 'showPopupWait', data: ''};
       // if (window.BRIDGE && window.BRIDGE.globalMethod) {
@@ -278,12 +280,14 @@ const Panel = observer(() => {
               <li id='book' className='button' onClick={handleSelectContainer}>
                 실시간 예약
               </li>
-              <li id='wait' className='button' onClick={handleSelectContainer}>
+              <li className='button'>티찜</li>
+              <li className='button'>티찜</li>
+              {/* <li id='wait' className='button' onClick={handleSelectContainer}>
                 예약대기
               </li>
               <li id='alarm' className='button' onClick={handleSelectContainer}>
                 예약오픈 알림
-              </li>
+              </li> */}
             </ul>
           </div>
           {/* //bookingwrap 예약/대기/알림 */}
