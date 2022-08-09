@@ -100,27 +100,26 @@ const ReserveTap = (props) => {
     <>
       <div className={styles.reserveTapContainer}>
         <div className={styles.dateInfo}>
-          <div className={styles.alert}>
-            <span>{`D-${dDay}`}</span>
-            {type === 'reserve' && (
-              <Image
-                className={styles.time}
-                src={Time}
-                alt='time'
-                width={26}
-                height={26}
-              />
-            )}
-
-            {type === 'wait' && (
-              <Image
-                className={styles.bell}
-                src={Bell}
-                alt='bell'
-                width={26}
-                height={26}
-              />
-            )}
+        <div className={styles.alert}>
+            {
+              type === 'reserve' && (
+                <span>{`D-${dDay}`}</span>
+              )
+            }
+            {
+              type === 'wait' && (
+                <div class="info_top fl">
+                  <b class="icon-time">time</b>
+                </div>
+              )
+            }
+            {
+              type === 'alarm' && (
+                <div class="info_top fl">
+                  <b class="icon-bell">bell</b>
+                </div>
+              )
+            }
           </div>
           {type === 'reserve' && (
             <div>
