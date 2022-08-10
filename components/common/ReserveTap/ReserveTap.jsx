@@ -120,14 +120,7 @@ const ReserveTap = (props) => {
           </div>
           {type === 'reserve' && (
             <div>
-              <span>{`${reserve?.game_date.substring(
-                0,
-                4,
-              )}-${reserve?.game_date.substring(
-                4,
-                6,
-              )}-${reserve?.game_date.substring(6, 8)}`}</span>
-              {/* <span>date</span> */}
+              <span>{`${month}월 ${day}일(${week[reserveDate.getDay()]}요일)`}<strong>{ " "+ reserve?.GolfClub?.name }</strong></span>
               <span>
                 {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
                 <b className="bar"></b>

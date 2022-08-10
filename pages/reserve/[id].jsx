@@ -190,8 +190,7 @@ const ReserveInfo = observer(() => {
       </div>
 
       <div className={styles.reserveContainer}>
-        {/* <ReserveDetail detail={reserveDetailData.data} /> */}
-        <ReserveDetail detail={test.data} />
+      <ReserveDetail detail={reserveDetailData} />
       </div>
 
       <div className={styles.ruleContainer}>
