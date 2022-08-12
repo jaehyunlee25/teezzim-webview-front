@@ -16,9 +16,12 @@ import MiniPanel from '@/components/layouts/book/MiniPanel';
 import BookContainer from '@/components/layouts/book/BookContainer';
 import WaitContainer from '@/components/layouts/book/WaitContainer';
 import AlarmContainer from '@/components/layouts/book/AlarmContainer';
+import PopUp from '@/components/common/PopUp';
 
 export default function Book() {
   const router = useRouter();
+  const [isHidePopup, setIsHidePopup]= useState(false);
+
   const {
     query: { subTab = 'tabContent01', container = 'book', ...others },
   } = router;
@@ -160,6 +163,26 @@ export default function Book() {
 
   return (
     <>
+      <PopUp
+        reverse={true}
+        hidden={isHidePopup}
+        buttonText='등록하러가기'
+        onButtonClick={e => {
+          setIsHidePopup(true);
+        }}
+        cancelButtonClick={e => {
+          setIsHidePopup(true);
+        }}
+      >
+        <div className='golf-club mt-25' />
+        <div className='notice-popup mb-20'>
+          <strong>
+            현재 사용하고 계신<br/>
+            골프장 계정을 등록해주세요.<br/>
+            <span className='text-primary'>편리하게 한곳에서 예약 가능합니다</span>
+          </strong>
+        </div>
+      </PopUp>
       <Panel />
       <MiniPanel />
 

@@ -2424,7 +2424,18 @@ input {
   background-repeat: no-repeat;
   background-size: 100%;
 }
-
+.golf-club {
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  background-image: url('../assets/images/golf-club.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.notice-popup {
+  text-align: center;
+  line-height: 1.3;
+}
 .popup-wrap {
   &[data-popup="content"] .popup{
    -webkit-transform: translate(0, 50px);
