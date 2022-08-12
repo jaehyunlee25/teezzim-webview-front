@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 const PopUp = ({
   reverse = false,
+  smallClose = false,
   children,
   buttonText = '확인',
   buttonType = 'primary',
@@ -21,7 +22,7 @@ const PopUp = ({
                   reverse ?
                     <div className='flex'>
                       {cancelButtonClick &&
-                        <div className='col col-6'>
+                        <div className={smallClose ? 'col col-4' : 'col col-6'}>
                           <button
                             type='button'
                             className={`btn large secondary full`}
@@ -31,7 +32,7 @@ const PopUp = ({
                           </button>
                         </div>
                       }
-                      <div className='col col-6'>
+                      <div className={smallClose ? 'col col-8':'col col-6'}>
                         <button
                           type='button'
                           className={`btn large ${buttonType === 'primary' ? buttonType : 'warning-medium'

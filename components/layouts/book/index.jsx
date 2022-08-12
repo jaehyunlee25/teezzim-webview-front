@@ -165,6 +165,7 @@ export default function Book() {
     <>
       <PopUp
         reverse={true}
+        smallClose={true}
         hidden={isHidePopup}
         buttonText='등록하러가기'
         onButtonClick={e => {
@@ -179,7 +180,7 @@ export default function Book() {
           <strong>
             현재 사용하고 계신<br/>
             골프장 계정을 등록해주세요.<br/>
-            <span className='text-primary'>편리하게 한곳에서 예약 가능합니다</span>
+            <span className='text-primary'>편리하게 한 곳에서 예약 가능합니다</span>
           </strong>
         </div>
       </PopUp>
