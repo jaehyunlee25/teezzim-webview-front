@@ -58,8 +58,8 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
       try {
         window.BRIDGE.saveLoginInfo(JSON.stringify(data));
-        setSaveSuccess(true);
-        authStore.communicate(false);
+        // setSaveSuccess(true);
+        // authStore.communicate(false);
         if (cb) cb();
       } catch {
         if (errCb) errCb();
@@ -67,8 +67,8 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     } else if (window.webkit && window.webkit.messageHandlers ) {
       try {
         window.webkit.messageHandlers.saveLoginInfo.postMessage(JSON.stringify(data));
-        setSaveSuccess(true);
-        authStore.communicate(false);
+        // setSaveSuccess(true);
+        // authStore.communicate(false);
         if (cb) cb();
       } catch {
         if (errCb) errCb();
@@ -88,6 +88,13 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
         window.BRIDGE.saveLoginInfo = data => console.log(data);
       }
     }
+    window.resultLogin = function (result) {
+      if(result == 'OK') {
+        setSaveSuccess(true);
+        authStore.communicate(false);
+        if (cb) cb();
+      }
+    };
   }, []);
 
   // reset when modal unmounted(hidden change)
