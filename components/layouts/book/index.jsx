@@ -20,7 +20,6 @@ import PopUp from '@/components/common/PopUp';
 
 export default function Book() {
   const router = useRouter();
-  const [isHidePopup, setIsHidePopup]= useState(false);
 
   const {
     query: { subTab = 'tabContent01', container = 'book', ...others },
@@ -163,27 +162,6 @@ export default function Book() {
 
   return (
     <>
-      <PopUp
-        reverse={true}
-        smallClose={true}
-        hidden={isHidePopup}
-        buttonText='등록하러가기'
-        onButtonClick={e => {
-          setIsHidePopup(true);
-        }}
-        cancelButtonClick={e => {
-          setIsHidePopup(true);
-        }}
-      >
-        <div className='golf-club mt-25' />
-        <div className='notice-popup mb-20'>
-          <strong>
-            현재 사용하고 계신<br/>
-            골프장 계정을 등록해주세요.<br/>
-            <span className='text-primary'>편리하게 한 곳에서 예약 가능합니다</span>
-          </strong>
-        </div>
-      </PopUp>
       <Panel />
       <MiniPanel />
 
