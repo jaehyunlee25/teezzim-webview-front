@@ -26,7 +26,7 @@ const MiniPanel = observer(() => {
                 {panelName()}
               </h1>
               <div className="allimg_icon">
-                <span className="allim_num">{panelStore.checkedTeeList.size}</span>
+                {/* <span className="allim_num">{panelStore.checkedTeeList.size}</span> */}
               </div>
             </div>
             <p className='text-sub'>
