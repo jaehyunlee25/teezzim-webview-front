@@ -18,7 +18,8 @@ const Calendar = observer(
 
     const mountRef = useRef(true);
     const getSchedule = useCallback(async () => {
-      if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
+      if (!mountRef.current) return;
+      // if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
       const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
         JSON.parse(v),
       );
@@ -121,12 +122,13 @@ const Calendar = observer(
 
     useEffect(() => {
       if(window){
+        getSchedule();
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
-        window.teeSearchFinished = function () {
-          // console.log("### teeSearchFinished 호출됨");
-          getSchedule();
-        };
+        // window.teeSearchFinished = function () {
+        //   // console.log("### teeSearchFinished 호출됨");
+        //   getSchedule();
+        // };
       }
     }, []);
     
