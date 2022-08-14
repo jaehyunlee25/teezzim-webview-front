@@ -46,15 +46,15 @@ const Calendar = observer(
             const nowTime = (new Date()).getTime();
             window.localStorage.setItem(timeKey, nowTime);
             // console.log("###", nowTime);
-            if (window.BRIDGE && window.BRIDGE.requestSearch) {
-              window.BRIDGE.requestSearch(JSON.stringify([params]));
-            } else if (window.webkit && window.webkit.messageHandlers) {
-              window.webkit.messageHandlers.requestSearch.postMessage(
-                JSON.stringify([params]),
-              );
-            } else {
-              alert(JSON.stringify([params]));
-            }
+            // if (window.BRIDGE && window.BRIDGE.requestSearch) {
+            //   window.BRIDGE.requestSearch(JSON.stringify([params]));
+            // } else if (window.webkit && window.webkit.messageHandlers) {
+            //   window.webkit.messageHandlers.requestSearch.postMessage(
+            //     JSON.stringify([params]),
+            //   );
+            // } else {
+            //   alert(JSON.stringify([params]));
+            // }
           }
           return res;
 
