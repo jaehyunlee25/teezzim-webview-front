@@ -25,7 +25,7 @@ const HomepageLink = observer(({ id, children, ...props }) => {
       className='text-link'
       style={{
         textOverflow: 'ellipsis',
-        maxWidth: 150,
+        // maxWidth: 150,
         overflow: 'hidden',
         whiteSpace: 'nowrap',
       }}

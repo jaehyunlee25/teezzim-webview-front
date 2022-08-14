@@ -117,15 +117,16 @@ export default function CreateReservation() {
               </div>
             </div>
           </div>
+          <div className='pt-15 pr-15 pl-15 pb-15'>
           <div className='component-wrap'>
             <div className='inner-container'>
               <div className='title-group'>
-                <h1 className='head-headline'>{golf_club_name}</h1>
+                <h1 className='head-headline book_title'>{golf_club_name}</h1>
                 <ul className='btn-group'>
                   <li>
                     <button
                       type='button'
-                      className='btn small round'
+                      className='btn small round infoBtn'
                       onClick={() =>
                         router.push({
                           pathname: '/reserve/info/[id]',
@@ -187,11 +188,14 @@ export default function CreateReservation() {
                   있습니다.
                 </li>
                 <li>자세한 위약규정은 홈페이지를 참고하시기 바랍니다.</li>
-                <HomepageLink id={tee_id}>
-                  {golf_club_name} [바로가기]
-                </HomepageLink>
+                <li>
+                  <HomepageLink id={tee_id}>
+                    {golf_club_name} [바로가기]
+                  </HomepageLink>
+                </li>
               </ul>
             </div>
+          </div>
           </div>
           {/** 기획에서는 간편예약이 가능한 골프장에 한해서만 간편예약을 렌더링하라고 기재되어있는데 어디에서 받아야할지 모르겠음 */}
           {tee && (

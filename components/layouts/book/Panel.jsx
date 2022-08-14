@@ -9,11 +9,13 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
+import PopUp from '@/components/common/PopUp';
 
 const Panel = observer(() => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
+  const [isHidePopup, setIsHidePopup]= useState(true);
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -58,6 +60,7 @@ const Panel = observer(() => {
           console.log(jsonStr);
           // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
           const dataList = JSON.parse(jsonStr);
+          if(dataList.length===0 && isInitSignalSendApp && authStore.communicated)setIsHidePopup(false);
           panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
 
           for (let i = 0; i < dataList.length; i++) {
@@ -186,11 +189,11 @@ const Panel = observer(() => {
       return;
     }
 
-    if (selectedLength > 5) {
+    if (selectedLength > 20) {
       const obj = id === 'wait' ? '대기' : id === 'alarm' ? '오픈알림' : '';
       toastStore.setMessage(
         <>
-          5개 이하의 골프장에서만
+          20개 이하의 골프장에서만
           <br /> 예약{obj}을 할 수 있습니다.
         </>,
       );
@@ -232,6 +235,27 @@ const Panel = observer(() => {
   return (
     <>
       <div hidden={panelStore.panelHidden}>
+      <PopUp
+        reverse={true}
+        smallClose={true}
+        hidden={isHidePopup}
+        buttonText='등록하러가기'
+        onButtonClick={e => {
+          setIsHidePopup(true);
+        }}
+        cancelButtonClick={e => {
+          setIsHidePopup(true);
+        }}
+      >
+        <div className='golf-club mt-25' />
+        <div className='notice-popup mb-20'>
+          <strong>
+            현재 사용하고 계신<br />
+            골프장 계정을 등록해주세요.<br />
+            <span className='text-primary'>편리하게 한 곳에서 예약 가능합니다</span>
+          </strong>
+        </div>
+      </PopUp>
         <SearchContainer />
         <div className='wrapper'>
           <NavTab />
@@ -260,6 +284,7 @@ const Panel = observer(() => {
                   <>
                     <div className='list_AreaTop'>
                       <Counter type='unregistered' />
+                      {/* <span className="fr">전체선택</span> */}
                     </div>
                     <TeeListArea
                       list={panelStore.unregisteredTeeList.sort((a, b) =>

@@ -25,13 +25,13 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
       <li>
         {/* list_detail */}
 
-        <div className='list-detail'>
+        <div className='list-detail'  onClick={type === 'home' ? handleClick : undefined}>
           <Image className='tee-icon' src={img} width={56} height={56} alt='' />
           <div>
             <p className='tee-name'>{tee.name}</p>
             <span
               className='tee-detail'
-              onClick={type === 'home' ? handleClick : undefined}
+             
             >
               {!registered ? (
                 <span className='badge bg-shade1'>{badgeMsg}</span>
@@ -75,6 +75,7 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
           display: flex;
           align-items: center;
           gap: 16px;
+          width: 90%
         }
         .tee-name {
           font-size: 16px;

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import CalenderIcon from '@/assets/images/frame/bottom/Icon_Calendar.svg';
 import CheckedOutlineIcon from '@/assets/images/frame/bottom/Icon_Checed-Outline.svg';
 import MenuIcon from '@/assets/images/frame/bottom/Icon_Menu.svg';
+import CalenderIconOn from '@/assets/images/frame/bottom/Icon_Calendar_On.svg';
+import CheckedOutlineIconOn from '@/assets/images/frame/bottom/Icon_Checed-Outline_On.svg';
 
 const BottomMenu = () => {
   const router = useRouter();
@@ -114,9 +116,8 @@ const BottomMenu = () => {
                   }
                 >
                   <Image
-                    src={CalenderIcon}
+                    src={tab !== 'my_book' ? CalenderIconOn : CalenderIcon}
                     alt='예약하기'
-                    className={tab !== 'my_book' ? 'menu-icon on' : 'menu-icon'}
                   />
                   <span>예약하기</span>
                 </div>
@@ -131,9 +132,8 @@ const BottomMenu = () => {
                   }
                 >
                   <Image
-                    src={CheckedOutlineIcon}
+                    src={tab === 'my_book' ? CheckedOutlineIconOn : CheckedOutlineIcon}
                     alt='나의 예약'
-                    className={tab === 'my_book' ? 'menu-icon on' : 'menu-icon'}
                   />
                   <span>나의 예약</span>
                 </div>
@@ -141,7 +141,9 @@ const BottomMenu = () => {
               {/* menu button 누르면 navigation menu 열기 */}
               <li onClick={handleOpen}>
                 <div>
-                  <Image src={MenuIcon} alt='메뉴' />
+                  <Image src={MenuIcon}
+                    alt='메뉴'
+                  />
                   <span>메뉴</span>
                 </div>
               </li>
@@ -166,10 +168,18 @@ const BottomMenu = () => {
             background: #fff;
             margin: 0 auto;
             border-top: 1px solid #e0e0e0;
+            width: 100%;
+            position: fixed;
+            bottom:0px;
+            background: #f4f4f4;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            border-top: 1px solid #e0e0e0;
           }
           .tabbar {
-            padding: 4px 0 calc(constant(safe-area-inset-bottom) + 8px);
-            padding: 4px 0 calc(env(safe-area-inset-bottom) + 8px);
+            padding: 0px 0 calc(constant(safe-area-inset-bottom) + 3px);
+            padding: 0px 0 calc(env(safe-area-inset-bottom) + 3px);
           }
           .tabbar:afrer {
             content: '';
@@ -177,54 +187,56 @@ const BottomMenu = () => {
             clear: both;
           }
           .tabbar ul {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin: 0 16px;
             text-align: center;
+            padding: 15px 0;
           }
           .tabbar li {
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            grid-gap: 10px;
             width: 32%;
-            height: 45px;
-            font-family: AppleSDGothicNeo-SemiBold;
+            height: auto;
+            min-height: 45px;
+            font-family: Spoqa Han Sans Neo;
             margin-top: 3px;
           }
           .tabbar li div.on {
-            background: #115b40;
-            display: inline-block;
             width: 72px;
-            height: 45px;
+            height: auto;
             border-radius: 4px;
           }
           .tabbar li div.on span {
             color: #fff;
           }
           .tabbar li span {
-            display: block;
+            display:block;
             color: #323233;
-            font-weight: 600;
+            font-weight: 500;
             line-height: 1.3;
             font-size: 13px;
           }
           li div {
-            cursor: pointer;
+            height: auto;
+            display: inline-flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            grid-gap: 10px;
           }
           li.icon-tab.on div {
             width: fit-content;
             padding: 2px 8px;
             border-radius: 4px;
             margin: 0 auto;
-            background-color: var(--brand-primary);
-          }
-
-          li.icon-tab.on span {
-            color: var(--neutrals-white);
           }
         `}
       </style>
-      <style jsx global>{`
-        img.menu-icon.on {
-          filter: brightness(0) invert(1);
-        }
-      `}</style>
     </>
   );
 };

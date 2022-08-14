@@ -18,7 +18,8 @@ const Calendar = observer(
 
     const mountRef = useRef(true);
     const getSchedule = useCallback(async () => {
-      if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
+      if (!mountRef.current) return;
+      // if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
       const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
         JSON.parse(v),
       );
@@ -45,15 +46,15 @@ const Calendar = observer(
             const nowTime = (new Date()).getTime();
             window.localStorage.setItem(timeKey, nowTime);
             // console.log("###", nowTime);
-            if (window.BRIDGE && window.BRIDGE.requestSearch) {
-              window.BRIDGE.requestSearch(JSON.stringify([params]));
-            } else if (window.webkit && window.webkit.messageHandlers) {
-              window.webkit.messageHandlers.requestSearch.postMessage(
-                JSON.stringify([params]),
-              );
-            } else {
-              alert(JSON.stringify([params]));
-            }
+            // if (window.BRIDGE && window.BRIDGE.requestSearch) {
+            //   window.BRIDGE.requestSearch(JSON.stringify([params]));
+            // } else if (window.webkit && window.webkit.messageHandlers) {
+            //   window.webkit.messageHandlers.requestSearch.postMessage(
+            //     JSON.stringify([params]),
+            //   );
+            // } else {
+            //   alert(JSON.stringify([params]));
+            // }
           }
           return res;
 
@@ -121,12 +122,13 @@ const Calendar = observer(
 
     useEffect(() => {
       if(window){
+        getSchedule();
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
-        window.teeSearchFinished = function () {
-          // console.log("### teeSearchFinished 호출됨");
-          getSchedule();
-        };
+        // window.teeSearchFinished = function () {
+        //   // console.log("### teeSearchFinished 호출됨");
+        //   getSchedule();
+        // };
       }
     }, []);
     
@@ -141,7 +143,7 @@ const Calendar = observer(
         >
           <div className='calendar'>
             <div className='day-of-week'>
-              <div>일</div>
+              <div className='sunday'>일</div>
               <div>월</div>
               <div>화</div>
               <div>수</div>
@@ -158,7 +160,7 @@ const Calendar = observer(
                   key={v}
                   className={`${
                     v === today ? 'today' : v < today ? 'prev-mon' : ''
-                  }${v === date ? ' on' : ' '}`}
+                  }${v === date ? 'selected' : ' '}`}
                   date={v}
                   count={schedule?.[yearMonth]?.[v] ?? 0}
                   onClick={v >= today ? handleDate : null}
@@ -175,9 +177,10 @@ const Calendar = observer(
 export default Calendar;
 
 const DateButton = ({ date, count, className, onClick, ...others }) => {
-  const dateText = date?.split('-')[2];
-  const day = new Date(date).getUTCDay();
   const classes = className ?? '';
+  const dateText = classes === 'selected'? `: ${date?.split('-')[2]}`:date?.split('-')[2];
+  const day = new Date(date).getUTCDay();
+  
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
@@ -194,7 +197,7 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
           )}
         </p>
       </button>
-      <style jsx>{`
+      {/* <style jsx>{`
         button:hover,
         button:focus {
           background-color: initial;
@@ -207,11 +210,11 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
         }
 
         button.on {
-          background-color: var(--brand-primary);
+          background-color: var(--naturals-black2);
           color: var(--neutrals-white);
           border-radius: 8px;
         }
-      `}</style>
+      `}</style> */}
     </>
   );
 };

@@ -606,7 +606,7 @@
 .booking-box {
   padding: 10px;
   padding: 0.625rem;
-  border: solid 1px var(--brand-secondary);
+  // border: solid 1px var(--brand-secondary);
   background-color: var(--neutrals-white);
 }
 
@@ -2210,16 +2210,19 @@
 /*아이콘*/
 
 .icon-time {
-  width: 21px;
-  height: 21px;
-  background: url(../assets/images/Icon_time.svg) center center no-repeat;
+  width: 28px;
+  height: 28px;
+  background: url(../assets/images/Icon_12.png) center center no-repeat;
+  background-size: 100%;
+  margin-left: 0 !important;
   text-indent: -9999px;
 }
-
 .icon-bell {
-  width: 21px;
-  height: 21px;
-  background: url(../assets/images/Icon_bell.svg) center center no-repeat;
+  width: 24px;
+  height: 29px;
+  background: url(../assets/images/Icon_13.png) center center no-repeat;
+  background-size: 100%;
+  margin-left: 0 !important;
   text-indent: -9999px;
 }
 
@@ -2415,8 +2418,11 @@ div.spinner {
   }
 
   &.w160 {
-    display: inline-block;
-    width: 160px !important;
+    display: inline-block; 
+    min-width: 160px !important; 
+    height: auto; 
+    border-radius: 20px; 
+    padding: 10px 20px;
   }
 }
 

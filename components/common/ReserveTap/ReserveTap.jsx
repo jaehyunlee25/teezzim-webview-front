@@ -33,6 +33,13 @@ const ReserveTap = (props) => {
   const router = useRouter();
   // 취소 팝업
   const [confirmHidden, setConfirmHidden] = useState(true);
+  const year = reserve?.game_date.substring(0, 4);
+  const month = reserve?.game_date.substring(4,6);
+  const day = reserve?.game_date.substring(6, 8);
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+  const reserveDate = new Date(`${year}-${month}-${day}`);
+  const waitDay = new Date(waitDate);
+  const alarmDay = new Date(alarmDate);
 
   useEffect(() => {
     if(window){
@@ -90,48 +97,36 @@ const ReserveTap = (props) => {
     <>
       <div className={styles.reserveTapContainer}>
         <div className={styles.dateInfo}>
-          <div className={styles.alert}>
-            <span>{`D-${dDay}`}</span>
-            {type === 'reserve' && (
-              <Image
-                className={styles.time}
-                src={Time}
-                alt='time'
-                width={26}
-                height={26}
-              />
-            )}
-
-            {type === 'wait' && (
-              <Image
-                className={styles.bell}
-                src={Bell}
-                alt='bell'
-                width={26}
-                height={26}
-              />
-            )}
+        <div className={styles.alert}>
+            {
+              type === 'reserve' && (
+                <span>{`D-${dDay}`}</span>
+              )
+            }
+            {
+              type === 'wait' && (
+                <div class="info_top fl">
+                  <b class="icon-time">time</b>
+                </div>
+              )
+            }
+            {
+              type === 'alarm' && (
+                <div class="info_top fl">
+                  <b class="icon-bell">bell</b>
+                </div>
+              )
+            }
           </div>
-
           {type === 'reserve' && (
             <div>
-              <span>{`${reserve?.game_date.substring(
-                0,
-                4,
-              )}-${reserve?.game_date.substring(
-                4,
-                6,
-              )}-${reserve?.game_date.substring(6, 8)}`}
-              <strong>{ " "+ reserve?.GolfClub?.name }</strong>
-              </span>
-              {/* <span>date</span> */}
+              <span>{`${month}월 ${day}일(${week[reserveDate.getDay()]}요일)`}<strong>{ " "+ reserve?.GolfClub?.name }</strong></span>
               <span>
-                {`${reserve?.game_time.substring(
-                  0,
-                  2,
-                )}:${reserve?.game_time.substring(2, 4)} | ${
-                  reserve?.GolfClub?.area
-                } | ${reserve?.GolfCourse?.name} 코스`}
+                {`${reserve?.game_time.substring(0,2,)}:${reserve?.game_time.substring(2, 4)}`}
+                <b className="bar"></b>
+                {`${reserve?.GolfClub?.area}`}
+                <b className="bar"></b>
+                {`${reserve?.GolfCourse?.name??'단일'} 코스`}
                 {/* time / area / course */}
               </span>
             </div>
@@ -139,9 +134,9 @@ const ReserveTap = (props) => {
 
           {type === 'wait' && (
             <div>
-              <span>{waitDate}</span>
+              <span>{`${waitDate.substring(5,7)}월 ${waitDate.substring(8,10)}일(${week[waitDay.getDay()]}요일)`}</span>
               <span>{`${clubName} `}</span>
-              <div className={styles.waitTime}>
+              {/* <div className={styles.waitTime}>
                 {waitTime?.map((item, index) => (
                   <p
                     key={index}
@@ -150,13 +145,13 @@ const ReserveTap = (props) => {
                     {item.slice(0, 5).replace('', ' ')}
                   </p>
                 ))}
-              </div>
+              </div> */}
             </div>
           )}
 
           {type === 'alarm' && (
             <div>
-              <span>{alarmDate}</span>
+              <span>{`${alarmDate.substring(5,7)}월 ${alarmDate.substring(8,10)}일(${week[alarmDay.getDay()]}요일)`}</span>
               <span>{`${clubName} `}</span>
             </div>
           )}

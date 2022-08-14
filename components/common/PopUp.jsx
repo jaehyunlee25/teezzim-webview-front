@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 const PopUp = ({
+  reverse = false,
+  smallClose = false,
   children,
   buttonText = '확인',
   buttonType = 'primary',
@@ -15,30 +17,58 @@ const PopUp = ({
           <div className='popup-inner'>
             <div className='popup-body'>{children}</div>
             <div className='popup-foot'>
-              <ul className='btn-group btn-group__fixed'>
-                <li>
-                  <button
-                    type='button'
-                    className={`btn large ${
-                      buttonType === 'primary' ? buttonType : 'warning-medium'
-                    } full`}
-                    onClick={onButtonClick}
-                  >
-                    {buttonText}
-                  </button>
-                </li>
-                { cancelButtonClick && 
-                  <li>
-                    <button
-                      type='button'
-                      className={`btn large warning-medium full`}
-                      onClick={cancelButtonClick}
-                    >
-                      닫기
-                    </button>
-                  </li>
+              <div className='btn-group grid btn-group__fixed'>
+                {
+                  reverse ?
+                    <div className='flex'>
+                      {cancelButtonClick &&
+                        <div className={smallClose ? 'col col-4' : 'col col-6'}>
+                          <button
+                            type='button'
+                            className={`btn large secondary full`}
+                            onClick={cancelButtonClick}
+                          >
+                            닫기
+                          </button>
+                        </div>
+                      }
+                      <div className={smallClose ? 'col col-8':'col col-6'}>
+                        <button
+                          type='button'
+                          className={`btn large ${buttonType === 'primary' ? buttonType : 'warning-medium'
+                            } full`}
+                          onClick={onButtonClick}
+                        >
+                          {buttonText}
+                        </button>
+                      </div>
+                    </div>
+                    :
+                    <>
+                      <div>
+                        <button
+                          type='button'
+                          className={`btn large ${buttonType === 'primary' ? buttonType : 'warning-medium'
+                            } full`}
+                          onClick={onButtonClick}
+                        >
+                          {buttonText}
+                        </button>
+                      </div>
+                      {cancelButtonClick &&
+                        <div>
+                          <button
+                            type='button'
+                            className={`btn large warning-medium full`}
+                            onClick={cancelButtonClick}
+                          >
+                            닫기
+                          </button>
+                        </div>
+                      }
+                    </>
                 }
-              </ul>
+              </div>
             </div>
           </div>
         </div>

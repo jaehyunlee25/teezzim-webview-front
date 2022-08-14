@@ -21,15 +21,20 @@ const MiniPanel = observer(() => {
       >
         <div className='rollsheet-container'>
           <div className='rollsheet'>
-            <h1 className='head-headline text-primary'>
-              {panelName()}({panelStore.checkedTeeList.size}):
-            </h1>
+            <div className="allim_reservation">
+              <h1 className='head-headline text-primary'>
+                {panelName()}
+              </h1>
+              <div className="allimg_icon">
+                {/* <span className="allim_num">{panelStore.checkedTeeList.size}</span> */}
+              </div>
+            </div>
             <p className='text-sub'>
               {[...panelStore.checkedTeeList]
                 ?.map(v => JSON.parse(v).name)
                 .join(', ')}
             </p>
-            <div className='handle'></div>
+            {/* <div className='handle'></div> */}
           </div>
         </div>
       </div>
