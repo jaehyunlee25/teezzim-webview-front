@@ -22,58 +22,26 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const handleLogin = async e => {
     e.preventDefault();
     saveLoginInfo();
-    // const res = await axios
-    //   .post(`/teezzim/teeapi/v1/club/${modalStore.golfInfo.clubId}/login`, {
-    //     login_id: inputs.id,
-    //     login_password: inputs.pw,
-    //   })
-    //   .catch(err => {
-    //     console.warn(err);
-    //     modalStore.setErrCode(-500); // 통신장애 (-500)
-    //   });
-
-    // if (res.status === 200) {
-    //   console.log(res.data);
-    //   if (res.data.message === 'login success') {
-    //     saveLoginInfo();
-    //   } else {
-    //     // login 실패 (-1)
-    //     modalStore.setErrCode(-1);
-    //   }
-    // }
   };
 
   const saveLoginInfo = () => {
     // const sampleData = {
     //   clubId: '골프장식별자',
     //   club: '골프장영문식별자',
+    //   name: '골프장 한글 이름',
     //   id: '아이디',
     //   pw: '패스워드',
     // };
     const data = {
       clubId: modalStore.golfInfo.clubId,
       club: modalStore.golfInfo.eng,
+      name: modalStore.golfInfo.name,
       ...inputs,
     };
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
-      try {
         window.BRIDGE.saveLoginInfo(JSON.stringify(data));
-        // setSaveSuccess(true);
-        // authStore.communicate(false);
-        if (cb) cb();
-      } catch {
-        if (errCb) errCb();
-      }
     } else if (window.webkit && window.webkit.messageHandlers ) {
-      try {
         window.webkit.messageHandlers.saveLoginInfo.postMessage(JSON.stringify(data));
-        // setSaveSuccess(true);
-        // authStore.communicate(false);
-        if (cb) cb();
-      } catch {
-        if (errCb) errCb();
-      }
-      
     } else {
       alert('이 기능은 앱에서만 동작합니다.');
       return;
