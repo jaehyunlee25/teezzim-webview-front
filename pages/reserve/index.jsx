@@ -219,17 +219,6 @@ const Reserve = () => {
               club_id: dataList[i].clubInfo.id,
             };
             console.log(data);
-            // if (window.BRIDGE && window.BRIDGE.requestSearchReserve) {
-            //   window.BRIDGE.requestSearchReserve(JSON.stringify(data));
-            // } else if (window.webkit && window.webkit.messageHandlers) {
-            //   window.webkit.messageHandlers.requestSearchReserve.postMessage(
-            //     JSON.stringify(data),
-            //   );
-            // } else {
-            //   console.warn(
-            //     '이 기능은 앱에서만 동작합니다.' + JSON.stringify(data),
-            //   );
-            // }
           }
         };
         /** 예약 정보 APP->WEB 전송 */
