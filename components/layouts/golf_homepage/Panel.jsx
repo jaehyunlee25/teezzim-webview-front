@@ -155,7 +155,7 @@ const Panel = observer(() => {
     <>
       <div className='container'>
         <SearchBar
-          style={{ top: 44 }}
+          style={router.pathname === '/golf_homepage/panel' ? { top: 65 }:{top:44}}
           formProps={{
             onSubmit: e => e.preventDefault(),
           }}

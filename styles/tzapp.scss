@@ -1827,43 +1827,102 @@
 
 .overlay-content {
   position: relative;
-  top: 58px;
   width: 100%;
   text-align: left;
-  margin-top: 30px;
-  margin-left: 56px;
+  margin-top: 37px;
+  margin-left: 37px;
 
   h1 {
-    height: 69px;
-    background: url(../assets/images/Logo.svg) no-repeat;
-    text-indent: -9999px;
-    margin-bottom: 13px;
+    font-size: 32px;
+    padding-bottom: 27px;
+    border-bottom: 1px solid #ddd;
   }
 }
 
 .overlay {
   a {
-    padding: 8px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 20px;
     color: #000;
-    display: block;
     transition: 0.3s;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #ddd;
   }
-
-  ul {
-    margin-top: 14px;
-
-    li a {
-      font-size: 14px;
-    }
+  .my_icon {
+    content: '';
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url('../assets/images/btm-ic01.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-left: 10px;
+    margin-right: 20px;
   }
+  .lock_icon {
+    content: '';
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url('../assets/images/btm-ic02.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  .alarm_icon {
+    content: '';
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url('../assets/images/btm-ic03.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  .backup_icon {
+    content: '';
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url('../assets/images/btm-ic04.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  .link_icon {
+    content: '';
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url('../assets/images/btm-ic05.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  
+  // ul {
+  //   margin-top: 14px;
+
+  //   li a {
+  //     font-size: 14px;
+  //   }
+  // }
 
   .closebtn {
     position: absolute;
-    top: 10px;
-    left: 16px;
-    font-size: 40px;
+    top: 9px;
+    // left: 116px;
+    right: 28px;
+    font-size: 38px;
+    z-index: 2;
+    border-bottom: 0px;
   }
 }
 

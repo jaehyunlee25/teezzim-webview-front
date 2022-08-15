@@ -14,6 +14,7 @@ export default function GolfHomepagePanel() {
         </button>
         <h1 className='headline'>골프장 홈페이지</h1>
       </div>
+      <div style={{height:29}}></div>
       <Panel />
       <style jsx>{`
         #header {

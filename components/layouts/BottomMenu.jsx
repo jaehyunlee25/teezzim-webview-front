@@ -52,14 +52,14 @@ const BottomMenu = () => {
           &times;
         </a>
         <div className='overlay-content'>
-          <h1 className='logo'>티찜</h1>
+          <h1>MENU</h1>
           <a
             onClick={e => {
               e.preventDefault();
               openNativePage('MyScore');
             }}
           >
-            나의기록
+            <div className='my_icon'></div>나의기록
           </a>
           <a
             onClick={e => {
@@ -67,7 +67,7 @@ const BottomMenu = () => {
               openNativePage('ScreenLock');
             }}
           >
-            화면잠금
+            <div className='lock_icon'></div>화면잠금
           </a>
           <a
             onClick={e => {
@@ -75,7 +75,7 @@ const BottomMenu = () => {
               openNativePage('Notification');
             }}
           >
-            알림
+            <div className='alarm_icon'></div>알림
           </a>
           <a
             onClick={e => {
@@ -83,9 +83,10 @@ const BottomMenu = () => {
               openNativePage('Backup');
             }}
           >
-            백업
+            <div className='backup_icon'></div>백업
           </a>
-          <ul>
+          <Link href='/golf_homepage/panel'><a><div className='link_icon'></div>골프장 홈페이지 바로가기</a></Link>
+          {/* <ul>
             <li>
               <Link href='/golf_homepage/panel'>골프장 홈페이지 바로가기</Link>
             </li>
@@ -98,7 +99,7 @@ const BottomMenu = () => {
             <li>
               <Link href='/home'>이 앱에 관하여...</Link>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
 
