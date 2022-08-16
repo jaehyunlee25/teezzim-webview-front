@@ -105,15 +105,15 @@ const ReserveTap = (props) => {
             }
             {
               type === 'wait' && (
-                <div class="info_top fl">
-                  <b class="icon-time">time</b>
+                <div className="info_top fl">
+                  <b className="icon-time">time</b>
                 </div>
               )
             }
             {
               type === 'alarm' && (
-                <div class="info_top fl">
-                  <b class="icon-bell">bell</b>
+                <div className="info_top fl">
+                  <b className="icon-bell">bell</b>
                 </div>
               )
             }
