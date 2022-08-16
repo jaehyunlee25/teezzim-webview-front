@@ -160,7 +160,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
               {
                 saveSuccess ?
                   <div className='verify_wrap'>
-                    <span className='text-primary pt-8 pb-8'>"계정정보를 다시 한번 확인 하시고 등록해주세요"</span>
+                    <span className='text-primary pt-8 pb-8'>&quot;계정정보를 다시 한번 확인 하시고 등록해주세요&quot;</span>
                   </div>
                   :
                   <div className='verify_wrap'>
