@@ -83,7 +83,10 @@ const SearchContainer = observer(() => {
           onSubmit: e => e.preventDefault(),
         }}
         hasCloseBtn={!hidden}
-        handleCloseBtn={() => setHidden(true)}
+        handleCloseBtn={() => {
+          search('');
+          setHidden(true);
+        }}
         onChangeKeyword={handleChangeKeyword}
       />
 

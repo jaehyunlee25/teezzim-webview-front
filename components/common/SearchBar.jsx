@@ -16,11 +16,17 @@ export default function SearchBar({
     @Props
         textButton(boolean) : textButton이 true면 `검색 버튼` false면 `검색 아이콘` 렌더링
   */
-  const { inputs, handleChange } = useInput(
+  const { inputs, reset, handleChange } = useInput(
     { keyword: '' },
     { cb: onChangeKeyword },
   );
   const { keyword } = inputs;
+
+  const handleClose = () => {
+    reset();
+    handleCloseBtn();
+  }
+
   return (
     <>
       {/* <div id='header'> */}
@@ -56,7 +62,7 @@ export default function SearchBar({
 
               <span
                 className='close-btn'
-                onClick={hasCloseBtn ? handleCloseBtn : () => {}}
+                onClick={hasCloseBtn ? ()=>handleClose() : () => {}}
               >
                 <Image src={CloseBtnMedium} alt='X' />{' '}
               </span>
