@@ -15,14 +15,15 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const handleChange = e => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
+    setSaveSuccess(false);
   };
 
   const handleLogin = async e => {
     e.preventDefault();
-    saveLoginInfo();
+    verifyLoginInfo();
   };
 
-  const saveLoginInfo = () => {
+  const verifyLoginInfo = () => {
     // const sampleData = {
     //   clubId: '골프장식별자',
     //   club: '골프장영문식별자',
@@ -38,7 +39,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     };
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
       window.BRIDGE.saveLoginInfo(JSON.stringify(data));
-    } else if ( window.webkit && window.webkit.messageHandlers ) {
+    } else if (window.webkit && window.webkit.messageHandlers) {
       const payload = JSON.stringify({
         command: 'saveLoginInfo',
         data: JSON.stringify(data)
@@ -50,9 +51,43 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     }
   };
 
+  
+  const requestSaveLoginData = () => {
+    // const sampleData = {
+    //   clubId: '골프장식별자',
+    //   club: '골프장영문식별자',
+    //   name: '골프장 한글 이름',
+    //   id: '아이디',
+    //   pw: '패스워드',
+    // };
+    const data = {
+      clubId: modalStore.golfInfo.clubId,
+      club: modalStore.golfInfo.eng,
+      name: modalStore.golfInfo.name,
+      ...inputs,
+    };
+    if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
+      window.BRIDGE.requestSaveLoginData(JSON.stringify(data));
+      handleClose();
+      authStore.communicate(false);
+    } else if (window.webkit && window.webkit.messageHandlers) {
+      const payload = JSON.stringify({
+        command: 'requestSaveLoginData',
+        data: JSON.stringify(data)
+      });
+      window.webkit.messageHandlers.globalMethod.postMessage(payload);
+      handleClose();
+      authStore.communicate(false);
+    } else {
+      console.log('이 기능은 앱에서만 동작합니다.');
+      return;
+    }
+  };
+
+
   useEffect(() => {
     window.resultLogin = function (result) {
-      if(result == 'OK') {
+      if(result){
         setSaveSuccess(true);
         authStore.communicate(false);
         if (cb) cb();
@@ -81,88 +116,75 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
               width='100%'
               height='100%'
             />
-            {saveSuccess ? (
-              <>
-                <p className='heading-title_02' style={{ paddingTop: 28 }}>
-                  {modalStore.golfInfo?.name}
-                </p>
-                <span className='medium-Emphasis01'>
-                  계정 등록을 완료했습니다.
-                </span>
-              </>
-            ) : (
-              <>
-                <p className='heading-title_03'>{modalStore.golfInfo?.name}</p>
-                <span className='caption'>{modalStore.golfInfo?.loc}</span>
-              </>
-            )}
+            <p className='heading-title_03'>{modalStore.golfInfo?.name}</p>
+            <span className='caption'>{modalStore.golfInfo?.loc}</span>
           </div>
 
           <form>
-            {saveSuccess ? null : (
-              <div className='login_box'>
-                <div className='input_item'>
-                  <div className='input_inner'>
-                    <input
-                      type='text'
-                      id='id'
-                      name='id'
-                      accessKey='L'
-                      autoCapitalize='none'
-                      placeholder='아이디'
-                      className='input_text'
-                      value={inputs.id}
-                      onChange={handleChange}
-                    />
-                  </div>
+            <div className='login_box'>
+              <div className='input_item'>
+                <div className='input_inner'>
+                  <input
+                    type='text'
+                    id='id'
+                    name='id'
+                    accessKey='L'
+                    autoCapitalize='none'
+                    placeholder='아이디'
+                    className='input_text'
+                    value={inputs.id}
+                    onChange={handleChange}
+                  />
                 </div>
-                <div className='input_item'>
-                  <div className='input_inner'>
-                    <input
-                      type={showPwd ? 'text' : 'password'}
-                      id='password'
-                      name='pw'
-                      placeholder='비밀번호'
-                      className='input_password'
-                      value={inputs.pw}
-                      onChange={handleChange}
-                    />
-                    <i
+              </div>
+              <div className='input_item'>
+                <div className='input_inner'>
+                  <input
+                    type={showPwd ? 'text' : 'password'}
+                    id='password'
+                    name='pw'
+                    placeholder='비밀번호'
+                    className='input_password'
+                    value={inputs.pw}
+                    onChange={handleChange}
+                  />
+                  <div className='eye-container' onClick={() => setShowPwd(!showPwd)}>
+                    <div
                       className={`eye ${showPwd ? 'bi-eye' : 'bi-eye-slash'}`}
                       id='togglePassword'
-                      onClick={() => setShowPwd(!showPwd)}
-                    ></i>
+                    ></div>
+                    <span className='eye-text'>{showPwd ? '감추기' : '보이기'}</span>
                   </div>
                 </div>
-                {modalStore.errCode && (
-                  <span className='text-warning' style={{ margin: '8px 0px' }}>
-                    아이디 또는 비밀번호가 일치하지 않습니다.
-                  </span>
-                )}
               </div>
-            )}
-
-            <div className='btn-apply'>
-              {saveSuccess ? (
-                <button
-                  type='button'
-                  className='bg-action text-white'
-                  onClick={handleClose}
-                >
-                  확인
-                </button>
-              ) : (
-                <button
-                  type='button'
-                  className={
-                    inputs.id && inputs.pw ? 'bg-action text-white' : 'disabled'
-                  }
-                  disabled={!inputs.id || !inputs.pw}
-                  onClick={handleLogin}
-                >
-                  로그인
-                </button>
+              {
+                saveSuccess ?
+                  <div className='verify_wrap'>
+                    <span className='text-primary pt-8 pb-8'>"계정정보를 다시 한번 확인 하시고 등록해주세요"</span>
+                  </div>
+                  :
+                  <div className='verify_wrap'>
+                    <span>아이디/패스워드를 검증해주세요</span>
+                    <div className='verify_btn' onClick={handleLogin}>
+                      <span>검증하기</span>
+                    </div>
+                  </div>
+              }
+              {modalStore.errCode && (
+                <span className='text-warning' style={{ margin: '8px 0px' }}>
+                  아이디 또는 비밀번호가 일치하지 않습니다.
+                </span>
               )}
+            </div>
+            <div className='btn-apply'>
+                <button
+                  type='button'
+                  className={saveSuccess ? 'bg-action text-white' : 'disabled'}
+                  onClick={requestSaveLoginData}
+                  disabled={!saveSuccess}
+                >
+                  등록하기
+                </button>
             </div>
           </form>
         </div>
