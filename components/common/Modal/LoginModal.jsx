@@ -1,10 +1,8 @@
 import Image from 'next/image';
 import IMG_Golf_01 from '@/assets/images/IMG_Golf_01.png'; // 임시
-import ModalContainer from './ModalContainer';
 import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
-import axios from 'axios';
 
 const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   // golfInfo = {clubId, name, loc, img}
@@ -39,23 +37,20 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       ...inputs,
     };
     if (window.BRIDGE && window.BRIDGE.saveLoginInfo) {
-        window.BRIDGE.saveLoginInfo(JSON.stringify(data));
-    } else if (window.webkit && window.webkit.messageHandlers ) {
-        window.webkit.messageHandlers.saveLoginInfo.postMessage(JSON.stringify(data));
+      window.BRIDGE.saveLoginInfo(JSON.stringify(data));
+    } else if ( window.webkit && window.webkit.messageHandlers ) {
+      const payload = JSON.stringify({
+        command: 'saveLoginInfo',
+        data: JSON.stringify(data)
+      });
+      window.webkit.messageHandlers.globalMethod.postMessage(payload);
     } else {
-      alert('이 기능은 앱에서만 동작합니다.');
+      console.log('이 기능은 앱에서만 동작합니다.');
       return;
     }
   };
 
-  // webview test only
   useEffect(() => {
-    if (window) {
-      if (!window.BRIDGE || !window.BRIDGE.saveLoginInfo) {
-        window.BRIDGE = {};
-        window.BRIDGE.saveLoginInfo = data => console.log(data);
-      }
-    }
     window.resultLogin = function (result) {
       if(result == 'OK') {
         setSaveSuccess(true);

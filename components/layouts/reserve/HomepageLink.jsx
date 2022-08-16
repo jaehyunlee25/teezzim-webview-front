@@ -13,7 +13,11 @@ const HomepageLink = observer(({ id, children, ...props }) => {
       if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
         window.BRIDGE.callHomepageLogin(JSON.stringify(params));
       } else if (window.webkit && window.webkit.messageHandlers ) {
-        window.webkit.messageHandlers.callHomepageLogin.postMessage(JSON.stringify(params));
+        const payload = JSON.stringify({
+          command: 'callHomepageLogin',
+          data: JSON.stringify(params),
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
       } else {
         alert(url)
       }

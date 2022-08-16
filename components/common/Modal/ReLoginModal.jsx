@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const { modalStore, authStore } = useStores();
@@ -19,7 +19,11 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       }
     } else if (window.webkit && window.webkit.messageHandlers ) {
       try {
-        window.webkit.messageHandlers.removeLoginInfo.postMessage(modalStore.golfInfo.clubId);
+        const payload = JSON.stringify({
+          command: 'removeLoginInfo',
+          data: modalStore.golfInfo.clubId,
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
         modalStore.setRegistered(false);
         authStore.communicate(false);
         if (cb) cb();
@@ -31,16 +35,6 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       return;
     }
   };
-
-  // webview test only
-  useEffect(() => {
-    if (window) {
-      if (!window.BRIDGE || !window.BRIDGE.removeLoginInfo) {
-        window.BRIDGE = {};
-        window.BRIDGE.removeLoginInfo = data => console.log(data);
-      }
-    }
-  }, []);
 
   return (
     <>
