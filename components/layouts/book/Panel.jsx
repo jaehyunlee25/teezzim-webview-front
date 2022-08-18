@@ -38,7 +38,12 @@ const Panel = observer(() => {
 
   useEffect(() => {
     mountRef.current = true;
-    getTeeList();
+    getTeeList().then(()=>{
+      const localCheckList = localStorage.getItem('checkList');
+      if(localCheckList){
+        JSON.parse(localCheckList).forEach(tee => panelStore.addChecked(JSON.stringify(panelStore.teeListMap?.[tee.club_id])));
+      }
+    });
     return () => {
       mountRef.current = false;
     };
@@ -212,6 +217,7 @@ const Panel = observer(() => {
         const nowTime = (new Date()).getTime();
         window.localStorage.setItem(timeKey, nowTime);
       }
+
       if (window.BRIDGE && window.BRIDGE.requestSearch) {
         window.BRIDGE.requestSearch(JSON.stringify(data));
       } else if (window.webkit && window.webkit.messageHandlers ) {
@@ -220,7 +226,7 @@ const Panel = observer(() => {
         console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
       }
     }
-
+    localStorage.setItem('checkList', JSON.stringify(data));
     router.push({
       href: '/home',
       query: {
