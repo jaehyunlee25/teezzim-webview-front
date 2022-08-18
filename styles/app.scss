@@ -2443,6 +2443,19 @@ input {
   line-height: 1.3;
   font-size: 14px;
 }
+.login-notice-icon {
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  background-image: url('../assets/images/icon_16.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.login-popup {
+  text-align: center;
+  line-height: 1.3;
+  font-size: 11px;
+}
 .popup-wrap {
   &[data-popup="content"] .popup{
    -webkit-transform: translate(0, 50px);

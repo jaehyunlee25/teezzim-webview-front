@@ -3,6 +3,7 @@ import IMG_Golf_01 from '@/assets/images/IMG_Golf_01.png'; // 임시
 import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
+import PopUp from '../PopUp';
 
 const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   // golfInfo = {clubId, name, loc, img}
@@ -10,6 +11,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const [inputs, setInputs] = useState({ id: '', pw: '' });
   const [showPwd, setShowPwd] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isHidePopup, setIsHidePopup]= useState(false);
 
   // Handler
   const handleChange = e => {
@@ -93,10 +95,12 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
         if (cb) cb();
       }
     };
+    
   }, []);
 
   // reset when modal unmounted(hidden change)
   useEffect(() => {
+    setIsHidePopup(false);
     if (modalStore.hidden) {
       setInputs({ id: '', pw: '' });
       setShowPwd(false);
@@ -107,6 +111,23 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
 
   return (
     <>
+      <PopUp
+        smallClose={true}
+        hidden={isHidePopup}
+        buttonText='확인'
+        onButtonClick={e => {
+          setIsHidePopup(true);
+        }}
+      >
+        <div className='login-notice-icon mt-30 mb-5' />
+        <div className='login-popup mb-20'>
+          <strong>
+          &#39;사용자의 골프장 계정 아이디와 패스워드는<br />
+            휴대폰에서만 저장될 뿐 	&#40;주&#41;티티픽은 이를 외부에<br />
+            반출하거나 저장하지 않습니다.&#39;
+          </strong>
+        </div>
+      </PopUp>
       <div className='ctn'>
         <div className='login_wrap'>
           <div className='login_img'>
