@@ -14,11 +14,31 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
   const [badgeMsg, setBadgeMsg] = useState(!registered ? '미등록' : null);
 
   // Handler - showModal
-  const handleClick = () => {
+  const handleClick = (e) => {
     modalStore.setRegistered(registered);
     modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img, eng: tee.eng });
     modalStore.setModalHidden(false);
   };
+
+  const handleHomepageLink = (e,id) => {
+    if (window) {
+      if (e.stopPropagation) { e.stopPropagation(); } e.cancelBubble = true;
+      const url = panelStore.teeListMap?.[id]?.homepage;
+      const params = { id, url };
+      /** WEB->APP */
+      if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
+        window.BRIDGE.callHomepageLogin(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        const payload = JSON.stringify({
+          command: 'callHomepageLogin',
+          data: JSON.stringify(params),
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
+      } else {
+        alert(url)
+      }
+    }
+  }
 
   return (
     <>
@@ -27,21 +47,32 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
 
         <div className='list-detail'  onClick={type === 'home' ? handleClick : undefined}>
           <Image className='tee-icon' src={img} width={56} height={56} alt='' />
-          <div>
-            <p className='tee-name'>{tee.name}</p>
-            <span
-              className='tee-detail'
-             
-            >
-              {!registered ? (
-                <span className='badge bg-shade1'>{badgeMsg}</span>
-              ) : null}
-              {type === 'home' ? (
-                <span>{loc}</span>
-              ) : (
-                <HomepageLink id={tee?.id}>홈페이지 바로가기</HomepageLink>
-              )}
-            </span>
+          <div className='tee-container'>
+            <div className='tee-wrap'>
+              <p className='tee-name'>{tee.name}</p>
+              <span
+                className='tee-detail'
+
+              >
+                {!registered && (
+                  <span className='badge bg-shade1'>{badgeMsg}</span>
+                )}
+                {type === 'home' ? (
+                  <span>{loc}</span>
+                ) : (
+                  <HomepageLink id={tee?.id}>홈페이지 바로가기</HomepageLink>
+                )}
+              </span>
+            </div>
+            {
+              registered && type==='home' &&
+              <div onClick={(e)=>handleHomepageLink(e, tee?.id)} className='homepage-link'>
+                  <span>
+                  홈페이지
+                  </span>
+                  <div className='homepage-link-icon'/>
+                </div>
+              }
           </div>
         </div>
         {/*//list_detail  */}
@@ -73,9 +104,21 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
         }
         .list-detail {
           display: flex;
+          flex:1;
           align-items: center;
           gap: 16px;
-          width: 90%
+          width: 90%;
+        }
+        .tee-container {
+          display: flex;
+          flex: 1;
+          flex-direction: row;
+          align-items: center;
+        }
+        .tee-wrap {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
         }
         .tee-name {
           font-size: 16px;
@@ -85,6 +128,20 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
         .tee-detail {
           font-size: 12px;
           cursor: pointer;
+        }
+        .homepage-link {
+          display: flex;
+          align-items: center;
+          margin-right: 30px;
+          background-color:#f0f0f0;
+          color: #979797;
+          border-radius: 21px;
+          font-size: 10px;
+          font-weight: bold;
+          padding: 15px;
+          height: 20px;
+          padding-left: 18px;
+          padding-right: 18px;
         }
       `}</style>
     </>

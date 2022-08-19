@@ -2456,6 +2456,14 @@ input {
   line-height: 1.3;
   font-size: 11px;
 }
+.homepage-link-icon {
+  width: 12px;
+  height: 12px;
+  background-image: url('../assets/images/ic-link.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin-left: 5px;
+}
 .popup-wrap {
   &[data-popup="content"] .popup{
    -webkit-transform: translate(0, 50px);

@@ -7,6 +7,7 @@ const HomepageLink = observer(({ id, children, ...props }) => {
 
   const handleClick = e => {
     if (window) {
+      if (e.stopPropagation) { e.stopPropagation(); } e.cancelBubble = true;
       const url = panelStore.teeListMap?.[id]?.homepage;
       const params = { id, url };
       /** WEB->APP */
