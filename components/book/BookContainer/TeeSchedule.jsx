@@ -6,7 +6,7 @@ const TeeSchedule = ({ id, time, registered, tee_id, ...others }) => {
   return (
     <div
       id={id}
-      className={registered ? 'min' : 'min warning'}
+      className={registered ? 'min text-primary' : 'min warning text-primary'}
       onClick={() =>
         router.push({
           pathname: '/reserve/create/[id]',

@@ -163,6 +163,7 @@ export default function Book() {
   return (
     <>
       <Panel />
+      <div className='pt-15'></div>
       <MiniPanel />
 
       <div className='filter-wrap'>
