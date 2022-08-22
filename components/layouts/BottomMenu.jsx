@@ -128,7 +128,7 @@ const BottomMenu = () => {
                   onClick={() =>
                     router.push({
                       pathname: '/reserve',
-                      query: { ...others, tab: 'my_book' },
+                      query: { ...others, tab: 'my_book', prev: 'my_book' },
                     })
                   }
                 >

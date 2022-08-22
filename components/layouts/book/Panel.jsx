@@ -227,20 +227,30 @@ const Panel = observer(() => {
       }
     }
     localStorage.setItem('checkList', JSON.stringify(data));
-    router.push({
-      href: '/home',
-      query: {
-        ...others,
-        subTab: 'tabContent01',
-        container: id,
-      },
-    });
-    panelStore.setPanelHidden(true);
+    window.teeSearchFinished = function () {
+      router.push({
+        href: '/home',
+        query: {
+          ...others,
+          subTab: 'tabContent01',
+          container: id,
+          prev: 'home',
+        },
+      });
+      panelStore.setPanelHidden(true);
+    }
   };
 
 useEffect(()=>{
+
   if(window){
     window.addEventListener('popstate', function(event) { 
+      const storage = globalThis?.sessionStorage;
+      if(!storage) return;
+      
+      const currentPath =storage.getItem('currentPath');
+
+      if(currentPath === '/teezzim/home')
       panelStore.setPanelHidden(false);
     });
   }
