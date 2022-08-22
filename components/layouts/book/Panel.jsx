@@ -238,6 +238,14 @@ const Panel = observer(() => {
     panelStore.setPanelHidden(true);
   };
 
+useEffect(()=>{
+  if(window){
+    window.addEventListener('popstate', function(event) { 
+      panelStore.setPanelHidden(false);
+    });
+  }
+});
+
   return (
     <>
       <div hidden={panelStore.panelHidden}>
