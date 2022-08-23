@@ -125,10 +125,10 @@ const Calendar = observer(
         getSchedule();
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
-        // window.teeSearchFinished = function () {
-        //   // console.log("### teeSearchFinished 호출됨");
-        //   getSchedule();
-        // };
+        window.teeSearchFinished = function () {
+          // console.log("### teeSearchFinished 호출됨");
+          getSchedule();
+        };
       }
     }, []);
     

@@ -37,7 +37,11 @@ const ButtonGroup = observer(
         if (window.BRIDGE && window.BRIDGE.requestReserve) {
           window.BRIDGE.requestReserve(JSON.stringify(data));
         } else if (window.webkit && window.webkit.messageHandlers ) {
-          window.webkit.messageHandlers.requestReserve.postMessage(JSON.stringify(data));
+          const payload = JSON.stringify({
+            command: 'requestReserve',
+            data: JSON.stringify(data)
+          });
+          window.webkit.messageHandlers.globalMethod.postMessage(payload);
         } else {
           alert('이 기능은 앱에서만 동작합니다.' + JSON.stringify(params));
         }
