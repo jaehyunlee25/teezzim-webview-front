@@ -58,11 +58,15 @@ export default function Book() {
       let checkedTeeList = [];
       for (const item of panelStore._checkedTeeList) checkedTeeList.push( JSON.parse(item).eng );
       const data = { date: dateTime, club_list: checkedTeeList.join(',') };
-      const params = { command: 'resquestSearchTime', data: JSON.stringify(data) };
+      const params = { command: 'resquestSearchTime', data: JSON.stringify(data) }; // TODO 여기 오타 어쩌지...?
       if (window.BRIDGE && window.BRIDGE.globalMethod) {
         window.BRIDGE.globalMethod(JSON.stringify(params));
       } else if (window.webkit && window.webkit.messageHandlers ) {
-        window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+        const payload = JSON.stringify({
+          command: 'requestSearchTime',
+          data: JSON.stringify(data)
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
       }
     }
   };
