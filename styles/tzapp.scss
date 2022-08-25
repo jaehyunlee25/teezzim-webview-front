@@ -845,7 +845,7 @@
 }
 
 .list_Golfarea {
-  padding: 0 16px;
+  // padding: 0 16px;
   position: relative;
   font-family: SFPro;
   background: #fff;
@@ -860,9 +860,19 @@
       /* Chrome, Safari, Opera*/
     }
   }
-
+  
+  .red {
+    background-color: #ffd6d6;
+  }
+  .yellow {
+    background-color: #fbf0db;
+  }
+  .blue {
+    background-color: #9db8ff;
+  }
+  
   li {
-    padding: 8px 0;
+    padding: 8px 16px;
     width: 100%;
 
     &:after {

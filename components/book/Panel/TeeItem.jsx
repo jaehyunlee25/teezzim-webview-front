@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
 import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
-export function TeeItem({ img, registered, type = 'home', ...tee }) {
+export function TeeItem({ img, registered,handleWarnPopup, type = 'home', ...tee }) {
   const { panelStore, modalStore } = useStores();
 
   const [loc1, loc2, loc3] = tee.address.split(' ');
@@ -40,20 +40,34 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
     }
   }
 
+  const stateClass = useMemo(()=>{
+    if(tee.state === 0){
+      return ''
+    }
+    if(tee.state === 1){
+      return 'red'
+    }
+    if(tee.state ===2){
+      return 'yellow'
+    }
+    if(tee.state === 3){
+      return 'blue'
+    }
+  },[tee]);
+
   return (
     <>
-      <li>
+      <li className={stateClass}>
         {/* list_detail */}
-
         <div className='list-detail'  onClick={type === 'home' ? handleClick : undefined}>
-          <Image className='tee-icon' src={img} width={56} height={56} alt='' />
+          <div className='tee-icon-wrap'>
+            <Image className='tee-icon' src={img} width={56} height={56} alt='' />
+            <div className={`${stateClass}-icon`} />
+          </div>
           <div className='tee-container'>
             <div className='tee-wrap'>
               <p className='tee-name'>{tee.name}</p>
-              <span
-                className='tee-detail'
-
-              >
+              <span className='tee-detail'>
                 {!registered && (
                   <span className='badge bg-shade1'>{badgeMsg}</span>
                 )}
@@ -77,7 +91,7 @@ export function TeeItem({ img, registered, type = 'home', ...tee }) {
         </div>
         {/*//list_detail  */}
         {
-          type === 'home' ? registered && <TeeCheckInput {...tee} /> : <b>{loc}</b>
+          type === 'home' ? registered && <TeeCheckInput handleWarnPopup={handleWarnPopup} {...tee} /> : <b>{loc}</b>
         }
       </li>
       <style jsx>{`

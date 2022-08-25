@@ -15,7 +15,9 @@ const Panel = observer(() => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
-  const [isHidePopup, setIsHidePopup]= useState(true);
+  const [isHidePopup, setIsHidePopup] = useState(true);
+  const [isWarnPopup, setIsWarnPopup] = useState(true);
+  const [warnState, setWarnState] = useState(1);
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -36,6 +38,16 @@ const Panel = observer(() => {
     }
   }, [panelStore]);
 
+  const handleWarnPopup = (state) => {
+    if(state === 1) {
+      setWarnState(state);
+      setIsWarnPopup(false);
+    }
+    if(state === 2) {
+      setWarnState(state);
+      setIsWarnPopup(false);
+    }
+  }
   useEffect(() => {
     mountRef.current = true;
     getTeeList().then(()=>{
@@ -251,7 +263,7 @@ useEffect(()=>{
     window.addEventListener('popstate', function(event) { 
       const storage = globalThis?.sessionStorage;
       if(!storage) return;
-      
+
       const currentPath =storage.getItem('currentPath');
 
       if(currentPath === '/teezzim/home')
@@ -284,6 +296,39 @@ useEffect(()=>{
           </strong>
         </div>
       </PopUp>
+      <PopUp
+        reverse={true}
+        hidden={isWarnPopup}
+        buttonText='확인'
+        isCancel={true}
+        wi
+        onButtonClick={e => {
+          setIsWarnPopup(true);
+        }}
+        cancelButtonClick={e => {
+          setIsWarnPopup(true);
+        }}
+      >
+        <div className='warn-icon' />
+        <div className='warn-popup'>
+          {
+            warnState === 1 && 
+          <strong>
+          <span className='text-surface2'>시스템 오류</span>
+            <p className='mb-5 mt-5'>시스템에 장애가 생겼습니다.</p>
+            복구중이니 잠시 기다려 주세요..<br />
+          </strong>
+          }
+          {
+            warnState === 2 &&
+              <strong>
+                <span className='text-surface2'>골프장 오류</span>
+                <p className='mb-5 mt-5'>해당 클럽의 홈페이지에 일시적인 접속장애가 있습니다.</p>
+                잠시후에 다시 시도 해보세요.<br />
+              </strong>
+          }
+        </div>
+      </PopUp>
         <SearchContainer />
         <div className='wrapper'>
           <NavTab />
@@ -299,6 +344,7 @@ useEffect(()=>{
                       <Counter type='registered' />
                     </div>
                     <TeeListArea
+                        handleWarnPopup={handleWarnPopup}
                       registered
                       list={panelStore.registeredTeeList.sort((a, b) =>
                         a.name < b.name ? -1 : a.name > b.name ? 1 : 0,

@@ -3,6 +3,7 @@ import { useState } from 'react';
 const PopUp = ({
   reverse = false,
   smallClose = false,
+  isCancel = false,
   children,
   buttonText = '확인',
   buttonType = 'primary',
@@ -28,7 +29,9 @@ const PopUp = ({
                             className={`btn large secondary full`}
                             onClick={cancelButtonClick}
                           >
-                            닫기
+                            {
+                              isCancel ? '취소' : '닫기'
+                            }
                           </button>
                         </div>
                       }
