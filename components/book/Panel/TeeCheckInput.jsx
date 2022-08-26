@@ -29,6 +29,7 @@ const TeeCheckInput = observer(props => {
       console.log(props)
       if (props.state === 1 || props.state === 2) {
         props.handleWarnPopup(props.state);
+        return;
       }
       if (panelStore.checkedTeeList.size >= 20) {
         toastStore.setMessage(

@@ -224,12 +224,13 @@ const Panel = observer(() => {
       let data = [];
       for (const item of panelStore.checkedTeeList) {
         const ctl = JSON.parse(item);
-        data.push({ club: ctl.eng, club_id: ctl.id });
-        const timeKey = 'search-' + ctl.id;
-        const nowTime = (new Date()).getTime();
-        window.localStorage.setItem(timeKey, nowTime);
+        if (ctl.state !== 1 || ctl.state !== 2){
+          data.push({ club: ctl.eng, club_id: ctl.id });
+          const timeKey = 'search-' + ctl.id;
+          const nowTime = (new Date()).getTime();
+          window.localStorage.setItem(timeKey, nowTime);
+        }
       }
-
       if (window.BRIDGE && window.BRIDGE.requestSearch) {
         window.BRIDGE.requestSearch(JSON.stringify(data));
       } else if (window.webkit && window.webkit.messageHandlers ) {
@@ -344,7 +345,7 @@ useEffect(()=>{
                       <Counter type='registered' />
                     </div>
                     <TeeListArea
-                        handleWarnPopup={handleWarnPopup}
+                      handleWarnPopup={handleWarnPopup}
                       registered
                       list={panelStore.registeredTeeList.sort((a, b) =>
                         a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
@@ -361,6 +362,7 @@ useEffect(()=>{
                       {/* <span className="fr">전체선택</span> */}
                     </div>
                     <TeeListArea
+                      handleWarnPopup={handleWarnPopup}
                       list={panelStore.unregisteredTeeList.sort((a, b) =>
                         a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
                       )}

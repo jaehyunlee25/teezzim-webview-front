@@ -5,7 +5,7 @@ import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
 import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
-export function TeeItem({ img, registered,handleWarnPopup, type = 'home', ...tee }) {
+export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...tee }) {
   const { panelStore, modalStore } = useStores();
 
   const [loc1, loc2, loc3] = tee.address.split(' ');
@@ -15,14 +15,22 @@ export function TeeItem({ img, registered,handleWarnPopup, type = 'home', ...tee
 
   // Handler - showModal
   const handleClick = (e) => {
+    if(tee.state === 1 || tee.state === 2){
+      handleWarnPopup(tee.state);
+      return;
+    }
     modalStore.setRegistered(registered);
     modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img, eng: tee.eng });
     modalStore.setModalHidden(false);
   };
 
-  const handleHomepageLink = (e,id) => {
+  const handleHomepageLink = (e,id, state) => {
     if (window) {
       if (e.stopPropagation) { e.stopPropagation(); } e.cancelBubble = true;
+      if(state === 1 || state === 2){
+        handleWarnPopup(state);
+        return;
+      }
       const url = panelStore.teeListMap?.[id]?.homepage;
       const params = { id, url };
       /** WEB->APP */
@@ -80,7 +88,7 @@ export function TeeItem({ img, registered,handleWarnPopup, type = 'home', ...tee
             </div>
             {
               registered && type==='home' &&
-              <div onClick={(e)=>handleHomepageLink(e, tee?.id)} className='homepage-link'>
+              <div onClick={(e)=>handleHomepageLink(e, tee?.id, tee?.state)} className='homepage-link'>
                   <span>
                   홈페이지
                   </span>
