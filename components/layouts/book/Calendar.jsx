@@ -184,7 +184,7 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time dateTime={date ?? ''} onClick={onClick}>
+        <time dateTime={date ?? ''} onClick={count ? onClick: null}>
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>
