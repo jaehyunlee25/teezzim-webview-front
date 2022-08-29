@@ -557,6 +557,51 @@
     color: #fff;
   }
 }
+.sign-in-wrap {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin-top: 45px;
+  margin-bottom: 16px;
+  span {
+    margin-right: 5px;
+    border-bottom: 1px solid #000;
+  }
+}
+.sign-in-icon {
+  width: 10px;
+  height: 10px;
+  // display: inline-block;
+  background-image: url('../assets/images/sign-in-btn.png');
+  background-repeat: no-repeat;
+  background-size: 45%;
+}
+.bubble-wrap {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.bubble {
+  border-radius: 16px;
+  background-color: #f1bc5e;
+  padding: 13px 20px;
+  font-size: 14px;
+}
+.tail {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  // display: inline-block;
+  background-image: url('../assets/images/tail.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
 .btn_submit.on {
   background: #148564;
   color: #fff;
@@ -870,7 +915,7 @@
   .blue {
     background-color: #9db8ff;
   }
-  
+
   li {
     padding: 8px 16px;
     width: 100%;

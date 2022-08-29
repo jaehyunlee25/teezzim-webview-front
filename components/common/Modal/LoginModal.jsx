@@ -7,7 +7,7 @@ import PopUp from '../PopUp';
 
 const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   // golfInfo = {clubId, name, loc, img}
-  const { modalStore, loadStore, authStore } = useStores();
+  const { modalStore, panelStore, authStore } = useStores();
   const [inputs, setInputs] = useState({ id: '', pw: '' });
   const [showPwd, setShowPwd] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -24,6 +24,26 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     e.preventDefault();
     verifyLoginInfo();
   };
+
+  
+  const handleHomepageLink = (id) => {
+    if (window) {
+      const url = panelStore.teeListMap?.[id]?.homepage;
+      const params = { id, url };
+      /** WEB->APP */
+      if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
+        window.BRIDGE.callHomepageLogin(JSON.stringify(params));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        const payload = JSON.stringify({
+          command: 'callHomepageLogin',
+          data: JSON.stringify(params),
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
+      } else {
+        alert(url)
+      }
+    }
+  }
 
   const verifyLoginInfo = () => {
     // const sampleData = {
@@ -212,6 +232,16 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                 >
                   등록하기
                 </button>
+            </div>
+            <div className='sign-in-wrap'>
+              <span onClick={()=>handleHomepageLink(modalStore.golfInfo.clubId)}>회원가입하기</span>
+              <div className='sign-in-icon'></div>
+            </div>
+            <div className='bubble-wrap'>
+              <div className='bubble'>
+                <div className='tail'></div>
+                <span>비회원인 경우 먼저 가입후에 등록하실 수 있습니다.</span>
+              </div>
             </div>
           </form>
         </div>
