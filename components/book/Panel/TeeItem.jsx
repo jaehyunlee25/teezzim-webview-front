@@ -87,7 +87,7 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
               </span>
             </div>
             {
-              registered && type==='home' &&
+              type==='home' &&
               <div onClick={(e)=>handleHomepageLink(e, tee?.id, tee?.state)} className='homepage-link'>
                   <span>
                   홈페이지
