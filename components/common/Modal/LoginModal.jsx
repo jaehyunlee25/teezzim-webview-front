@@ -178,7 +178,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                   </div>
                 </div>
               </div>
-              {
+              {/* {
                 saveSuccess ?
                   <div className='verify_wrap'>
                     <span className='text-primary pt-8 pb-8'>&quot;계정정보를 다시 한번 확인 하시고 등록해주세요&quot;</span>
@@ -190,7 +190,13 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                       <span>검증하기</span>
                     </div>
                   </div>
-              }
+              } */}
+                  <div className='verify_wrap'>
+                    <span>아이디/패스워드를 검증해주세요</span>
+                    <div className='verify_btn' onClick={handleLogin}>
+                      <span>검증하기</span>
+                    </div>
+                  </div>
               {modalStore.errCode && (
                 <span className='text-warning' style={{ margin: '8px 0px' }}>
                   아이디 또는 비밀번호가 일치하지 않습니다.
