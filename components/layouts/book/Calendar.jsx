@@ -77,15 +77,18 @@ const Calendar = observer(
       //console.log("$$$", res);
       res.forEach(v => {
         const {
-          data: { resultCode = 1, message = '', data = [] },
+          data: { resultCode = 1, message = '', data = { club: '', list:[] } },
         } = v;
         // console.log(resultCode, message, data);
         if (resultCode === 1) {
           // yearMonth: yyyy-mm, date: yyyy-mm-dd
-          curSchedule = data.reduce(
+          curSchedule = data.list.reduce(
             (acc, { date, count }) => ({
               ...acc,
-              [date]: acc?.[date] ? acc[date] + count : count,
+              [date]: {
+                club: acc[date]?.club ? acc[date].club + `,${data.club}` : data.club,
+                count: acc[date]?.count ? acc[date].count + count : count,
+              }
             }),
             curSchedule,
           );
@@ -162,7 +165,8 @@ const Calendar = observer(
                     v === today ? 'today' : v < today ? 'prev-mon' : ''
                   }${v === date ? 'selected' : ' '}`}
                   date={v}
-                  count={schedule?.[yearMonth]?.[v] ?? 0}
+                  clubList ={schedule?.[yearMonth]?.[v]?.club ?? []}
+                  count={schedule?.[yearMonth]?.[v]?.count ?? 0}
                   onClick={v >= today ? handleDate : null}
                 />
               ))}
@@ -176,7 +180,7 @@ const Calendar = observer(
 
 export default Calendar;
 
-const DateButton = ({ date, count, className, onClick, ...others }) => {
+const DateButton = ({ date, count, className, onClick, clubList, ...others }) => {
   const classes = className ?? '';
   const dateText = classes === 'selected'? `: ${date?.split('-')[2]}`:date?.split('-')[2];
   const day = new Date(date).getUTCDay();
@@ -184,7 +188,7 @@ const DateButton = ({ date, count, className, onClick, ...others }) => {
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time dateTime={date ?? ''} onClick={count ? onClick: null}>
+        <time dateTime={date ?? ''} onClick={count ? (e)=>onClick(e, clubList): null}>
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>

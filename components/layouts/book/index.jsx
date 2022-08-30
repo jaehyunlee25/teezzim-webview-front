@@ -48,16 +48,18 @@ export default function Book() {
   );
 
   /** Date Select */
-  const handleDate = async e => {
+  const handleDate = async (e, clubList) => {
+    const availableClubList = clubList.split(',');
     const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
     // console.log(dateTime);
     // if (container !== 'book') return;
     if (container === 'book') {
-      let checkedTeeList = [];
-      for (const item of panelStore._checkedTeeList) checkedTeeList.push( JSON.parse(item).eng );
-      const data = { date: dateTime, club_list: checkedTeeList.join(',') };
+      // let checkedTeeList = [];
+      // for (const item of panelStore._checkedTeeList) checkedTeeList.push( JSON.parse(item).eng );
+      // const data = { date: dateTime, club_list: checkedTeeList.join(',') };
+      const data = { date: dateTime, club_list: availableClubList.join(',') };
       const params = { command: 'resquestSearchTime', data: JSON.stringify(data) }; // TODO 여기 오타 어쩌지...?
       if (window.BRIDGE && window.BRIDGE.globalMethod) {
         window.BRIDGE.globalMethod(JSON.stringify(params));
