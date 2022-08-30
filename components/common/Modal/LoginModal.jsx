@@ -29,7 +29,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const handleHomepageLink = (id) => {
     if (window) {
       const url = panelStore.teeListMap?.[id]?.homepage;
-      const params = { id, url };
+      const params = { url };
       /** WEB->APP */
       if (window.BRIDGE && window.BRIDGE.callHomepageLogin) {
         window.BRIDGE.callHomepageLogin(JSON.stringify(params));
