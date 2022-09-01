@@ -12,6 +12,7 @@ class AuthStore {
       _deviceId: observable,
       authList: computed,
       communicated: computed,
+      deviceId: computed,
       saveAuthList: action,
       communicate: action,
       setDeviceId: action,
@@ -24,6 +25,10 @@ class AuthStore {
 
   get communicated() {
     return this._communicated;
+  }
+
+  get deviceId() {
+    return this._deviceId;
   }
 
   saveAuthList(authList) {

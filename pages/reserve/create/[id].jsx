@@ -17,7 +17,7 @@ export default function CreateReservation() {
   const router = useRouter();
   console.log(router.query);
   const { id, tee_id } = router.query;
-  const { teeScheduleStore } = useStores();
+  const { teeScheduleStore, authStore } = useStores();
 
   const [tee, setTee] = useState({});
   const {
@@ -49,7 +49,7 @@ export default function CreateReservation() {
     const {
       status,
       data: { data, resultCode, message },
-    } = await axios.get(`/teezzim/teeapi/v1/schedule/${id}`);
+    } = await axios.get(`/teezzim/teeapi/v1/schedule/${id}`, { device_id: authStore.deviceId });
     if (!mountRef.current) return;
     if (status === 200) {
       if (resultCode === 1) {

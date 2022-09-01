@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 
 const Calendar = observer(
   ({ date, handleDate, yearMonth, today, ...others }) => {
-    const { panelStore, teeScheduleStore } = useStores();
+    const { panelStore, authStore, teeScheduleStore } = useStores();
     const [schedule, setSchedule] = useState({});
     const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
     const dates = useMemo(() => {
@@ -67,7 +67,7 @@ const Calendar = observer(
       const res = await Promise.all(
         checkedTeeList.map(({ id, eng }) =>
           axios.get('/teezzim/teeapi/v1/schedule/date', {
-            params: { date: `${yearMonth}-01`, club: id, eng },
+            params: { date: `${yearMonth}-01`, device_id: authStore.deviceId, club: id, eng },
           }),
         ),
       ).catch(err => console.log(err));
@@ -163,7 +163,7 @@ const Calendar = observer(
                   key={v}
                   className={`${
                     v === today ? 'today' : v < today ? 'prev-mon' : ''
-                  }${v === date ? 'selected' : ' '}`}
+                    }${v === date ? 'selected' : ' '} ${schedule?.[yearMonth]?.[v]?.count ? '' : 'prev-mon'}`}
                   date={v}
                   clubList ={schedule?.[yearMonth]?.[v]?.club ?? []}
                   count={schedule?.[yearMonth]?.[v]?.count ?? 0}

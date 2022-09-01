@@ -24,7 +24,7 @@ export default function Book() {
   const {
     query: { subTab = 'tabContent01', container = 'book', ...others },
   } = router;
-  const { teeScheduleStore, loadStore, panelStore } = useStores();
+  const { teeScheduleStore, authStore, loadStore, panelStore } = useStores();
 
   /** Calender Component */
   const [date, setDate] = useState(null);
@@ -83,6 +83,7 @@ export default function Book() {
     } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
       params: {
         dates: dateTime,
+        device_id:authStore.deviceId,
         clubId: panelStore.checkedKeys.join(','),
       },
     });
@@ -139,6 +140,13 @@ export default function Book() {
 
   useEffect(() => {
     if(window){
+      const params = { command: 'getDeviceId'};
+      window.BRIDGE.globalMethod(JSON.stringify(params));
+
+      window.callDeviceId = function (deviceId) {
+        const { device_id } = JSON.parse(deviceId);
+        authStore.setDeviceId(device_id);
+      };
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
       window.teeSearchTimeFinished = function(){
