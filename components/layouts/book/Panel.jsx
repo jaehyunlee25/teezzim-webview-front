@@ -291,9 +291,10 @@ useEffect(()=>{
         <div className='golf-club mt-25' />
         <div className='notice-popup mb-20'>
           <strong>
-            현재 사용하고 계신<br />
-            골프장 계정을 등록해주세요.<br />
-            <span className='text-primary'>편리하게 한 곳에서 예약 가능합니다</span>
+            골프장 예약사이트의<br />
+            계정정보들을 등록하세요.<br />
+            <span className='text-primary'>예약에 필요한 정보를</span><br />
+            <span className='text-primary'>모아서 보실수 있습니다.</span>
           </strong>
         </div>
       </PopUp>
