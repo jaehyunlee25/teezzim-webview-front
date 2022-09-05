@@ -81,6 +81,17 @@ class PanelStore {
     return this._checkedTeeList;
   }
 
+  get filterCheckedTeeList() {
+    const checkedTeeList = [...this._checkedTeeList].map(tee => JSON.parse(tee));
+    return checkedTeeList.filter(({ id, area }) =>
+      this._filter
+        ? area === this._filter && this.checkedKeys.includes(id)
+        : this.checkedKeys.includes(id),
+    );
+    // return this._checkedTeeList;
+  }
+
+
   get checkedKeys() {
     return [...this._checkedTeeList].map(v => JSON.parse(v).id);
   }

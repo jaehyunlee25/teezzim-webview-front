@@ -20,9 +20,10 @@ const Calendar = observer(
     const getSchedule = useCallback(async () => {
       if (!mountRef.current) return;
       // if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
-      const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
-        JSON.parse(v),
-      );
+      // const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
+      //   JSON.parse(v),
+      // );
+    
       axios.interceptors.response.use(
         res => {
           console.log(res);
@@ -65,13 +66,12 @@ const Calendar = observer(
       );
 
       const res = await Promise.all(
-        checkedTeeList.map(({ id, eng }) =>
+        panelStore.filterCheckedTeeList.map(({ id, eng }) =>
           axios.get('/teezzim/teeapi/v1/schedule/date', {
             params: { date: `${yearMonth}-01`, device_id: authStore.deviceId, club: id, eng },
           }),
         ),
       ).catch(err => console.log(err));
-
       let curSchedule = {};
 
       //console.log("$$$", res);

@@ -222,8 +222,9 @@ const Panel = observer(() => {
       teeScheduleStore.setCalenderUpdate();
       // const ctl = Array.from(panelStore.checkedTeeList);
       let data = [];
-      for (const item of panelStore.checkedTeeList) {
-        const ctl = JSON.parse(item);
+      for (const item of panelStore.filterCheckedTeeList) {
+        // const ctl = JSON.parse(item);
+        const ctl = item;
         if (ctl.state !== 1 || ctl.state !== 2){
           data.push({ club: ctl.eng, club_id: ctl.id });
           const timeKey = 'search-' + ctl.id;

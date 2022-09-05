@@ -32,8 +32,8 @@ const MiniPanel = observer(() => {
             </div>
             <div className='allim_sub'>
               <p className='text-sub'>
-                {[...panelStore.checkedTeeList]
-                  ?.map(v => JSON.parse(v).name)
+                {[...panelStore.filterCheckedTeeList]
+                  ?.map(v => v.name)
                   .join(', ')}
               </p>
             </div>
