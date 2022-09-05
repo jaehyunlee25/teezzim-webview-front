@@ -244,7 +244,15 @@ const Panel = observer(() => {
         console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
       }
     }
-    localStorage.setItem('checkList', JSON.stringify(data));
+
+    let saveData = [];
+    for (const saveItem of panelStore.checkedTeeList){
+      const saveCtl = JSON.parse(saveItem);
+      if (saveCtl.state !== 1 || saveCtl.state !== 2){
+        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+      }
+    }
+    localStorage.setItem('checkList', JSON.stringify(saveData));
     window.teeSearchFinished = function () {
       router.push({
         href: '/home',

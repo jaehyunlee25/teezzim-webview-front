@@ -17,7 +17,7 @@ export default function CreateReservation() {
   const router = useRouter();
   console.log(router.query);
   const { id, tee_id } = router.query;
-  const { teeScheduleStore, authStore } = useStores();
+  const { teeScheduleStore, authStore, panelStore } = useStores();
 
   const [tee, setTee] = useState({});
   const {
@@ -87,6 +87,37 @@ export default function CreateReservation() {
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
+  // const handleBack = () => {
+  //   teeScheduleStore.setDate(0);
+  //   teeScheduleStore.setCalenderUpdate();
+  //   // const ctl = Array.from(panelStore.checkedTeeList);
+  //   let data = [];
+  //   for (const item of panelStore.filterCheckedTeeList) {
+  //     // const ctl = JSON.parse(item);
+  //     const ctl = item;
+  //     if (ctl.state !== 1 || ctl.state !== 2) {
+  //       data.push({ club: ctl.eng, club_id: ctl.id });
+  //       const timeKey = 'search-' + ctl.id;
+  //       const nowTime = (new Date()).getTime();
+  //       window.localStorage.setItem(timeKey, nowTime);
+  //     }
+  //   }
+  //   if (window.BRIDGE && window.BRIDGE.requestSearch) {
+  //     window.BRIDGE.requestSearch(JSON.stringify(data));
+  //   } else if (window.webkit && window.webkit.messageHandlers) {
+  //     const payload = JSON.stringify({
+  //       command: 'requestSearch',
+  //       data: JSON.stringify(data)
+  //     });
+  //     window.webkit.messageHandlers.globalMethod.postMessage(payload);
+  //   } else {
+  //     console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+  //   }
+  //   window.teeSearchFinished = function () {
+  //     router.back();
+  //   }
+  // }
+  
   return (
     <>
       <ConnectWithApp />
@@ -95,6 +126,7 @@ export default function CreateReservation() {
           type='button'
           className='btn-history-back'
           onClick={() => {
+            // handleBack();
             router.back();
             teeScheduleStore.setCalenderUpdate();
           }}
