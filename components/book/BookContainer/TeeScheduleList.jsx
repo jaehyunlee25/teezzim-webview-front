@@ -2,7 +2,7 @@ import TeeSchedule from '@/components/book/BookContainer/TeeSchedule';
 
 const TeeScheduleList = ({ hour, schedules, ...others }) => {
   return (
-    <div className='time-content'>
+    <div className='time-content inner-container'>
       <div className='time-row'>
         <h2 className='title-hour'>{hour}시</h2>
         <div className='box-row multi'>

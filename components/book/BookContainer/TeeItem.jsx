@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 
 // 각 Tee별 GolfSchedules array 를 받음
-const TeeItem = observer(({ id, name, area, schedules, registered }) => {
+const TeeItem = observer(({ id, name, area, schedules, registered, isLast }) => {
   const { teeScheduleStore } = useStores();
   const teeSchedules = Object.entries(schedules);
   const scheduleOnHour = useCallback(
@@ -39,7 +39,7 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
     <>
       {teeSchedules.map(([course, scheduleList], idx) => (
         <>
-          <div className='time-head title-group' key={idx}>
+          <div className='time-head title-group inner-container' key={idx}>
             <h1 className='head-headline'>
               {name}
               <span className='bar'>{course}</span>
@@ -48,6 +48,10 @@ const TeeItem = observer(({ id, name, area, schedules, registered }) => {
           {scheduleOnHour(scheduleList)}
         </>
       ))}
+      {
+        !isLast &&
+        <div className='border-primary' />
+      }
     </>
   );
 });

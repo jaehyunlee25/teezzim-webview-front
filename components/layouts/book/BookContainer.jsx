@@ -55,7 +55,7 @@ const BookContainer = observer(() => {
   return (
     <>
       {/** 데이터가 없을 때 */}
-      <div className='inner-container'>
+      <div>
         {loadStore.isLoading ? (
           <div className='loading-icon'></div>
         ) : teeScheduleStore.isEmpty ||
@@ -77,6 +77,7 @@ const BookContainer = observer(() => {
                 area={panelStore.teeListMap?.[tee_id].area}
                 schedules={schedules}
                 registered
+                isLast={i === registeredTee.length-1}
               />
             ))}
             {unregisteredTee.map(([tee_id, schedules], i) => (
