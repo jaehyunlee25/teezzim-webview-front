@@ -16,6 +16,7 @@ const Calendar = observer(
       );
     }, [yearMonth]);
 
+    const storage = globalThis?.sessionStorage;
     const mountRef = useRef(true);
     const getSchedule = useCallback(async () => {
       if (!mountRef.current) return;
@@ -26,7 +27,7 @@ const Calendar = observer(
     
       axios.interceptors.response.use(
         res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.data?.length === 0) {
             // res.data.club_id = res.config.params.club;
             /** WEB->APP requestSearch 요청 */
@@ -74,7 +75,7 @@ const Calendar = observer(
       ).catch(err => console.log(err));
       let curSchedule = {};
 
-      //console.log("$$$", res);
+      // console.log("$$$", res);
       res.forEach(v => {
         const {
           data: { resultCode = 1, message = '', data = { club: '', list:[] } },
@@ -125,7 +126,42 @@ const Calendar = observer(
 
     useEffect(() => {
       if(window){
-        getSchedule();
+        const prevPath = storage.getItem('prevPath');
+        if(prevPath){
+          if(prevPath.includes('/reserve/create')){
+            teeScheduleStore.setDate(0);
+            teeScheduleStore.setCalenderUpdate();
+            // const ctl = Array.from(panelStore.checkedTeeList);
+            let data = [];
+            for (const item of panelStore.filterCheckedTeeList) {
+              // const ctl = JSON.parse(item);
+              const ctl = item;
+              if (ctl.state !== 1 || ctl.state !== 2) {
+                data.push({ club: ctl.eng, club_id: ctl.id });
+                const timeKey = 'search-' + ctl.id;
+                const nowTime = (new Date()).getTime();
+                window.localStorage.setItem(timeKey, nowTime);
+              }
+            }
+            if (window.BRIDGE && window.BRIDGE.requestSearch) {
+              window.BRIDGE.requestSearch(JSON.stringify(data));
+            } else if (window.webkit && window.webkit.messageHandlers) {
+              const payload = JSON.stringify({
+                command: 'requestSearch',
+                data: JSON.stringify(data)
+              });
+              window.webkit.messageHandlers.globalMethod.postMessage(payload);
+            } else {
+              console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+            }
+            window.teeSearchFinished = function () {
+              getSchedule();
+            }
+          }
+        } else {
+          getSchedule();
+        }
+          
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
         window.teeSearchFinished = function () {
