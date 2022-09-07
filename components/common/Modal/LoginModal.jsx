@@ -5,19 +5,19 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 import PopUp from '../PopUp';
 
-const VIVALDI_LIST = [
-  {clubId: "5d8163d1-cd85-11ec-a93e-0242ac11000a", club: "delphino", name: "델피노"},
-  {clubId: "5a2e3107-cd84-11ec-a93e-0242ac11000a", club: "vivaldi_east", name: "비발디파크 EAST"},
-  {clubId: "ef2fd07b-cd84-11ec-a93e-0242ac11000a", club: "vivaldi_west", name: "비발디파크 WEST"},
-  {clubId: "dd3200eb-cd85-11ec-a93e-0242ac11000a", club: "vivaldi_mountain", name: "비발디파크 마운틴"},
-];
+// const VIVALDI_LIST = [
+//   {clubId: "5d8163d1-cd85-11ec-a93e-0242ac11000a", club: "delphino", name: "델피노"},
+//   {clubId: "5a2e3107-cd84-11ec-a93e-0242ac11000a", club: "vivaldi_east", name: "비발디파크 EAST"},
+//   {clubId: "ef2fd07b-cd84-11ec-a93e-0242ac11000a", club: "vivaldi_west", name: "비발디파크 WEST"},
+//   {clubId: "dd3200eb-cd85-11ec-a93e-0242ac11000a", club: "vivaldi_mountain", name: "비발디파크 마운틴"},
+// ];
 
-const KMH_LIST = [
-  {clubId: "b20397aa-7dea-11ec-b15c-0242ac110005", club: "tgv_KMH", name: "KMH떼제베"},
-  {clubId: "3facbc96-7cfc-11ec-b15c-0242ac110005", club: "shilla_KMH", name: "KMH신라cc"},
-  {clubId: "c5783163-7dec-11ec-b15c-0242ac110005", club: "paganica_KMH", name: "KMH파가니카CC"},
-  {clubId: "ae0b0349-7dce-11ec-b15c-0242ac110005", club: "paju_KMH", name: "KMH파주CC"},
-];
+// const KMH_LIST = [
+//   {clubId: "b20397aa-7dea-11ec-b15c-0242ac110005", club: "tgv_KMH", name: "KMH떼제베"},
+//   {clubId: "3facbc96-7cfc-11ec-b15c-0242ac110005", club: "shilla_KMH", name: "KMH신라cc"},
+//   {clubId: "c5783163-7dec-11ec-b15c-0242ac110005", club: "paganica_KMH", name: "KMH파가니카CC"},
+//   {clubId: "ae0b0349-7dce-11ec-b15c-0242ac110005", club: "paju_KMH", name: "KMH파주CC"},
+// ];
 
 const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   // golfInfo = {clubId, name, loc, img}
@@ -27,25 +27,25 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [isHidePopup, setIsHidePopup]= useState(false);
 
-  const isVivaldi = useMemo(() => {
-    const vivaldiIdList = VIVALDI_LIST.map(club => club.clubId);
-    if (modalStore.golfInfo) {
-      if (vivaldiIdList.includes(modalStore.golfInfo.clubId)) {
-        return true;
-      }
-    }
-    return false;
-  }, [modalStore.golfInfo]);
+  // const isVivaldi = useMemo(() => {
+  //   const vivaldiIdList = VIVALDI_LIST.map(club => club.clubId);
+  //   if (modalStore.golfInfo) {
+  //     if (vivaldiIdList.includes(modalStore.golfInfo.clubId)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }, [modalStore.golfInfo]);
 
-  const isKMH = useMemo(() => {
-    const kmhIdList = KMH_LIST.map(club => club.clubId);
-    if (modalStore.golfInfo) {
-      if (kmhIdList.includes(modalStore.golfInfo.clubId)) {
-        return true;
-      }
-    }
-    return false;
-  }, [modalStore.golfInfo]);
+  // const isKMH = useMemo(() => {
+  //   const kmhIdList = KMH_LIST.map(club => club.clubId);
+  //   if (modalStore.golfInfo) {
+  //     if (kmhIdList.includes(modalStore.golfInfo.clubId)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }, [modalStore.golfInfo]);
 
   // Handler
   const handleChange = e => {
@@ -86,6 +86,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     //   id: '아이디',
     //   pw: '패스워드',
     // };
+    
     const data = {
       clubId: modalStore.golfInfo.clubId,
       club: modalStore.golfInfo.eng,
@@ -115,74 +116,96 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     //   id: '아이디',
     //   pw: '패스워드',
     // };
-    
-    if (isVivaldi || isKMH) {
-      if (isVivaldi) {
-        if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
-          console.log('실행됨');
-          VIVALDI_LIST.forEach(club => window.BRIDGE.requestSaveLoginData(JSON.stringify({...club, ...inputs})));
-          handleClose();
-          authStore.communicate(false);
-        } else if (window.webkit && window.webkit.messageHandlers) {
-          VIVALDI_LIST.forEach(club => {
-            const payload = JSON.stringify({
-              command: 'requestSaveLoginData',
-              data: JSON.stringify({...club, ...inputs})
-            });
-            window.webkit.messageHandlers.globalMethod.postMessage(payload);
-          });
-          handleClose();
-          authStore.communicate(false);
-        } else {
-          console.log('이 기능은 앱에서만 동작합니다.');
-          return;
-        }
-      }
-      if (isKMH) {
-        if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
-          KMH_LIST.forEach(club => window.BRIDGE.requestSaveLoginData(JSON.stringify({...club, ...inputs})));
-          handleClose();
-          authStore.communicate(false);
-        } else if (window.webkit && window.webkit.messageHandlers) {
-          KMH_LIST.forEach(club => {
-            const payload = JSON.stringify({
-              command: 'requestSaveLoginData',
-              data: JSON.stringify({...club, ...inputs})
-            });
-            window.webkit.messageHandlers.globalMethod.postMessage(payload);
-          });
-          handleClose();
-          authStore.communicate(false);
-        } else {
-          console.log('이 기능은 앱에서만 동작합니다.');
-          return;
-        }
-      }
-    } else {
-      const data = {
-        clubId: modalStore.golfInfo.clubId,
-        club: modalStore.golfInfo.eng,
-        name: modalStore.golfInfo.name,
-        ...inputs,
-      };
 
-      if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
-        window.BRIDGE.requestSaveLoginData(JSON.stringify(data));
-        handleClose();
-        authStore.communicate(false);
-      } else if (window.webkit && window.webkit.messageHandlers) {
-        const payload = JSON.stringify({
-          command: 'requestSaveLoginData',
-          data: JSON.stringify(data)
-        });
-        window.webkit.messageHandlers.globalMethod.postMessage(payload);
-        handleClose();
-        authStore.communicate(false);
-      } else {
-        console.log('이 기능은 앱에서만 동작합니다.');
-        return;
-      }
+    const data = {
+      clubId: modalStore.golfInfo.clubId,
+      club: modalStore.golfInfo.eng,
+      name: modalStore.golfInfo.name,
+      ...inputs,
+    };
+
+    if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
+      window.BRIDGE.requestSaveLoginData(JSON.stringify(data));
+      handleClose();
+      authStore.communicate(false);
+    } else if (window.webkit && window.webkit.messageHandlers) {
+      const payload = JSON.stringify({
+        command: 'requestSaveLoginData',
+        data: JSON.stringify(data)
+      });
+      window.webkit.messageHandlers.globalMethod.postMessage(payload);
+      handleClose();
+      authStore.communicate(false);
+    } else {
+      console.log('이 기능은 앱에서만 동작합니다.');
+      return;
     }
+    // if (isVivaldi || isKMH) {
+    //   if (isVivaldi) {
+    //     if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
+    //       VIVALDI_LIST.forEach(club => window.BRIDGE.requestSaveLoginData(JSON.stringify({...club, ...inputs})));
+    //       handleClose();
+    //       authStore.communicate(false);
+    //     } else if (window.webkit && window.webkit.messageHandlers) {
+    //       VIVALDI_LIST.forEach(club => {
+    //         const payload = JSON.stringify({
+    //           command: 'requestSaveLoginData',
+    //           data: JSON.stringify({...club, ...inputs})
+    //         });
+    //         window.webkit.messageHandlers.globalMethod.postMessage(payload);
+    //       });
+    //       handleClose();
+    //       authStore.communicate(false);
+    //     } else {
+    //       console.log('이 기능은 앱에서만 동작합니다.');
+    //       return;
+    //     }
+    //   }
+    //   if (isKMH) {
+    //     if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
+    //       KMH_LIST.forEach(club => window.BRIDGE.requestSaveLoginData(JSON.stringify({...club, ...inputs})));
+    //       handleClose();
+    //       authStore.communicate(false);
+    //     } else if (window.webkit && window.webkit.messageHandlers) {
+    //       KMH_LIST.forEach(club => {
+    //         const payload = JSON.stringify({
+    //           command: 'requestSaveLoginData',
+    //           data: JSON.stringify({...club, ...inputs})
+    //         });
+    //         window.webkit.messageHandlers.globalMethod.postMessage(payload);
+    //       });
+    //       handleClose();
+    //       authStore.communicate(false);
+    //     } else {
+    //       console.log('이 기능은 앱에서만 동작합니다.');
+    //       return;
+    //     }
+    //   }
+    // } else {
+    //   const data = {
+    //     clubId: modalStore.golfInfo.clubId,
+    //     club: modalStore.golfInfo.eng,
+    //     name: modalStore.golfInfo.name,
+    //     ...inputs,
+    //   };
+
+    //   if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
+    //     window.BRIDGE.requestSaveLoginData(JSON.stringify(data));
+    //     handleClose();
+    //     authStore.communicate(false);
+    //   } else if (window.webkit && window.webkit.messageHandlers) {
+    //     const payload = JSON.stringify({
+    //       command: 'requestSaveLoginData',
+    //       data: JSON.stringify(data)
+    //     });
+    //     window.webkit.messageHandlers.globalMethod.postMessage(payload);
+    //     handleClose();
+    //     authStore.communicate(false);
+    //   } else {
+    //     console.log('이 기능은 앱에서만 동작합니다.');
+    //     return;
+    //   }
+    // }
   };
 
 
