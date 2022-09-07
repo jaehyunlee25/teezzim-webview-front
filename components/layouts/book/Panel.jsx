@@ -51,7 +51,7 @@ const Panel = observer(() => {
   useEffect(() => {
     mountRef.current = true;
     getTeeList().then(()=>{
-      const localCheckList = localStorage.getItem('checkList');
+      const localCheckList = window.localStorage.getItem('checkList');
       if(localCheckList){
         JSON.parse(localCheckList).forEach(tee => panelStore.addChecked(JSON.stringify(panelStore.teeListMap?.[tee.club_id])));
       }
@@ -252,7 +252,7 @@ const Panel = observer(() => {
         saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
       }
     }
-    localStorage.setItem('checkList', JSON.stringify(saveData));
+    window.localStorage.setItem('checkList', JSON.stringify(saveData));
     window.teeSearchFinished = function () {
       router.push({
         href: '/home',

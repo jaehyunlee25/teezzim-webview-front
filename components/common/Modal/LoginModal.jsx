@@ -86,7 +86,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     //   id: '아이디',
     //   pw: '패스워드',
     // };
-    
+
     const data = {
       clubId: modalStore.golfInfo.clubId,
       club: modalStore.golfInfo.eng,
@@ -123,6 +123,8 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       name: modalStore.golfInfo.name,
       ...inputs,
     };
+
+    window.localStorage.setItem('account',JSON.stringify(inputs));
 
     if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
       window.BRIDGE.requestSaveLoginData(JSON.stringify(data));
@@ -211,17 +213,20 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
 
   useEffect(() => {
     window.resultLogin = function (result) {
-      if(result){
+      if (result) {
         setSaveSuccess(true);
         authStore.communicate(false);
         if (cb) cb();
       }
     };
-    
   }, []);
 
   // reset when modal unmounted(hidden change)
   useEffect(() => {
+    const savedAccount = window.localStorage.getItem('account');
+    if (savedAccount) {
+      setInputs(JSON.parse(savedAccount));
+    }
     setIsHidePopup(false);
     if (modalStore.hidden) {
       setInputs({ id: '', pw: '' });
