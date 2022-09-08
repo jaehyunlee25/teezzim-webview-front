@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import useStores from '@/stores/useStores';
 import {
   getPrevYearMonth,
@@ -16,7 +16,6 @@ import MiniPanel from '@/components/layouts/book/MiniPanel';
 import BookContainer from '@/components/layouts/book/BookContainer';
 import WaitContainer from '@/components/layouts/book/WaitContainer';
 import AlarmContainer from '@/components/layouts/book/AlarmContainer';
-import PopUp from '@/components/common/PopUp';
 
 export default function Book() {
   const router = useRouter();
@@ -24,10 +23,11 @@ export default function Book() {
   const {
     query: { subTab = 'tabContent01', container = 'book', ...others },
   } = router;
-  const { teeScheduleStore, authStore, loadStore, panelStore } = useStores();
+  const { teeScheduleStore, authStore, loadStore, toastStore, panelStore } = useStores();
 
   /** Calender Component */
   const [date, setDate] = useState(null);
+  const [schedule, setSchedule] = useState({});
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -49,7 +49,6 @@ export default function Book() {
 
   /** Date Select */
   const handleDate = async (e, clubList) => {
-    const availableClubList = clubList.split(',');
     const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
@@ -59,7 +58,7 @@ export default function Book() {
       // let checkedTeeList = [];
       // for (const item of panelStore._checkedTeeList) checkedTeeList.push( JSON.parse(item).eng );
       // const data = { date: dateTime, club_list: checkedTeeList.join(',') };
-      const data = { date: dateTime, club_list: availableClubList.join(',') };
+      const data = { date: dateTime, club_list: clubList.join(',') };
       const params = { command: 'resquestSearchTime', data: JSON.stringify(data) }; // TODO 여기 오타 어쩌지...?
       if (window.BRIDGE && window.BRIDGE.globalMethod) {
         window.BRIDGE.globalMethod(JSON.stringify(params));
@@ -138,6 +137,130 @@ export default function Book() {
     }
   }
 
+  const handleSelectContainer = useCallback(async(e) => {
+    const selectedLength = panelStore.checkedTeeList.size;
+    const { id } = e.target;
+    if (!id) return;
+    if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
+
+    teeScheduleStore.setDate(0);
+    if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
+      const params = { command: 'showPopupWait', data: ''};
+      // if (window.BRIDGE && window.BRIDGE.globalMethod) {
+      //   window.BRIDGE.globalMethod(JSON.stringify(params));
+      // } else if (window.webkit && window.webkit.messageHandlers ) {
+      //   window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
+      // }
+      // return;
+    }
+
+    if (selectedLength <= 0) {
+      toastStore.setMessage('골프장을 1개 이상 선택해 주세요.');
+      toastStore.setHidden(false);
+      return;
+    }
+
+    if (selectedLength > 20) {
+      const obj = id === 'wait' ? '대기' : id === 'alarm' ? '오픈알림' : '';
+      toastStore.setMessage(
+        <>
+          20개 이하의 골프장에서만
+          <br /> 예약{obj}을 할 수 있습니다.
+        </>,
+      );
+      toastStore.setHidden(false);
+      return;
+    }
+
+    // checkList 저장 코드
+    let saveData = [];
+    for (const saveItem of panelStore.checkedTeeList){
+      const saveCtl = JSON.parse(saveItem);
+      if (saveCtl.state !== 1 || saveCtl.state !== 2){
+        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+      }
+    }
+    window.localStorage.setItem('checkList', JSON.stringify(saveData));
+    window.teeSearchFinished = function () {
+      router.push({
+        href: '/home',
+        query: {
+          ...others,
+          subTab: 'tabContent01',
+          container: id,
+          prev: 'home',
+        },
+      });
+      panelStore.setPanelHidden(true);
+    }
+
+    // cache 스케쥴 조회
+    const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
+    const res = await axios.post('/teezzim/teeapi/v1/schedule/date/cache',{
+      time: "300",
+      club_list: clubList
+    });
+
+    if(res.data.data.length){
+      if(res.data.empty.length){
+        // TODO: 일부만 cache 데이터가 있는 경우
+
+      } else {
+        // empty가 없는경우
+        const cacheSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
+          ...acc,
+          [date]: {
+            club: club,
+            count: count
+          }
+        }));
+        setSchedule(prevSchedule => ({
+          ...prevSchedule,
+          [yearMonthStr]: cacheSchedule,
+        }));
+        
+        router.push({
+          href: '/home',
+          query: {
+            ...others,
+            subTab: 'tabContent01',
+            container: id,
+            prev: 'home',
+          },
+        });
+        panelStore.setPanelHidden(true);
+      }
+    } else {
+      // cache 데이터가 없는 경우
+      if (id === 'book'){
+        teeScheduleStore.setCalenderUpdate();
+        // const ctl = Array.from(panelStore.checkedTeeList);
+        let data = [];
+        for (const item of panelStore.filterCheckedTeeList) {
+          // const ctl = JSON.parse(item);
+          const ctl = item;
+          if (ctl.state !== 1 || ctl.state !== 2){
+            data.push({ club: ctl.eng, club_id: ctl.id });
+            const timeKey = 'search-' + ctl.id;
+            const nowTime = (new Date()).getTime();
+            window.localStorage.setItem(timeKey, nowTime);
+          }
+        }
+        if (window.BRIDGE && window.BRIDGE.requestSearch) {
+          window.BRIDGE.requestSearch(JSON.stringify(data));
+        } else if (window.webkit && window.webkit.messageHandlers ) {
+          const payload = JSON.stringify({
+            command: 'requestSearch',
+            data: JSON.stringify(data)
+          });
+          window.webkit.messageHandlers.globalMethod.postMessage(payload);
+        } else {
+          console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+        }
+      }
+    }
+  });
+
   useEffect(() => {
     if(window){
       const params = { command: 'getDeviceId'};
@@ -176,7 +299,7 @@ export default function Book() {
 
   return (
     <>
-      <Panel />
+      <Panel handleSelectContainer={handleSelectContainer}/>
       <div className='pt-15'></div>
       <MiniPanel />
 
@@ -286,6 +409,8 @@ export default function Book() {
               hidden={subTab !== 'tabContent01'}
               date={date}
               handleDate={handleDate}
+              schedule={schedule}
+              setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
             />
@@ -318,3 +443,4 @@ export default function Book() {
     </>
   );
 }
+

@@ -11,7 +11,7 @@ import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 import PopUp from '@/components/common/PopUp';
 
-const Panel = observer(() => {
+const Panel = observer(({handleSelectContainer}) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
@@ -68,13 +68,13 @@ const Panel = observer(() => {
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
-    console.log(authStore.communicated);
+    // console.log(authStore.communicated);
     if (!isInitSignalSendApp || !authStore.communicated) {
       // window 존재여부 체크 (nextjs 특징)
       if (window) {
         /** 로그인 APP->WEB 전송 */
         window.getSavedAuth = function (jsonStr) {
-          console.log(jsonStr);
+          // console.log(jsonStr);
           // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
           const dataList = JSON.parse(jsonStr);
           if(dataList.length===0 && isInitSignalSendApp && authStore.communicated)setIsHidePopup(false);
@@ -183,89 +183,7 @@ const Panel = observer(() => {
     }
   }, [isInitSignalSendApp, panelStore, authStore, authStore.communicated]);
 
-  const handleSelectContainer = e => {
-    const selectedLength = panelStore.checkedTeeList.size;
-    const { id } = e.target;
-    if (!id) return;
-    if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
 
-    teeScheduleStore.setDate(0);
-    if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
-      const params = { command: 'showPopupWait', data: ''};
-      // if (window.BRIDGE && window.BRIDGE.globalMethod) {
-      //   window.BRIDGE.globalMethod(JSON.stringify(params));
-      // } else if (window.webkit && window.webkit.messageHandlers ) {
-      //   window.webkit.messageHandlers.globalMethod.postMessage(JSON.stringify(params));
-      // }
-      // return;
-    }
-
-    if (selectedLength <= 0) {
-      toastStore.setMessage('골프장을 1개 이상 선택해 주세요.');
-      toastStore.setHidden(false);
-      return;
-    }
-
-    if (selectedLength > 20) {
-      const obj = id === 'wait' ? '대기' : id === 'alarm' ? '오픈알림' : '';
-      toastStore.setMessage(
-        <>
-          20개 이하의 골프장에서만
-          <br /> 예약{obj}을 할 수 있습니다.
-        </>,
-      );
-      toastStore.setHidden(false);
-      return;
-    }
-
-    if (id === 'book'){
-      teeScheduleStore.setCalenderUpdate();
-      // const ctl = Array.from(panelStore.checkedTeeList);
-      let data = [];
-      for (const item of panelStore.filterCheckedTeeList) {
-        // const ctl = JSON.parse(item);
-        const ctl = item;
-        if (ctl.state !== 1 || ctl.state !== 2){
-          data.push({ club: ctl.eng, club_id: ctl.id });
-          const timeKey = 'search-' + ctl.id;
-          const nowTime = (new Date()).getTime();
-          window.localStorage.setItem(timeKey, nowTime);
-        }
-      }
-      if (window.BRIDGE && window.BRIDGE.requestSearch) {
-        window.BRIDGE.requestSearch(JSON.stringify(data));
-      } else if (window.webkit && window.webkit.messageHandlers ) {
-        const payload = JSON.stringify({
-          command: 'requestSearch',
-          data: JSON.stringify(data)
-        });
-        window.webkit.messageHandlers.globalMethod.postMessage(payload);
-      } else {
-        console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
-      }
-    }
-
-    let saveData = [];
-    for (const saveItem of panelStore.checkedTeeList){
-      const saveCtl = JSON.parse(saveItem);
-      if (saveCtl.state !== 1 || saveCtl.state !== 2){
-        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
-      }
-    }
-    window.localStorage.setItem('checkList', JSON.stringify(saveData));
-    window.teeSearchFinished = function () {
-      router.push({
-        href: '/home',
-        query: {
-          ...others,
-          subTab: 'tabContent01',
-          container: id,
-          prev: 'home',
-        },
-      });
-      panelStore.setPanelHidden(true);
-    }
-  };
 
 useEffect(()=>{
 
