@@ -9,17 +9,10 @@ const nextConfig = {
     return [
       {
         source: '/teeapi/v1/:path*',
+        // destination: 'http://localhost:4000/teeapi/v1/:path*',
         destination: 'https://dev.mnemosyne.co.kr/teeapi/v1/:path*',
       },
     ];
-    // return process.env.NODE_ENV == 'production'
-    //   ? []
-    //   : [
-    //       {
-    //         source: '/teeapi/v1/:path*',
-    //         destination: 'https://dev.mnemosyne.co.kr/teeapi/v1/:path*',
-    //       },
-    //     ];
   },
 };
 

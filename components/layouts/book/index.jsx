@@ -28,6 +28,9 @@ export default function Book() {
   /** Calender Component */
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
+  const [cachedSchedule, setCacheSchedule] = useState([]);
+  const [uncachedClubList, setUncachedClubList] = useState([]);
+  
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -138,6 +141,7 @@ export default function Book() {
   }
 
   const handleSelectContainer = useCallback(async(e) => {
+    setCacheSchedule([]); setUncachedClubList([]);
     const selectedLength = panelStore.checkedTeeList.size;
     const { id } = e.target;
     if (!id) return;
@@ -197,55 +201,56 @@ export default function Book() {
     // cache 스케쥴 조회
     const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
     const res = await axios.post('/teezzim/teeapi/v1/schedule/date/cache',{
-      time: "300",
+      time: "60",
       club_list: clubList
     });
 
-    if(res.data.data.length){
-      if(res.data.empty.length){
-        // TODO: 일부만 cache 데이터가 있는 경우
-
-      } else {
-        // empty가 없는경우
-        const cacheSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
-          ...acc,
-          [date]: {
-            club: club,
-            count: count
-          }
-        }));
-        setSchedule(prevSchedule => ({
-          ...prevSchedule,
-          [yearMonthStr]: cacheSchedule,
-        }));
-        
-        router.push({
-          href: '/home',
-          query: {
-            ...others,
-            subTab: 'tabContent01',
-            container: id,
-            prev: 'home',
-          },
-        });
-        panelStore.setPanelHidden(true);
-      }
+    if( res.data.empty.length < 1 && res.data.data.length > 0 ) {
+      console.log('[LOG][CASE] 캐시가 모두 있는 경우');
+      setCacheSchedule(res.data.data); setUncachedClubList([]);
+      const cacheSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
+        ...acc,
+        [date]: {
+          club: club,
+          count: count
+        }
+      }));
+      setSchedule(prevSchedule => ({
+        ...prevSchedule,
+        [yearMonthStr]: cacheSchedule,
+      }));
+      
+      router.push({
+        href: '/home',
+        query: {
+          ...others,
+          subTab: 'tabContent01',
+          container: id,
+          prev: 'home',
+        },
+      });
+      panelStore.setPanelHidden(true);
     } else {
-      // cache 데이터가 없는 경우
+      if(res.data.data.length){
+        console.log('[LOG][CASE] 일부만 캐시가 있는 경우'); 
+        setCacheSchedule(res.data.data); setUncachedClubList(res.data.empty);
+      } else {
+        console.log('[LOG][CASE] 캐시가 모두 없는 경우'); 
+        setCacheSchedule([]); setUncachedClubList(res.data.empty);
+      }
       if (id === 'book'){
         teeScheduleStore.setCalenderUpdate();
-        // const ctl = Array.from(panelStore.checkedTeeList);
-        let data = [];
-        for (const item of panelStore.filterCheckedTeeList) {
-          // const ctl = JSON.parse(item);
-          const ctl = item;
-          if (ctl.state !== 1 || ctl.state !== 2){
-            data.push({ club: ctl.eng, club_id: ctl.id });
-            const timeKey = 'search-' + ctl.id;
-            const nowTime = (new Date()).getTime();
-            window.localStorage.setItem(timeKey, nowTime);
-          }
-        }
+        const data = res.data.empty;
+        // for (const item of panelStore.filterCheckedTeeList) {
+        //   // const ctl = JSON.parse(item);
+        //   const ctl = item;
+        //   if (ctl.state !== 1 || ctl.state !== 2){
+        //     data.push({ club: ctl.eng, club_id: ctl.id });
+        //     const timeKey = 'search-' + ctl.id;
+        //     const nowTime = (new Date()).getTime();
+        //     window.localStorage.setItem(timeKey, nowTime);
+        //   }
+        // }
         if (window.BRIDGE && window.BRIDGE.requestSearch) {
           window.BRIDGE.requestSearch(JSON.stringify(data));
         } else if (window.webkit && window.webkit.messageHandlers ) {
@@ -410,6 +415,8 @@ export default function Book() {
               date={date}
               handleDate={handleDate}
               schedule={schedule}
+              cachedSchedule={cachedSchedule}
+              uncachedClubList={uncachedClubList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
