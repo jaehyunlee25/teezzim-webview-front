@@ -915,6 +915,9 @@
   .blue {
     background-color: #d0ddff;
   }
+  .turquoise {
+    background-color: #e2fff9;
+  }
 
   li {
     padding: 8px 16px;
@@ -2291,8 +2294,6 @@
 .checkbox {
   height: 40px;
   position: relative;
-  background: red;
-
   input[type='checkbox'] {
     display: none;
 

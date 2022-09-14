@@ -50,17 +50,21 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
 
   const stateClass = useMemo(()=>{
     if(tee.state === 0){
-      return ''
+      return '';
     }
     if(tee.state === 1){
-      return 'red'
+      return 'red';
     }
     if(tee.state ===2){
-      return 'yellow'
+      return 'yellow';
     }
     if(tee.state === 3){
-      return 'blue'
+      return 'blue';
     }
+    if(!registered && tee.state === 4){
+      return 'turquoise';
+    }
+    return '';
   },[tee]);
 
   return (
@@ -88,18 +92,18 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
             </div>
             {
               type==='home' &&
-              <div onClick={(e)=>handleHomepageLink(e, tee?.id, tee?.state)} className='homepage-link'>
-                  <span>
-                  홈페이지
-                  </span>
+              <div onClick={(e) => handleHomepageLink(e, tee?.id, tee?.state)} className={(registered && tee.state === 4) ? 'homepage-link-lb' : 'homepage-link'}>
                   <div className='homepage-link-icon'/>
+                  <span>
+                  바로가기
+                  </span>
                 </div>
               }
           </div>
         </div>
         {/*//list_detail  */}
         {
-          type === 'home' ? registered && <TeeCheckInput handleWarnPopup={handleWarnPopup} {...tee} /> : <b>{loc}</b>
+          type === 'home' ? (registered && tee.state !== 4) && <TeeCheckInput handleWarnPopup={handleWarnPopup} {...tee} /> : <b>{loc}</b>
         }
       </li>
       <style jsx>{`
@@ -162,8 +166,19 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
           font-weight: bold;
           padding: 15px;
           height: 20px;
-          padding-left: 18px;
-          padding-right: 18px;
+        }
+        .homepage-link-lb {
+          display: flex;
+          align-items: center;
+          background-color:#f0f0f0;
+          color: #979797;
+          border-radius: 21px;
+          font-size: 10px;
+          font-weight: bold;
+          padding: 15px;
+          height: 20px;
+          padding-left:30px;
+          padding-right:30px;
         }
       `}</style>
     </>
