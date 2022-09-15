@@ -47,14 +47,14 @@ const TeeCheckInput = observer(props => {
   return (
     <>
       {/*btn_check_box  */}
-      <div className='btn_check_box'>
+      <div className='btn_check_box' onClick={handleChecked}>
         <span className='checkbox'>
           <input
             id={props.id}
             type='checkbox'
             name={props.name}
             checked={isChecked}
-            onChange={handleChecked}
+            // onChange={handleChecked}
           />
           <label htmlFor={props.id}></label>
         </span>
@@ -63,8 +63,10 @@ const TeeCheckInput = observer(props => {
       <style jsx>{`
         .btn_check_box {
           position: absolute;
-          right: 16px;
+          right: 8px;
           margin: 0px;
+          padding: 8px; 
+          /* background-color: red; */
         }
         label {
           padding: 8px;
