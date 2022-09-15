@@ -164,11 +164,11 @@ export default function Book() {
       return;
     }
 
-    if (selectedLength > 20) {
+    if (selectedLength > 5) {
       const obj = id === 'wait' ? '대기' : id === 'alarm' ? '오픈알림' : '';
       toastStore.setMessage(
         <>
-          20개 이하의 골프장에서만
+          5개 이하의 골프장에서만
           <br /> 예약{obj}을 할 수 있습니다.
         </>,
       );

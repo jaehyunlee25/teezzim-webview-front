@@ -31,10 +31,10 @@ const TeeCheckInput = observer(props => {
         props.handleWarnPopup(props.state);
         return;
       }
-      if (panelStore.checkedTeeList.size >= 20) {
+      if (panelStore.checkedTeeList.size >= 5) {
         toastStore.setMessage(
           <>
-            20개 이하의 골프장에서만
+            5개 이하의 골프장에서만
             <br /> 예약을 할 수 있습니다.
           </>,
         );
