@@ -7,7 +7,7 @@ import { useEffect, useMemo, useCallback, useRef } from 'react';
 const Calendar = observer(
   ({ date, handleDate, schedule, cachedSchedule, uncachedClubList, setSchedule, yearMonth, today, ...others }) => {
     const { panelStore, authStore, teeScheduleStore } = useStores();
-    // console.log('[LOG] Calendar->schedule:', schedule);
+    console.log('[LOG] Calendar->schedule:', schedule);
     console.log('[LOG] Calendar->cachedSchedule:', cachedSchedule);
     console.log('[LOG] Calendar->uncachedClubList:', uncachedClubList);
     
@@ -77,6 +77,8 @@ const Calendar = observer(
       //     }),
       //   ),
       // ).catch(err => console.log(err));
+      console.log('schedule',schedule);
+      console.log('schedule[yearMonth]',schedule[yearMonth]);
       let clubList; 
       if(cachedSchedule.length > 0) {
         clubList = [];
@@ -276,7 +278,7 @@ const DateButton = ({ date, count, className, onClick, clubList, ...others }) =>
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>
-          {count ? (
+          {!classes.includes('prev-mon') && count ? (
             <>
               <strong>{count}</strong>G
             </>

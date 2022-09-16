@@ -75,7 +75,7 @@ export default function Book() {
     }
   };
 
-  const getDayScadules = async function () {
+  const getDayScadules = async function (clubList) {
     const dateTime = teeScheduleStore._date;
     loadStore.reset();
     loadStore.setLoading(true);
@@ -86,12 +86,11 @@ export default function Book() {
       params: {
         dates: dateTime,
         device_id:authStore.deviceId,
-        clubId: panelStore.checkedKeys.join(','),
+        clubId: clubList,
       },
     });
 
     loadStore.setLoading(false);
-
     if (status === 200) {
       if (resultCode === 1) {
         const nameMap = panelStore.checkedKeys.reduce(
@@ -185,6 +184,7 @@ export default function Book() {
       }
     }
     window.localStorage.setItem('checkList', JSON.stringify(saveData));
+
     window.teeSearchFinished = function () {
       router.push({
         href: '/home',
@@ -277,10 +277,10 @@ export default function Book() {
       };
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
-      window.teeSearchTimeFinished = function(){
+      window.teeSearchTimeFinished = function(clubList){
         console.log("### teeSearchTimeFinished 호출됨");
         setTimeout(()=>{
-          getDayScadules();
+          getDayScadules(clubList);
         }, 500);
       };
     }
