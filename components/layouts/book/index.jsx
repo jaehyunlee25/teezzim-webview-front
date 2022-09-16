@@ -86,7 +86,7 @@ export default function Book() {
       params: {
         dates: dateTime,
         device_id:authStore.deviceId,
-        clubId: clubList,
+        clubId: clubList ?? panelStore.checkedKeys.join(','),
       },
     });
 
