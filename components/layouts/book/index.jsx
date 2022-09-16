@@ -28,8 +28,9 @@ export default function Book() {
   /** Calender Component */
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
-  const [cachedSchedule, setCacheSchedule] = useState([]);
-  const [uncachedClubList, setUncachedClubList] = useState([]);
+  const [successList, setSuccessList] = useState('');
+  // const [cachedSchedule, setCacheSchedule] = useState([]);
+  // const [uncachedClubList, setUncachedClubList] = useState([]);
   
 
   const now = getTodayKST(); // 오늘 날짜 객체
@@ -140,7 +141,7 @@ export default function Book() {
   }
 
   const handleSelectContainer = useCallback(async(e) => {
-    setCacheSchedule([]); setUncachedClubList([]);
+    setSchedule({});
     const selectedLength = panelStore.checkedTeeList.size;
     const { id } = e.target;
     if (!id) return;
@@ -185,19 +186,6 @@ export default function Book() {
     }
     window.localStorage.setItem('checkList', JSON.stringify(saveData));
 
-    window.teeSearchFinished = function () {
-      router.push({
-        href: '/home',
-        query: {
-          ...others,
-          subTab: 'tabContent01',
-          container: id,
-          prev: 'home',
-        },
-      });
-      panelStore.setPanelHidden(true);
-    }
-
     // cache 스케쥴 조회
     const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
     const res = await axios.post('/teezzim/teeapi/v1/schedule/date/cache',{
@@ -207,7 +195,6 @@ export default function Book() {
 
     if( res.data.empty.length < 1 && res.data.data.length > 0 ) {
       console.log('[LOG][CASE] 캐시가 모두 있는 경우');
-      setCacheSchedule(res.data.data); setUncachedClubList([]);
       const cacheSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
         ...acc,
         [date]: {
@@ -231,26 +218,27 @@ export default function Book() {
       });
       panelStore.setPanelHidden(true);
     } else {
-      if(res.data.data.length){
-        console.log('[LOG][CASE] 일부만 캐시가 있는 경우'); 
-        setCacheSchedule(res.data.data); setUncachedClubList(res.data.empty);
-      } else {
-        console.log('[LOG][CASE] 캐시가 모두 없는 경우'); 
-        setCacheSchedule([]); setUncachedClubList(res.data.empty);
-      }
+      // if(res.data.data.length){
+      //   console.log('[LOG][CASE] 일부만 캐시가 있는 경우'); 
+      //   setCacheSchedule(res.data.data); setUncachedClubList(res.data.empty);
+      // } else {
+      //   console.log('[LOG][CASE] 캐시가 모두 없는 경우'); 
+      //   setCacheSchedule([]); setUncachedClubList(res.data.empty);
+      // }
       if (id === 'book'){
-        teeScheduleStore.setCalenderUpdate();
-        const data = res.data.empty;
-        // for (const item of panelStore.filterCheckedTeeList) {
-        //   // const ctl = JSON.parse(item);
-        //   const ctl = item;
-        //   if (ctl.state !== 1 || ctl.state !== 2){
-        //     data.push({ club: ctl.eng, club_id: ctl.id });
-        //     const timeKey = 'search-' + ctl.id;
-        //     const nowTime = (new Date()).getTime();
-        //     window.localStorage.setItem(timeKey, nowTime);
-        //   }
-        // }
+        // teeScheduleStore.setCalenderUpdate();
+        // const data = res.data.empty;
+        let data = [];
+        for (const item of panelStore.filterCheckedTeeList) {
+          // const ctl = JSON.parse(item);
+          const ctl = item;
+          if (ctl.state !== 1 || ctl.state !== 2){
+            data.push({ club: ctl.eng, club_id: ctl.id });
+            const timeKey = 'search-' + ctl.id;
+            const nowTime = (new Date()).getTime();
+            window.localStorage.setItem(timeKey, nowTime);
+          }
+        }
         if (window.BRIDGE && window.BRIDGE.requestSearch) {
           window.BRIDGE.requestSearch(JSON.stringify(data));
         } else if (window.webkit && window.webkit.messageHandlers ) {
@@ -262,6 +250,20 @@ export default function Book() {
         } else {
           console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
         }
+      }
+      
+      window.teeSearchFinished = function (clubList) {
+        setSuccessList(clubList);
+        router.push({
+          href: '/home',
+          query: {
+            ...others,
+            subTab: 'tabContent01',
+            container: id,
+            prev: 'home',
+          },
+        });
+        panelStore.setPanelHidden(true);
       }
     }
   });
@@ -415,8 +417,9 @@ export default function Book() {
               date={date}
               handleDate={handleDate}
               schedule={schedule}
-              cachedSchedule={cachedSchedule}
-              uncachedClubList={uncachedClubList}
+              // cachedSchedule={cachedSchedule}
+              // uncachedClubList={uncachedClubList}
+              successList={successList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
