@@ -310,7 +310,7 @@ useEffect(()=>{
                 실시간 예약
               </li>
               <li className='button'>티찜</li>
-              <li className='button'>티찜</li>
+              <li className='button' onClick={()=>window.BRIDGE.functionTest()}>티찜</li>
               {/* <li id='wait' className='button' onClick={handleSelectContainer}>
                 예약대기
               </li>
