@@ -19,10 +19,16 @@ import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import PageLayout from '@/components/layouts/PageLayout';
 import { useEffect } from 'react';
+import { sendResponse } from '@/lib/APIUtils';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => storePathValues, [router.asPath]);
+  useEffect(() => {
+    window.getNativeRequest = function ({ command, parameter }) {
+      sendResponse(command, parameter);
+    }
+  }, []);
 
   function storePathValues() {
     const storage = globalThis?.sessionStorage;
