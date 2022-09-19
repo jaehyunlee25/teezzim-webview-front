@@ -25,7 +25,7 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => storePathValues, [router.asPath]);
   useEffect(() => {
-    window.getNativeRequest = function ({ parameter }) {
+    window.getNativeRequest = function (parameter) {
       sendResponse(parameter);
     };
   }, []);
