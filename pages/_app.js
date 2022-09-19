@@ -25,19 +25,19 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => storePathValues, [router.asPath]);
   useEffect(() => {
-    window.getNativeRequest = function ({ command, parameter }) {
-      sendResponse(command, parameter);
-    }
+    window.getNativeRequest = function ({ parameter }) {
+      sendResponse(parameter);
+    };
   }, []);
 
   function storePathValues() {
     const storage = globalThis?.sessionStorage;
     if (!storage) return;
     // Set the previous path as the value of the current path.
-    const prevPath = storage.getItem("currentPath");
-    storage.setItem("prevPath", prevPath);
+    const prevPath = storage.getItem('currentPath');
+    storage.setItem('prevPath', prevPath);
     // Set the current path value by looking at the browser's location object.
-    storage.setItem("currentPath", globalThis.location.pathname);
+    storage.setItem('currentPath', globalThis.location.pathname);
   }
   // 주입할 전역 MobX Store들
   const initStores = {
