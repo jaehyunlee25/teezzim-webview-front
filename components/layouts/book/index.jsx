@@ -281,9 +281,10 @@ export default function Book() {
       /** APP->WEB */
       window.teeSearchTimeFinished = function(clubList){
         console.log("### teeSearchTimeFinished 호출됨");
-        setTimeout(()=>{
-          getDayScadules(clubList);
-        }, 500);
+        // setTimeout(()=>{
+        //   getDayScadules(clubList);
+        // }, 500);
+        getDayScadules(clubList);
       };
     }
   }, []);
