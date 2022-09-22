@@ -7,9 +7,6 @@ import { useEffect, useMemo, useCallback, useRef } from 'react';
 const Calendar = observer(
   ({ date, handleDate, schedule, setSchedule, successList, yearMonth, today, ...others }) => {
     const { panelStore, authStore, teeScheduleStore } = useStores();
-    // console.log('[LOG] Calendar->schedule:', schedule);
-    // console.log('[LOG] Calendar->cachedSchedule:', cachedSchedule);
-    // console.log('[LOG] Calendar->uncachedClubList:', uncachedClubList);
     
     const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
     const dates = useMemo(() => {
@@ -20,131 +17,33 @@ const Calendar = observer(
     }, [yearMonth]);
     const storage = globalThis?.sessionStorage;
     const mountRef = useRef(true);
-    const getSchedule = useCallback(async (club_list) => {
+    const getSchedule = useCallback(async (scheduleList) => {
       if (!mountRef.current) return;
-      // if (!mountRef.current || !teeScheduleStore._calenderUpdate) return;
-      // const checkedTeeList = [...panelStore._checkedTeeList].map(v =>
-      //   JSON.parse(v),
-      // );
-    
-      // axios.interceptors.response.use(
-      //   res => {
-      //     // console.log(res);
-      //     if (res.data.data?.length === 0) {
-      //       // res.data.club_id = res.config.params.club;
-      //       /** WEB->APP requestSearch 요청 */
-      //       const params = {
-      //         club: res.config.params.eng,
-      //         club_id: res.config.params.club,
-      //         command: 'search', // 고정 문자열
-      //       };
-      //       const timeKey = 'search-' + params.club_id;
-      //       let savedTime = window.localStorage.getItem(timeKey);
-      //       // console.log("###", savedTime);
-      //       if( savedTime ){
-      //         savedTime = Number(savedTime);
-      //         if( savedTime + 60000 > (new Date()).getTime() ) {
-      //           return res;
-      //         }
-      //       }
-      //       const nowTime = (new Date()).getTime();
-      //       window.localStorage.setItem(timeKey, nowTime);
-      //       // console.log("###", nowTime);
-      //       // if (window.BRIDGE && window.BRIDGE.requestSearch) {
-      //       //   window.BRIDGE.requestSearch(JSON.stringify([params]));
-      //       // } else if (window.webkit && window.webkit.messageHandlers) {
-      //       //   window.webkit.messageHandlers.requestSearch.postMessage(
-      //       //     JSON.stringify([params]),
-      //       //   );
-      //       // } else {
-      //       //   alert(JSON.stringify([params]));
-      //       // }
-      //     }
-      //     return res;
 
-      //     // 앱에서 추가 요청 하거나 -> 앱에서 크롤러 함수 진행 완료 상황을 받아서 재요청 해야할듯
-      //     // return axios.request(config)
-      //   },
-      //   err => Promise.reject(err),
-      // );
-
-      // const res = await Promise.all(
-      //   panelStore.filterCheckedTeeList.map(({ id, eng }) =>
-      //     axios.get('/teezzim/teeapi/v1/schedule/date', {
-      //       params: { date: `${yearMonth}-01`, device_id: authStore.deviceId, club: id, eng },
-      //     }),
-      //   ),
-      // ).catch(err => console.log(err));
-      
-      const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
-      // console.log('cachedSchedule.length > 0', cachedSchedule.length > 0, clubList, uncachedClubList);
-      const res = await axios.post('/teezzim/teeapi/v1/schedule/date', {
-        device_id: authStore.deviceId,
-        club_list: club_list ? club_list.split(',') : clubList,
-      }).catch(err => console.log(err));
+      // const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
+      // const res = await axios.post('/teezzim/teeapi/v1/schedule/date', {
+      //   device_id: authStore.deviceId,
+      //   club_list: club_list ? club_list.split(',') : clubList,
+      // }).catch(err => console.log(err));
       
       let curSchedule = {};
 
-      if(res.data.data.length){
-        if(res.data.resultCode === 1){
-          // let scheduleData = [...res.data.data];
-          // console.log('[LOG] cachedSchedule', cachedSchedule);
-          // if( cachedSchedule.length > 0 ) { // 캐시된 데이터가 존재하면
-          //   for (const cItem of cachedSchedule) { // 순회 검사
-          //     const idx = scheduleData.findIndex(item=>{
-          //       // console.log(item.date,cItem.date, item.date==cItem.date);
-          //       return item.date==cItem.date;
-          //     }); 
-          //     if(idx < 0) { // 동일 날짜가 없으면 단순 추가
-          //       scheduleData.push(cItem);
-          //     } else { // 동일 날짜가 있으면 개별 merge
-          //       scheduleData[idx].club.push(...cItem.club);
-          //       scheduleData[idx].count = scheduleData[idx].club.length;
-          //     }
-          //   }
-          // }
-          // console.log(scheduleData);
-          curSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
-            ...acc,
-            [date]: {
-              club: club,
-              count: count
-            }
-          }));
-          // console.log(curSchedule);
-        } else {
-          console.warn(res.data.message);
-        }
+      if(scheduleList.length){
+        curSchedule = scheduleList.reduce((acc, {date, count, club })=> ({
+          ...acc,
+          [date]: {
+            club: club,
+            count: count
+          }
+        }));
       }
-      // console.log("$$$", res);
-      // res.forEach(v => {
-      //   const {
-      //     data: { resultCode = 1, message = '', data = { club: '', list:[] } },
-      //   } = v;
-      //   // console.log(resultCode, message, data);
-      //   if (resultCode === 1) {
-      //     // yearMonth: yyyy-mm, date: yyyy-mm-dd
-      //     curSchedule = data.list.reduce(
-      //       (acc, { date, count }) => ({
-      //         ...acc,
-      //         [date]: {
-      //           club: acc[date]?.club ? acc[date].club + `,${data.club}` : data.club,
-      //           count: acc[date]?.count ? acc[date].count + count : count,
-      //         }
-      //       }),
-      //       curSchedule,
-      //     );
-      //   } else {
-      //     console.warn(message);
-      //   }
-      // });
 
       setSchedule(prevSchedule => ({
         ...prevSchedule,
         [yearMonth]: curSchedule,
       }));
       teeScheduleStore.setCalenderUpdate(false);
-    }, [yearMonth, setSchedule, panelStore._checkedTeeList, teeScheduleStore]);
+    }, [yearMonth, setSchedule, teeScheduleStore]);
 
     useEffect(() => {
       mountRef.current = true;
@@ -158,13 +57,7 @@ const Calendar = observer(
       return () => {
         mountRef.current = false;
       };
-    }, [
-      // teeScheduleStore._calenderUpdate,
-      // getSchedule,
-      yearMonth,
-      // panelStore._checkedTeeList,
-      panelStore._panelHidden,
-    ]);
+    }, [yearMonth, panelStore._panelHidden, panelStore._checkedTeeList.size, getSchedule, successList]);
 
     useEffect(() => {
       if(window){
@@ -196,17 +89,18 @@ const Calendar = observer(
             } else {
               console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
             }
-            window.teeSearchFinished = function (clubList) {
-              getSchedule(clubList);
-            }
+            // window.teeSearchFinished = function (clubList) {
+            //   console.log("### teeSearchFinished 호출됨 3");
+            //   getSchedule(clubList);
+            // }
           }
         } 
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
-        window.teeSearchFinished = function (clubList) {
-          // console.log("### teeSearchFinished 호출됨");
-          getSchedule(clubList);
-        };
+        // window.teeSearchFinished = function (clubList) {
+        //   console.log("### teeSearchFinished 호출됨 1");
+        //   getSchedule(clubList);
+        // };
       }
     }, []);
     
