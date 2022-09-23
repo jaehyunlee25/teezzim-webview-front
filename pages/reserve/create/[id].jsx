@@ -15,20 +15,20 @@ import ButtonGroup from '@/components/layouts/reserve/create/ButtonGroup';
 
 export default function CreateReservation() {
   const router = useRouter();
-  const { id, tee_id } = router.query;
+  const { 
+    id, 
+    tee_id, 
+    date, 
+    fee_discount,
+    golf_club_name,
+    golf_course_name,
+    fee_normal,
+    time
+  } = router.query;
   const { teeScheduleStore, authStore } = useStores();
-
+  console.log(router.query);
   const [tee, setTee] = useState({});
-  const {
-    date = '',
-    fee_discount = '',
-    fee_normal = '',
-    golf_club_name = '',
-    golf_course_name = '',
-    time = '',
-    GolfClub = {},
-  } = tee ?? {};
-
+  const { GolfClub } = tee ?? {};
   const dayList = ['일', '월', '화', '수', '목', '금', '토'];
   const [hour, min, _] = time?.split(':') ?? [];
   const [year, mon, _date] = date?.split('-') ?? [];
@@ -48,12 +48,15 @@ export default function CreateReservation() {
     const {
       status,
       data: { data, resultCode, message },
-    } = await axios.get(`/teezzim/teeapi/v1/schedule/${id}`, { device_id: authStore.deviceId });
+    } = await axios.get(`/teezzim/teeapi/v1/club/${id}`, { device_id: authStore.deviceId });
     if (!mountRef.current) return;
     if (status === 200) {
       if (resultCode === 1) {
-        // console.log(data);
-        setTee(data);
+        console.log(data);
+        setTee({
+          ...tee,
+          GolfClub:data,
+        });
         mountRef.current = false;
       } else {
         console.warn(`[errorCode: ${status}] ${message}`);
