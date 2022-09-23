@@ -7,7 +7,7 @@ import { useEffect, useMemo, useCallback, useRef } from 'react';
 const Calendar = observer(
   ({ date, handleDate, schedule, setSchedule, successList, yearMonth, today, ...others }) => {
     const { panelStore, authStore, teeScheduleStore } = useStores();
-    
+
     const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
     const dates = useMemo(() => {
       const [year, month] = yearMonth.split('-').map(v => Number(v));
@@ -25,11 +25,11 @@ const Calendar = observer(
       //   device_id: authStore.deviceId,
       //   club_list: club_list ? club_list.split(',') : clubList,
       // }).catch(err => console.log(err));
-      
+
       let curSchedule = {};
 
-      if(scheduleList.length){
-        curSchedule = scheduleList.reduce((acc, {date, count, club })=> ({
+      if (scheduleList.length) {
+        curSchedule = scheduleList.reduce((acc, { date, count, club }) => ({
           ...acc,
           [date]: {
             club: club,
@@ -60,10 +60,10 @@ const Calendar = observer(
     }, [yearMonth, panelStore._panelHidden, panelStore._checkedTeeList.size, getSchedule, successList]);
 
     useEffect(() => {
-      if(window){
+      if (window) {
         const prevPath = storage.getItem('prevPath');
-        if(prevPath){
-          if(prevPath.includes('/reserve/create')){
+        if (prevPath) {
+          if (prevPath.includes('/reserve/create')) {
             teeScheduleStore.setDate(0);
             teeScheduleStore.setCalenderUpdate();
             // const ctl = Array.from(panelStore.checkedTeeList);
@@ -89,21 +89,34 @@ const Calendar = observer(
             } else {
               console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
             }
-            // window.teeSearchFinished = function (clubList) {
-            //   console.log("### teeSearchFinished 호출됨 3");
-            //   getSchedule(clubList);
-            // }
           }
-        } 
+        }
         // console.log("### teeSearchFinished 바인딩됨");
         /** APP->WEB */
-        // window.teeSearchFinished = function (clubList) {
-        //   console.log("### teeSearchFinished 호출됨 1");
-        //   getSchedule(clubList);
-        // };
+        window.teeSearchFinished = function (data) {
+          // console.log("### teeSearchFinished 호출됨", data);
+          ///----
+          const jarr = JSON.parse(data);
+          let scheduleList = [];
+          for (const info of jarr) {
+            for (const dt of info.content) {
+              const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
+              if (idx < 0) {
+                scheduleList.push({ date: dt, count: 1, club: [info.club] });
+              } else { // 이미 해당 날짜가 있으면
+                // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
+                if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0) {
+                  scheduleList[idx].club.push(info.club);
+                  scheduleList[idx].count = scheduleList[idx].club.length;
+                }
+              }
+            }
+          }
+          getSchedule(scheduleList);
+        };
       }
     }, []);
-    
+
     return (
       <>
         <div
@@ -130,11 +143,10 @@ const Calendar = observer(
               {dates?.map(v => (
                 <DateButton
                   key={v}
-                  className={`${
-                    v === today ? 'today' : v < today ? 'prev-mon' : ''
+                  className={`${v === today ? 'today' : v < today ? 'prev-mon' : ''
                     }${v === date ? 'selected' : ' '} ${schedule?.[yearMonth]?.[v]?.count ? '' : 'prev-mon'}`}
                   date={v}
-                  clubList ={schedule?.[yearMonth]?.[v]?.club ?? []}
+                  clubList={schedule?.[yearMonth]?.[v]?.club ?? []}
                   count={schedule?.[yearMonth]?.[v]?.count ?? 0}
                   onClick={v >= today ? handleDate : null}
                 />
@@ -151,12 +163,12 @@ export default Calendar;
 
 const DateButton = ({ date, count, className, onClick, clubList, ...others }) => {
   const classes = className ?? '';
-  const dateText = classes === 'selected'? `: ${date?.split('-')[2]}`:date?.split('-')[2];
+  const dateText = classes === 'selected' ? `: ${date?.split('-')[2]}` : date?.split('-')[2];
   const day = new Date(date).getUTCDay();
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time dateTime={date ?? ''} onClick={count ? (e)=>onClick(e, clubList): null}>
+        <time dateTime={date ?? ''} onClick={count ? (e) => onClick(e, clubList) : null}>
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>
