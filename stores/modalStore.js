@@ -4,6 +4,7 @@ import { createRef } from 'react';
 class ModalStore {
   registered;
   errCode;
+  visiblePath;
   hidden = true;
   golfInfo; // {id, name, area, img}
   // authInfo => authStore.authList
@@ -14,8 +15,10 @@ class ModalStore {
       errCode: observable,
       hidden: observable,
       golfInfo: observable,
+      visiblePath: observable,
       setRegistered: action,
       setGolfInfo: action,
+      setVisiblePath: action,
       setModalHidden: action,
       setErrCode: action,
     });
@@ -29,6 +32,10 @@ class ModalStore {
     this.golfInfo = golfInfo;
   }
 
+  setVisiblePath(visiblePath){
+    this.visiblePath = visiblePath;
+  }
+  
   setModalHidden(hidden) {
     this.hidden = hidden;
   }

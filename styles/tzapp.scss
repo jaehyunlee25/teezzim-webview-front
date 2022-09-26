@@ -427,13 +427,68 @@
   }
 }
 
+.detail_nav_wrap {
+  margin: 40px 0;
+}
+.detail_nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 8px 0;
+}
+.weather_icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url('../assets/images/weather.png');
+  background-repeat: no-repeat;
+  background-size: 100%;  
+}
+.traffic_icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url('../assets/images/traffic.png');
+  background-repeat: no-repeat;
+  background-size: 100%;  
+}
+.menu_icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url('../assets/images/menu.png');
+  background-repeat: no-repeat;
+  background-size: 100%;  
+}
+.restaurants_icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url('../assets/images/restaurants.png');
+  background-repeat: no-repeat;
+  background-size: 100%;  
+}
+.right_arrow_icon {
+  width: 20px; 
+  height: 20px; 
+  margin: 10px;
+  display: inline-block;
+  background-image: url('../assets/images/right_arrow.png'); 
+  background-repeat: no-repeat; 
+  background-size: 50%;
+}
+.nav_title {
+  font-size: 17px;
+  margin-left: 25px;
+  flex: 1;
+  text-align: left;
+}
 .input_box {
   position: relative;
   width: 100%;
   margin: 0 auto;
   border-radius: 4px;
 }
-
 .login_box {
   position: relative;
   width: 100%;

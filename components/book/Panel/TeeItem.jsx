@@ -19,6 +19,13 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
       handleWarnPopup(tee.state);
       return;
     }
+    if(!registered){
+      modalStore.setVisiblePath('Login');
+    } else if (e.target.className==='tee-icon' && registered){
+      modalStore.setVisiblePath('ReLogin');
+    } else {
+      modalStore.setVisiblePath('Detail');
+    }
     modalStore.setRegistered(registered);
     modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img, eng: tee.eng });
     modalStore.setModalHidden(false);
