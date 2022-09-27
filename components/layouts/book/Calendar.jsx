@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useCallback, useRef } from 'react';
 
 const Calendar = observer(
-  ({ date, handleDate, schedule, setSchedule, successList, yearMonth, today, ...others }) => {
+  ({ date, handleDate, schedule, setSchedule, successList, setSuccessList, yearMonth, today, ...others }) => {
     const { panelStore, authStore, teeScheduleStore } = useStores();
 
     const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
@@ -52,6 +52,8 @@ const Calendar = observer(
         panelStore._checkedTeeList.size > 0 &&
         panelStore._panelHidden
       ) {
+        console.log('들어옴');
+        console.log(successList);
         getSchedule(successList);
       }
       return () => {
@@ -112,6 +114,7 @@ const Calendar = observer(
               }
             }
           }
+          setSuccessList(scheduleList);
           getSchedule(scheduleList);
         };
       }

@@ -347,6 +347,7 @@ export default function Book() {
               // cachedSchedule={cachedSchedule}
               // uncachedClubList={uncachedClubList}
               successList={successList}
+              setSuccessList={setSuccessList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
