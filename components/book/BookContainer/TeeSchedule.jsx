@@ -5,7 +5,6 @@ const TeeSchedule = ({ time, registered, tee_id, ...others }) => {
   const [_, min, __] = time.split(':');
   return (
     <div
-      id={id}
       className={registered ? 'min text-primary' : 'min warning text-primary'}
       onClick={() =>
         router.push({
