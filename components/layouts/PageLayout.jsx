@@ -16,7 +16,7 @@ const PageTemplate = observer(({ children }) => {
   return (
     <>
       {!toastStore.hidden && <Toast message={message} />}
-      <ModalContainer title='계정등록' hidden={modalStore.hidden} />
+      <ModalContainer hidden={modalStore.hidden} />
       <div className='container'>{children}</div>
       <BottomMenu />
       <style jsx>

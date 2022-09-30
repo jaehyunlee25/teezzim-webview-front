@@ -1,10 +1,11 @@
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
+import DetailModal from './DetailModal';
 import LoginModal from './LoginModal';
 import ReLoginModal from './ReLoginModal';
 
-const ModalContainerComponent = observer(({ title, children, hidden }) => {
+const ModalContainerComponent = observer(({ children, hidden }) => {
   const { modalStore } = useStores();
   const ref = useRef(null);
 
@@ -17,6 +18,13 @@ const ModalContainerComponent = observer(({ title, children, hidden }) => {
     }, 300);
   }, [modalStore]);
 
+  const title = useMemo(()=>{
+    if(modalStore.visiblePath === 'Login') return '계정등록';
+    if(modalStore.visiblePath === 'ReLogin') return '등록해제';
+    if(modalStore.visiblePath === 'Detail') return '골프장 관련 상세정보보기';
+    return '';
+  },[modalStore.visiblePath]);
+
   return (
     <>
       <div id='modal-container' ref={ref} hidden={hidden}>
@@ -26,11 +34,18 @@ const ModalContainerComponent = observer(({ title, children, hidden }) => {
             close
           </span>
         </div>
-        {modalStore.registered ? (
-          <ReLoginModal handleClose={handleClose} />
-        ) : (
+        {
+          modalStore.visiblePath === 'Login' &&
           <LoginModal handleClose={handleClose} />
-        )}
+        }
+        {
+          modalStore.visiblePath === 'ReLogin' &&
+          <ReLoginModal handleClose={handleClose} />
+        }
+        {
+          modalStore.visiblePath === 'Detail' &&
+          <DetailModal handleClose={handleClose} />
+        }
       </div>
       <style jsx>{`
         #modal-container {

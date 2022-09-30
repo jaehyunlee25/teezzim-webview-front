@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
-import teeScheduleStore from '@/stores/teeScheduleStore';
 import SearchBar from '@/components/common/SearchBar';
 
 const Panel = observer(() => {

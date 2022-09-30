@@ -29,9 +29,6 @@ export default function Book() {
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
   const [successList, setSuccessList] = useState('');
-  // const [cachedSchedule, setCacheSchedule] = useState([]);
-  // const [uncachedClubList, setUncachedClubList] = useState([]);
-  
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -75,70 +72,6 @@ export default function Book() {
       }
     }
   };
-
-  const getDayScadules = async function (clubList) {
-    const dateTime = teeScheduleStore._date;
-    loadStore.reset();
-    loadStore.setLoading(true);
-    const {
-      status,
-      data: { resultCode, message, data },
-    } = await axios.get('/teezzim/teeapi/v1/schedule/filter', {
-      params: {
-        dates: dateTime,
-        device_id:authStore.deviceId,
-        clubId: clubList ?? panelStore.checkedKeys.join(','),
-      },
-    });
-
-    loadStore.setLoading(false);
-    if (status === 200) {
-      if (resultCode === 1) {
-        const nameMap = panelStore.checkedKeys.reduce(
-          (acc, id) => ({ ...acc, [panelStore.teeListMap?.[id]?.name]: id }),
-          {},
-        );
-        // console.log("@@@", data);
-        const daySchedule = data?.[dateTime]
-          ? Object.entries(data[dateTime]).reduce(
-              (acc, [course, schedules]) => {
-                let nextAcc = acc;
-                for (let [hour, scheduleList] of Object.entries(schedules)) {
-                  for (let schedule of scheduleList) {
-                    const { golf_club_name } = schedule;
-                    if (!nextAcc?.[nameMap?.[golf_club_name]]) continue;
-                    // 여기에서 SavedReservation Data로 필터링
-                    // nextAcc.nameMap[golf_club_name];
-                    // teeScheduleStore.reservedSchedules[golf]
-                    nextAcc[nameMap[golf_club_name]] = {
-                      ...(nextAcc[nameMap[golf_club_name]] || {}),
-                      [course]: [
-                        ...(nextAcc[nameMap[golf_club_name]]?.[course] || []),
-                        { ...schedule, hour },
-                      ],
-                    };
-                  }
-                }
-                return nextAcc;
-              },
-              panelStore.checkedKeys.reduce(
-                (acc, v) => ({ ...acc, [v]: {} }),
-                {},
-              ),
-            )
-          : panelStore.checkedKeys.reduce(
-              (acc, v) => ({ ...acc, [v]: {} }),
-              {},
-            );
-
-        // console.log(daySchedule);
-        teeScheduleStore.setTeeSchedules(daySchedule);
-      } else console.warn(message);
-    } else {
-      loadStore.setError(true);
-      console.warn(`error code: ${status}`);
-    }
-  }
 
   const handleSelectContainer = useCallback(async(e) => {
     setSchedule({});
@@ -187,26 +120,53 @@ export default function Book() {
     window.localStorage.setItem('checkList', JSON.stringify(saveData));
 
     // cache 스케쥴 조회
-    const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
-    const res = await axios.post('/teezzim/teeapi/v1/schedule/date/cache',{
-      time: "60",
-      club_list: clubList
-    });
-
-    if( res.data.empty.length < 1 && res.data.data.length > 0 ) {
-      console.log('[LOG][CASE] 캐시가 모두 있는 경우');
-      const cacheSchedule = res.data.data.reduce((acc, {date, count, club })=> ({
-        ...acc,
-        [date]: {
-          club: club,
-          count: count
+    if (id === 'book'){
+      let data = [];
+      for (const item of panelStore.filterCheckedTeeList) {
+        const ctl = item;
+        if (ctl.state !== 1 || ctl.state !== 2){
+          data.push({ club: ctl.eng, club_id: ctl.id });
+          const timeKey = 'search-' + ctl.id;
+          const nowTime = (new Date()).getTime();
+          window.localStorage.setItem(timeKey, nowTime);
         }
-      }));
-      setSchedule(prevSchedule => ({
-        ...prevSchedule,
-        [yearMonthStr]: cacheSchedule,
-      }));
+      }
+      if (window.BRIDGE && window.BRIDGE.requestSearch) {
+        window.BRIDGE.requestSearch(JSON.stringify(data));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        const payload = JSON.stringify({
+          command: 'requestSearch',
+          data: JSON.stringify(data),
+        });
+        window.webkit.messageHandlers.globalMethod.postMessage(payload);
+      } else {
+        console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
+      }
+    }
       
+    window.teeSearchFinished = function (data) {
+      console.log("### teeSearchFinished 호출됨", data);
+      ///----
+      const jarr = JSON.parse(data);
+      let scheduleList = [];
+      for (const info of jarr) {
+        for (const dt of info.content) {
+          const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
+          if (idx < 0) {
+            scheduleList.push({ date: dt, count: 1, club: [info.club] });
+          } else { // 이미 해당 날짜가 있으면
+            // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
+            if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0){
+              scheduleList[idx].club.push(info.club);
+              scheduleList[idx].count = scheduleList[idx].club.length;
+            }
+          }
+        }
+      }
+      // console.log(scheduleList);
+      setSuccessList(scheduleList);
+      ///----
+      // setSuccessList(data);
       router.push({
         href: '/home',
         query: {
@@ -217,54 +177,6 @@ export default function Book() {
         },
       });
       panelStore.setPanelHidden(true);
-    } else {
-      // if(res.data.data.length){
-      //   console.log('[LOG][CASE] 일부만 캐시가 있는 경우'); 
-      //   setCacheSchedule(res.data.data); setUncachedClubList(res.data.empty);
-      // } else {
-      //   console.log('[LOG][CASE] 캐시가 모두 없는 경우'); 
-      //   setCacheSchedule([]); setUncachedClubList(res.data.empty);
-      // }
-      if (id === 'book'){
-        // teeScheduleStore.setCalenderUpdate();
-        // const data = res.data.empty;
-        let data = [];
-        for (const item of panelStore.filterCheckedTeeList) {
-          // const ctl = JSON.parse(item);
-          const ctl = item;
-          if (ctl.state !== 1 || ctl.state !== 2){
-            data.push({ club: ctl.eng, club_id: ctl.id });
-            const timeKey = 'search-' + ctl.id;
-            const nowTime = (new Date()).getTime();
-            window.localStorage.setItem(timeKey, nowTime);
-          }
-        }
-        if (window.BRIDGE && window.BRIDGE.requestSearch) {
-          window.BRIDGE.requestSearch(JSON.stringify(data));
-        } else if (window.webkit && window.webkit.messageHandlers ) {
-          const payload = JSON.stringify({
-            command: 'requestSearch',
-            data: JSON.stringify(data)
-          });
-          window.webkit.messageHandlers.globalMethod.postMessage(payload);
-        } else {
-          console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
-        }
-      }
-      
-      window.teeSearchFinished = function (clubList) {
-        setSuccessList(clubList);
-        router.push({
-          href: '/home',
-          query: {
-            ...others,
-            subTab: 'tabContent01',
-            container: id,
-            prev: 'home',
-          },
-        });
-        panelStore.setPanelHidden(true);
-      }
     }
   });
 
@@ -279,12 +191,26 @@ export default function Book() {
       };
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
-      window.teeSearchTimeFinished = function(clubList){
-        console.log("### teeSearchTimeFinished 호출됨");
-        // setTimeout(()=>{
-        //   getDayScadules(clubList);
-        // }, 500);
-        getDayScadules(clubList);
+      window.teeSearchTimeFinished = function(data){
+        console.log("### teeSearchTimeFinished 호출됨", data);
+        const jarr = JSON.parse(data);
+        console.log(jarr);
+        let daySchedule = {};
+        for (const info of jarr) {
+          daySchedule[info.club_id] = {};
+          for (const row of info.content) {
+            row.hour = row.time.substring(0, 2);
+            row.time = row.time + ":00";
+            if( daySchedule[info.club_id].hasOwnProperty(row.golf_course_name) ){
+              daySchedule[info.club_id][row.golf_course_name].push(row);
+            } else { // 중복된 코스가 없으면
+              daySchedule[info.club_id][row.golf_course_name] = [row];
+            }
+          }
+        }
+        console.log(daySchedule);
+        teeScheduleStore.setTeeSchedules(daySchedule);
+        // getDayScadules(clubList);
       };
     }
   }, []);
@@ -421,6 +347,7 @@ export default function Book() {
               // cachedSchedule={cachedSchedule}
               // uncachedClubList={uncachedClubList}
               successList={successList}
+              setSuccessList={setSuccessList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
