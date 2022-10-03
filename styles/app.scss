@@ -1452,6 +1452,11 @@ input {
   }
 }
 
+.text-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .text-sub {
   font-size: 16px;
   font-weight: 400; 
@@ -1461,10 +1466,45 @@ input {
   letter-spacing: 0.25px; 
   font-family: Spoqa Han Sans Neo;
   color: #5d5d5d;
+  width: 50% !important;
 
   &.bold {
     font-weight: 600;
   }
+}
+
+.arrow-wrap {
+  position: absolute;
+  bottom: 0px;
+  background-color: #fff;
+  height: 20px;
+  width: 100%;
+}
+
+.down-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-image: url('../assets/images/down.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin-right: 5px;
+  top: 8px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.up-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-image: url('../assets/images/up.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin-right: 5px;
+  top: 8px;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
 
 .text-caption1 {
@@ -2765,13 +2805,16 @@ input {
   left: 0;
   width: 100%;
   z-index: 100;
-
+  
   .rollsheet-container {
     position: relative;
     display: flex;
     width: 100%;
     pointer-events: auto;
     outline: 0;
+    max-height: 100px;
+    transition-property: max-height;
+    transition-duration: 0.25s;
   }
 
   .rollsheet {
@@ -2785,7 +2828,6 @@ input {
     text-overflow: ellipsis; 
     border-bottom: 1px solid #b8b8b8; 
     background-color: var(--neutrals-white);
-
     box-shadow: 0 6px 8px 1px var(--alpha-black-a-7), 0 4px 4px -3px var(--alpha-black-20),
       0 2px 2px 0 rgba(0, 0, 0, 0.15);
 
