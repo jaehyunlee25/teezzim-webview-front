@@ -83,7 +83,7 @@ const BottomMenu = () => {
               openNativePage('Backup');
             }}
           >
-            <div className='backup_icon'></div>백업
+            <div className='backup_icon'></div>백업 및 복원
           </a>
           <Link href='/golf_homepage/panel'><a><div className='link_icon'></div>골프장 홈페이지 바로가기</a></Link>
           {/* <ul>

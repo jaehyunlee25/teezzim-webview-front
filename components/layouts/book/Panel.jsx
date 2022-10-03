@@ -307,10 +307,10 @@ useEffect(()=>{
             <Counter type='checked' />
             <ul className='button-list'>
               <li id='book' className='button' onClick={handleSelectContainer}>
-                실시간 예약
+                실시간 검색
               </li>
-              <li className='button'>티찜</li>
-              <li className='button' onClick={()=>window.BRIDGE.functionTest()}>티찜</li>
+              <li className='button'>자동검색</li>
+              <li className='button' onClick={()=>window.BRIDGE.functionTest()}>예약오픈정보</li>
               {/* <li id='wait' className='button' onClick={handleSelectContainer}>
                 예약대기
               </li>

@@ -8,7 +8,7 @@ const MiniPanel = observer(() => {
   const { panelStore } = useStores();
 
   const panelName = () => {
-    if (container === 'book') return '실시간 예약';
+    if (container === 'book') return '골프장리스트';
     else if (container === 'wait') return '예약대기';
     else if (container === 'alarm') return '예약오픈 알림';
   };

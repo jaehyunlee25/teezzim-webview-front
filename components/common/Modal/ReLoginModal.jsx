@@ -78,15 +78,15 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
             </button>
           ) : (
             <>
-              <span className='text-black medium-Emphasis02'>
+              {/* <span className='text-black medium-Emphasis02'>
                 [재설정]시 사용하던 골프장 계정 정보를 지우고 새로 설정합니다.
-              </span>
+              </span> */}
               <button
                 type='button'
                 className='bg-surface1 text-white'
                 onClick={() => setPopupHidden(false)}
               >
-                재설정
+                등록해제
               </button>
             </>
           )}
@@ -95,7 +95,7 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       <div className='pop_Common' hidden={popupHidden}>
         <div className='pop_Notice'>
           <p className='medium-Emphasis01'>
-            아이디와 비밀번호를 지우고 다시 설정합니다.
+            등록을 해제합니다.
           </p>
           <div className='Buttonwrap'>
             <span
@@ -105,7 +105,7 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
                 removeLoginInfo();
               }}
             >
-              재설정(확인)
+              확인
             </span>
             <span
               className='fl bg-white text-action'
