@@ -20,7 +20,7 @@ const MiniPanel = observer(() => {
     if (!ref.current) return;
     setIsOpen(!isOpen);
     if(isOpen){
-      ref.current.style.maxHeight = '150px';
+      ref.current.style.maxHeight = '190px';
     } else {
       ref.current.style.maxHeight = '100px';
     }
