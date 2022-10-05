@@ -97,11 +97,11 @@ export default function Book() {
       return;
     }
 
-    if (selectedLength > 5) {
+    if (selectedLength > 10) {
       const obj = id === 'wait' ? '대기' : id === 'alarm' ? '오픈알림' : '';
       toastStore.setMessage(
         <>
-          5개 이하의 골프장에서만
+          10개 이하의 골프장에서만
           <br /> 예약{obj}을 할 수 있습니다.
         </>,
       );
@@ -183,8 +183,7 @@ export default function Book() {
   useEffect(() => {
     if(window){
       const params = { command: 'getDeviceId'};
-      if(window.BRIDGE && window.BRIDGE.globalMethod) 
-        window.BRIDGE.globalMethod(JSON.stringify(params));
+      window.BRIDGE.globalMethod(JSON.stringify(params));
 
       window.callDeviceId = function (deviceId) {
         const { device_id } = JSON.parse(deviceId);

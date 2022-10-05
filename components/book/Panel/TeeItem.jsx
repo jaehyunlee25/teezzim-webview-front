@@ -12,6 +12,17 @@ export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) 
   // TODO 등록된 골프장 계정 로그인 에러 상태를 반영하는 Badge로 변경
   const [badgeMsg, setBadgeMsg] = useState(!registered ? '미등록' : null);
 
+  const imageSrc = useMemo(()=>{
+    if(tee.area==='수도권') return globalStore.TeeImages[0];
+    if(tee.area==='강원도') return globalStore.TeeImages[2];
+    if(tee.area==='충청도') return globalStore.TeeImages[3];
+    if(tee.area==='영남권') return globalStore.TeeImages[4];
+    if(tee.area==='호남권') return globalStore.TeeImages[5];
+    if(tee.area==='제주도') return globalStore.TeeImages[6];
+    return globalStore.TeeImages[0];
+  },[tee]);
+
+
   // Handler - showModal
   const handleClick = (e) => {
     if(tee.state === 1 || tee.state === 2){
@@ -28,7 +39,7 @@ export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) 
       modalStore.setVisiblePath('Detail');
     }
     modalStore.setRegistered(registered);
-    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img, eng: tee.eng });
+    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img:imageSrc, eng: tee.eng });
     modalStore.setModalHidden(false);
   };
 
@@ -73,16 +84,6 @@ export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) 
       return 'turquoise';
     }
     return '';
-  },[tee]);
-
-  const imageSrc = useMemo(()=>{
-    if(tee.area==='수도권') return globalStore.TeeImages[0];
-    if(tee.area==='강원도') return globalStore.TeeImages[2];
-    if(tee.area==='충청도') return globalStore.TeeImages[3];
-    if(tee.area==='영남권') return globalStore.TeeImages[4];
-    if(tee.area==='호남권') return globalStore.TeeImages[5];
-    if(tee.area==='제주도') return globalStore.TeeImages[6];
-    return globalStore.TeeImages[0];
   },[tee]);
 
   return (

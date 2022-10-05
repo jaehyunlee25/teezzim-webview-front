@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 import { useState } from 'react';
+import IMG_Golf_01 from '@/assets/images/IMG_Golf_01.png'; // 임시
 
 const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const { modalStore, authStore } = useStores();

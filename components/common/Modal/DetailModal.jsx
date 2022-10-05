@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
+import IMG_Golf_01 from '@/assets/images/IMG_Golf_01.png'; // 임시
 
 const DetailModalComponent = observer(({ cb, errCb }) => {
   const { modalStore } = useStores();
