@@ -56,8 +56,8 @@ const MiniPanel = observer(() => {
               </p> */}
               <ul className='text-wrap'>
                 {
-                  [...panelStore.filterCheckedTeeList]?.map(v => (
-                    <li className='text-sub'>
+                  [...panelStore.filterCheckedTeeList]?.map((v, i) => (
+                    <li key={i} className='text-sub'>
                       &#183; {v.name}
                     </li>
                   ))
