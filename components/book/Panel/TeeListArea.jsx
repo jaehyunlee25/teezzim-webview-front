@@ -1,10 +1,6 @@
-import useStores from '@/stores/useStores';
-import { observer } from 'mobx-react-lite';
-
 import TeeItem from '@/components/book/Panel/TeeItem';
 
 export const TeeListArea = ({ registered, list, handleWarnPopup }) => {
-  const { globalStore } = useStores();
   return (
     <>
       <div className='list_Golfarea'>
@@ -13,7 +9,6 @@ export const TeeListArea = ({ registered, list, handleWarnPopup }) => {
             <TeeItem
               handleWarnPopup={handleWarnPopup}
               key={tee.id}
-              img={globalStore.TeeImages[i % 7]}
               registered={registered}
               {...tee}
             />

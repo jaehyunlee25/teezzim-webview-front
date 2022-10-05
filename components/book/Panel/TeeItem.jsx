@@ -5,9 +5,8 @@ import useStores from '@/stores/useStores';
 import TeeCheckInput from '@/components/book/Panel/TeeCheckInput';
 import HomepageLink from '@/components/layouts/reserve/HomepageLink';
 
-export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...tee }) {
-  const { panelStore, modalStore } = useStores();
-
+export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) {
+  const { panelStore, modalStore, globalStore } = useStores();
   const [loc1, loc2, loc3] = tee.address.split(' ');
   const loc = /\d/.test(loc1) ? `${loc2} ${loc3}` : `${loc1} ${loc2}`;
   // TODO 등록된 골프장 계정 로그인 에러 상태를 반영하는 Badge로 변경
@@ -76,13 +75,23 @@ export function TeeItem({ img, registered, handleWarnPopup, type = 'home', ...te
     return '';
   },[tee]);
 
+  const imageSrc = useMemo(()=>{
+    if(tee.area==='수도권') return globalStore.TeeImages[0];
+    if(tee.area==='강원도') return globalStore.TeeImages[2];
+    if(tee.area==='충청도') return globalStore.TeeImages[3];
+    if(tee.area==='영남권') return globalStore.TeeImages[4];
+    if(tee.area==='호남권') return globalStore.TeeImages[5];
+    if(tee.area==='제주도') return globalStore.TeeImages[6];
+    return globalStore.TeeImages[0];
+  },[tee]);
+
   return (
     <>
       <li className={stateClass}>
         {/* list_detail */}
         <div className='list-detail'  onClick={type === 'home' ? handleClick : undefined}>
           <div className='tee-icon-wrap'>
-            <Image className='tee-icon' src={img} width={56} height={56} alt='' />
+            <Image className='tee-icon' src={imageSrc} width={56} height={56} alt='' />
             <div className={`${stateClass}-icon`} />
           </div>
           <div className='tee-container'>
