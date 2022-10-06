@@ -188,7 +188,8 @@ export default function Book() {
   useEffect(() => {
     if(window){
       const params = { command: 'getDeviceId'};
-      window.BRIDGE.globalMethod(JSON.stringify(params));
+
+      if (window.BRIDGE) window.BRIDGE.globalMethod(JSON.stringify(params));
 
       window.callDeviceId = function (deviceId) {
         const { device_id } = JSON.parse(deviceId);
