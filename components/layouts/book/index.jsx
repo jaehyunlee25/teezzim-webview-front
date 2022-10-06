@@ -29,6 +29,7 @@ export default function Book() {
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
   const [successList, setSuccessList] = useState('');
+  const [successClubList, setSuccessClubList] = useState([]);
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -149,7 +150,9 @@ export default function Book() {
       ///----
       const jarr = JSON.parse(data);
       let scheduleList = [];
+      let clubList = [];
       for (const info of jarr) {
+        if(!clubList.includes(info.club)) clubList.push(info.club);
         for (const dt of info.content) {
           const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
           if (idx < 0) {
@@ -163,7 +166,9 @@ export default function Book() {
           }
         }
       }
+      // console.log(clubList)
       // console.log(scheduleList);
+      setSuccessClubList(clubList);
       setSuccessList(scheduleList);
       ///----
       // setSuccessList(data);
@@ -235,7 +240,7 @@ export default function Book() {
     <>
       <Panel handleSelectContainer={handleSelectContainer}/>
       <div className='pt-15'></div>
-      <MiniPanel />
+      <MiniPanel successClubList={successClubList}/>
 
       <div className='filter-wrap'>
         <div className='filter-container'>

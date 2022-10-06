@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const MiniPanel = observer(() => {
+const MiniPanel = observer(({successClubList}) => {
   const router = useRouter();
   const { container } = router.query;
   const { panelStore } = useStores();
@@ -57,7 +57,7 @@ const MiniPanel = observer(() => {
               <ul className='text-wrap'>
                 {
                   [...panelStore.filterCheckedTeeList]?.map((v, i) => (
-                    <li key={i} className='text-sub'>
+                    <li key={i} className={successClubList?.includes(v.eng) ? 'text-sub':'empty-text-sub'}>
                       &#183; {v.name}
                     </li>
                   ))

@@ -1472,6 +1472,21 @@ input {
     font-weight: 600;
   }
 }
+.empty-text-sub {
+  font-size: 16px;
+  font-weight: 400; 
+  font-stretch: normal; 
+  font-style: normal; 
+  line-height: 1.36; 
+  letter-spacing: 0.25px; 
+  font-family: Spoqa Han Sans Neo;
+  color: var(--warning-surface-2); 
+  width: 50% !important;
+
+  &.bold {
+    font-weight: 600;
+  }
+}
 
 .arrow-wrap {
   position: absolute;
