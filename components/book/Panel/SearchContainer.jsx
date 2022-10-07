@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 
 // TODO Debounce 적용하기
 const SearchContainer = observer(() => {
-  const { panelStore } = useStores();
+  const { panelStore, authStore } = useStores();
   const [hidden, setHidden] = useState(true);
   const [tee, setTee] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState('');
@@ -35,7 +35,7 @@ const SearchContainer = observer(() => {
     //   value,
     // );
     // console.log(`${value} pid : ${pid}`);
-
+    if(value !== '' && !authStore.isResetSearchValue) authStore.setIsResetSearchValue(true);
     return pid;
   };
 

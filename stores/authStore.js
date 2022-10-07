@@ -4,18 +4,22 @@ class AuthStore {
   _authList = [];
   _communicated = false;
   _deviceId = "";
+  _isResetSearchValue = false;
 
   constructor() {
     makeObservable(this, {
       _authList: observable,
       _communicated: observable,
       _deviceId: observable,
+      _isResetSearchValue: observable,
       authList: computed,
       communicated: computed,
       deviceId: computed,
+      isResetSearchValue: computed,
       saveAuthList: action,
       communicate: action,
       setDeviceId: action,
+      setIsResetSearchValue: action,
     });
   }
 
@@ -31,6 +35,10 @@ class AuthStore {
     return this._deviceId;
   }
 
+  get isResetSearchValue() {
+    return this._isResetSearchValue;
+  }
+
   saveAuthList(authList) {
     this._authList = authList;
   }
@@ -39,8 +47,12 @@ class AuthStore {
     this._communicated = condition ?? true;
   }
 
-  setDeviceId(did){
+  setDeviceId(did) {
     this._deviceId = did;
+  }
+
+  setIsResetSearchValue(boolean) {
+    this._isResetSearchValue = boolean;
   }
 }
 

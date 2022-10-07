@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import useInput from '@/lib/hooks/useInput';
 import CloseBtnMedium from '@/assets/images/Icon_Close-Medium2.svg';
+import { useEffect } from 'react';
+import useStores from '@/stores/useStores';
 
 // MyStory, Panel 페이지에서 사용
 export default function SearchBar({
@@ -21,11 +23,18 @@ export default function SearchBar({
     { cb: onChangeKeyword },
   );
   const { keyword } = inputs;
+  const { authStore } = useStores();
 
   const handleClose = () => {
     reset();
     handleCloseBtn();
   }
+
+  useEffect(()=>{
+    if(!authStore.isResetSearchValue && keyword !== '') {
+      handleClose();
+    }
+  },[authStore.isResetSearchValue]);
 
   return (
     <>

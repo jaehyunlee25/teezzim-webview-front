@@ -35,6 +35,7 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       alert('이 기능은 앱에서만 동작합니다.');
       return;
     }
+    authStore.setIsResetSearchValue(false);
   };
 
   return (
@@ -104,6 +105,7 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
               onClick={() => {
                 setPopupHidden(true);
                 removeLoginInfo();
+                handleClose();
               }}
             >
               확인

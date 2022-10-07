@@ -142,6 +142,7 @@ const LoginModalComponent = observer(({ cb, errCb, handleClose }) => {
       console.log('이 기능은 앱에서만 동작합니다.');
       return;
     }
+    authStore.setIsResetSearchValue(false);
     // if (isVivaldi || isKMH) {
     //   if (isVivaldi) {
     //     if (window.BRIDGE && window.BRIDGE.requestSaveLoginData) {
