@@ -39,7 +39,7 @@ export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) 
       modalStore.setVisiblePath('Detail');
     }
     modalStore.setRegistered(registered);
-    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img:imageSrc, eng: tee.eng });
+    modalStore.setGolfInfo({ clubId: tee.id, name: tee.name, loc, img:imageSrc, eng: tee.eng, phone: tee.phone });
     modalStore.setModalHidden(false);
   };
 

@@ -6,7 +6,7 @@ class ModalStore {
   errCode;
   visiblePath;
   hidden = true;
-  golfInfo; // {id, name, area, img}
+  golfInfo; // {id, name, area, img, phone}
   // authInfo => authStore.authList
 
   constructor() {
