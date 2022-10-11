@@ -10,6 +10,8 @@ class TeeScheduleStore {
     21, 22, 23,
   ];
   _areas = ['수도권', '강원도', '충청도', '영남권', '호남권', '제주도'];
+  _successList = [];
+  _successClubList = [];
 
   constructor() {
     makeObservable(this, {
@@ -19,6 +21,8 @@ class TeeScheduleStore {
       _calenderUpdate: observable,
       _times: observable,
       _areas: observable,
+      _successList: observable,
+      _successClubList: observable,
 
       teeSchedules: computed,
       reservedSchedules: computed,
@@ -27,6 +31,8 @@ class TeeScheduleStore {
       isEmpty: computed,
       times: computed,
       areas: computed,
+      successList: computed,
+      successClubList: computed,
 
       setTeeSchedules: action,
       setDate: action,
@@ -36,6 +42,8 @@ class TeeScheduleStore {
       removeAreas: action,
       initFilter: action,
       setCalenderUpdate: action,
+      setSuccessList: action,
+      setSuccessClubList: action,
     });
   }
 
@@ -65,6 +73,14 @@ class TeeScheduleStore {
 
   get areas() {
     return this._areas;
+  }
+  
+  get successList() {
+    return this._successList;
+  }
+
+  get successClubList() {
+    return this._successClubList;
   }
 
   setDate(date) {
@@ -110,6 +126,14 @@ class TeeScheduleStore {
 
   setCalenderUpdate(condition = true) {
     this._calenderUpdate = condition;
+  }
+
+  setSuccessList(successList) {
+    this._successList = successList;
+  }
+
+  setSuccessClubList(successClubList) {
+    this._successClubList = successClubList;
   }
 }
 

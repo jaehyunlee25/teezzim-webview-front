@@ -28,8 +28,8 @@ export default function Book() {
   /** Calender Component */
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
-  const [successList, setSuccessList] = useState('');
-  const [successClubList, setSuccessClubList] = useState([]);
+  // const [successList, setSuccessList] = useState([]);
+  // const [successClubList, setSuccessClubList] = useState([]);
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -168,8 +168,8 @@ export default function Book() {
       }
       // console.log(clubList)
       // console.log(scheduleList);
-      setSuccessClubList(clubList);
-      setSuccessList(scheduleList);
+      teeScheduleStore.setSuccessClubList(clubList);
+      teeScheduleStore.setSuccessList(scheduleList);
       ///----
       // setSuccessList(data);
       router.push({
@@ -189,7 +189,7 @@ export default function Book() {
     if(window){
       const params = { command: 'getDeviceId'};
 
-      if (window.BRIDGE) window.BRIDGE.globalMethod(JSON.stringify(params));
+      if (window.BRIDGE && window.BRIDGE.globalMethod) window.BRIDGE.globalMethod(JSON.stringify(params));
 
       window.callDeviceId = function (deviceId) {
         const { device_id } = JSON.parse(deviceId);
@@ -241,7 +241,7 @@ export default function Book() {
     <>
       <Panel handleSelectContainer={handleSelectContainer}/>
       <div className='pt-15'></div>
-      <MiniPanel successClubList={successClubList}/>
+      <MiniPanel successClubList={teeScheduleStore.successClubList}/>
 
       <div className='filter-wrap'>
         <div className='filter-container'>
@@ -352,8 +352,8 @@ export default function Book() {
               schedule={schedule}
               // cachedSchedule={cachedSchedule}
               // uncachedClubList={uncachedClubList}
-              successList={successList}
-              setSuccessList={setSuccessList}
+              successList={teeScheduleStore.successList}
+              // setSuccessList={setSuccessList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
               today={today}
