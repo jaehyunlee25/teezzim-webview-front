@@ -54,6 +54,7 @@ export default function Book() {
     const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
+    teeScheduleStore.setTeeSchedules({});
     // console.log(dateTime);
     // if (container !== 'book') return;
     if (container === 'book') {
