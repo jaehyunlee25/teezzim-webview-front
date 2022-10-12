@@ -14,7 +14,11 @@ const DetailModalComponent = observer(({ cb, errCb }) => {
       command : command,
       club_id : modalStore.golfInfo?.clubId
     }
-    window.BRIDGE.sendResponse(JSON.stringify(res));
+    if (window.BRIDGE && window.BRIDGE.sendResponse) {
+      window.BRIDGE.sendResponse(JSON.stringify(res));
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(res));
+    }
   }
 
   return (
