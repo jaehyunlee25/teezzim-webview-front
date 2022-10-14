@@ -11,6 +11,25 @@ const TeeCheckInput = observer(props => {
       ),
     [panelStore.checkedTeeList, panelStore.teeListMap, props],
   );
+
+  const sendCheckedData = (command, value) => {
+    if(command === 'addChecked') {
+      panelStore.addChecked(value);
+    } else {
+      panelStore.removeChecked(value);
+    }
+    const teeObj = JSON.parse(value);
+    const checkedData = {
+      command: command,
+      data: { club: teeObj.eng, club_id: teeObj.id },
+    }
+    console.log(checkedData);
+    if (window.BRIDGE && window.BRIDGE.sendResponse) {
+      window.BRIDGE.sendResponse(JSON.stringify(checkedData));
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
+    }
+  }
   const handleChecked = e => {
     if(props.registered && props.registered != true) {
       const params = { command: 'showToast', data: '먼저 로그인 정보를 입력하세요'};
@@ -41,7 +60,7 @@ const TeeCheckInput = observer(props => {
         return;
       }
     }
-    isChecked ? panelStore.removeChecked(value) : panelStore.addChecked(value);
+    isChecked ? sendCheckedData('removeChecked', value) : sendCheckedData('addChecked', value);
   };
   return (
     <>

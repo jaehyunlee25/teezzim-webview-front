@@ -11,7 +11,7 @@ import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 import PopUp from '@/components/common/PopUp';
 
-const Panel = observer(({handleSelectContainer}) => {
+const Panel = observer(({ handleSelectContainer }) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
@@ -39,20 +39,20 @@ const Panel = observer(({handleSelectContainer}) => {
   }, [panelStore]);
 
   const handleWarnPopup = (state) => {
-    if(state === 1) {
+    if (state === 1) {
       setWarnState(state);
       setIsWarnPopup(false);
     }
-    if(state === 2) {
+    if (state === 2) {
       setWarnState(state);
       setIsWarnPopup(false);
     }
   }
   useEffect(() => {
     mountRef.current = true;
-    getTeeList().then(()=>{
+    getTeeList().then(() => {
       const localCheckList = window.localStorage.getItem('checkList');
-      if(localCheckList){
+      if (localCheckList) {
         JSON.parse(localCheckList).forEach(tee => panelStore.addChecked(JSON.stringify(panelStore.teeListMap?.[tee.club_id])));
       }
     });
@@ -77,7 +77,7 @@ const Panel = observer(({handleSelectContainer}) => {
           // console.log(jsonStr);
           // 데이터 샘플: [{"clubId":"골프장식별자","id":"아이디","password":"패스워드"}]
           const dataList = JSON.parse(jsonStr);
-          if(dataList.length===0 && isInitSignalSendApp && authStore.communicated)setIsHidePopup(false);
+          if (dataList.length === 0 && isInitSignalSendApp && authStore.communicated) setIsHidePopup(false);
           panelStore.setRegisteredKeys(dataList.map(({ clubId }) => clubId));
 
           for (let i = 0; i < dataList.length; i++) {
@@ -183,81 +183,96 @@ const Panel = observer(({handleSelectContainer}) => {
     }
   }, [isInitSignalSendApp, panelStore, authStore, authStore.communicated]);
 
+  useEffect(() => {
+    if (window) {
+      window.addEventListener('popstate', function (event) {
+        const storage = globalThis?.sessionStorage;
+        if (!storage) return;
 
+        const currentPath = storage.getItem('currentPath');
 
-useEffect(()=>{
+        if (currentPath === '/teezzim/home')
+          panelStore.setPanelHidden(false);
+      });
+    }
+  });
 
-  if(window){
-    window.addEventListener('popstate', function(event) { 
-      const storage = globalThis?.sessionStorage;
-      if(!storage) return;
-
-      const currentPath =storage.getItem('currentPath');
-
-      if(currentPath === '/teezzim/home')
-      panelStore.setPanelHidden(false);
-    });
-  }
-});
+  useEffect(()=>{
+    if(window){
+      window.getCheckedTeeList = function() {
+        const checkedTeeList = [];
+        for (const checkedTee of panelStore.checkedTeeList) {
+          const teeObj = JSON.parse(checkedTee);
+          checkedTeeList.push({ club: teeObj.eng, club_id: teeObj.id })
+        }
+        if (window.BRIDGE && window.BRIDGE.sendResponse) {
+          window.BRIDGE.sendResponse(JSON.stringify(checkedTeeList));
+        } else if (window.webkit && window.webkit.messageHandlers) {
+          // TODO data 확인 필요 - ios
+          window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedTeeList));
+        }
+      }
+    }
+  },[]);
 
   return (
     <>
       <div hidden={panelStore.panelHidden}>
-      <PopUp
-        reverse={true}
-        smallClose={true}
-        hidden={isHidePopup}
-        buttonText='등록하러가기'
-        onButtonClick={e => {
-          setIsHidePopup(true);
-        }}
-        cancelButtonClick={e => {
-          setIsHidePopup(true);
-        }}
-      >
-        <div className='golf-club mt-25' />
-        <div className='notice-popup mb-20'>
-          <strong>
-            골프장 예약사이트의<br />
-            계정정보들을 등록하세요.<br />
-            <span className='text-primary'>예약에 필요한 정보를</span><br />
-            <span className='text-primary'>모아서 보실수 있습니다.</span>
-          </strong>
-        </div>
-      </PopUp>
-      <PopUp
-        reverse={true}
-        hidden={isWarnPopup}
-        buttonText='확인'
-        isCancel={true}
-        wi
-        onButtonClick={e => {
-          setIsWarnPopup(true);
-        }}
-        cancelButtonClick={e => {
-          setIsWarnPopup(true);
-        }}
-      >
-        <div className='warn-icon' />
-        <div className='warn-popup'>
-          {
-            warnState === 1 && 
-          <strong>
-          <span className='text-surface2'>시스템 오류</span>
-            <p className='mb-5 mt-5'>시스템에 장애가 생겼습니다.</p>
-            복구중이니 잠시 기다려 주세요..<br />
-          </strong>
-          }
-          {
-            warnState === 2 &&
+        <PopUp
+          reverse={true}
+          smallClose={true}
+          hidden={isHidePopup}
+          buttonText='등록하러가기'
+          onButtonClick={e => {
+            setIsHidePopup(true);
+          }}
+          cancelButtonClick={e => {
+            setIsHidePopup(true);
+          }}
+        >
+          <div className='golf-club mt-25' />
+          <div className='notice-popup mb-20'>
+            <strong>
+              골프장 예약사이트의<br />
+              계정정보들을 등록하세요.<br />
+              <span className='text-primary'>예약에 필요한 정보를</span><br />
+              <span className='text-primary'>모아서 보실수 있습니다.</span>
+            </strong>
+          </div>
+        </PopUp>
+        <PopUp
+          reverse={true}
+          hidden={isWarnPopup}
+          buttonText='확인'
+          isCancel={true}
+          wi
+          onButtonClick={e => {
+            setIsWarnPopup(true);
+          }}
+          cancelButtonClick={e => {
+            setIsWarnPopup(true);
+          }}
+        >
+          <div className='warn-icon' />
+          <div className='warn-popup'>
+            {
+              warnState === 1 &&
+              <strong>
+                <span className='text-surface2'>시스템 오류</span>
+                <p className='mb-5 mt-5'>시스템에 장애가 생겼습니다.</p>
+                복구중이니 잠시 기다려 주세요..<br />
+              </strong>
+            }
+            {
+              warnState === 2 &&
               <strong>
                 <span className='text-surface2'>골프장 오류</span>
                 <p className='mb-5 mt-5'>해당 클럽의 홈페이지에 일시적인 접속장애가 있습니다.</p>
                 잠시후에 다시 시도 해보세요.<br />
               </strong>
-          }
-        </div>
-      </PopUp>
+            }
+          </div>
+        </PopUp>
         <SearchContainer />
         <div className='wrapper'>
           <NavTab />
@@ -267,7 +282,7 @@ useEffect(()=>{
             <div className='list_Areawrap'>
               <div className='list_Areawrap_inner'>
                 {!panelStore.filter &&
-                panelStore.registeredTeeList.length <= 0 ? null : (
+                  panelStore.registeredTeeList.length <= 0 ? null : (
                   <>
                     <div className='list_AreaTop'>
                       <Counter type='registered' />
@@ -283,7 +298,7 @@ useEffect(()=>{
                 )}
 
                 {!panelStore.filter &&
-                panelStore.unregisteredTeeList.length <= 0 ? null : (
+                  panelStore.unregisteredTeeList.length <= 0 ? null : (
                   <>
                     <div className='list_AreaTop'>
                       <Counter type='unregistered' />
@@ -310,7 +325,7 @@ useEffect(()=>{
                 실시간 검색
               </li>
               <li className='button'>자동검색</li>
-              <li className='button' onClick={()=>window.BRIDGE.functionTest()}>예약오픈정보</li>
+              <li className='button' onClick={() => window.BRIDGE.functionTest()}>이벤트검색</li>
               {/* <li id='wait' className='button' onClick={handleSelectContainer}>
                 예약대기
               </li>
