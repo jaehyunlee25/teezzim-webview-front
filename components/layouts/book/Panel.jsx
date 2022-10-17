@@ -18,6 +18,7 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [isHidePopup, setIsHidePopup] = useState(true);
   const [isWarnPopup, setIsWarnPopup] = useState(true);
   const [warnState, setWarnState] = useState(1);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const mountRef = useRef(true);
   const getTeeList = useCallback(async () => {
@@ -206,10 +207,23 @@ const Panel = observer(({ handleSelectContainer }) => {
           checkedTeeList.push({ club: teeObj.eng, club_id: teeObj.id })
         }
         if (window.BRIDGE && window.BRIDGE.sendResponse) {
-          window.BRIDGE.sendResponse(JSON.stringify(checkedTeeList));
+          window.BRIDGE.sendResponse(JSON.stringify({
+            command: 'checkedTeeList',
+            data: checkedTeeList,
+          }));
         } else if (window.webkit && window.webkit.messageHandlers) {
           // TODO data 확인 필요 - ios
-          window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedTeeList));
+          window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify({
+            command: 'checkedTeeList',
+            data: checkedTeeList,
+          }));
+        }
+      }
+      window.loginScriptState = function (state) {
+        if (state === 'start') {
+          setIsDisabled(true);
+        } else {
+          setIsDisabled(false);
         }
       }
     }
@@ -321,7 +335,7 @@ const Panel = observer(({ handleSelectContainer }) => {
           <div className='bookingwrap'>
             <Counter type='checked' />
             <ul className='button-list'>
-              <li id='book' className='button' onClick={handleSelectContainer}>
+              <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : handleSelectContainer}>
                 실시간 검색
               </li>
               <li className='button'>자동검색</li>
@@ -379,6 +393,12 @@ const Panel = observer(({ handleSelectContainer }) => {
         .button {
           height: auto;
           min-height: max-content;
+        }
+        .button-disabled {
+          height: auto;
+          min-height: max-content;
+          background-color: #d9d9d9;
+          color: var(--neutrals-grey-3);
         }
         .list_AreaTop {
           display: flex;
