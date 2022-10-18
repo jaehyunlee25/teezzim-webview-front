@@ -29,7 +29,7 @@ export default function Book() {
   const [date, setDate] = useState(null);
   const [schedule, setSchedule] = useState({});
   // const [successList, setSuccessList] = useState([]);
-  // const [successClubList, setSuccessClubList] = useState([]);
+  const [successClubList, setSuccessClubList] = useState([]);
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -72,6 +72,7 @@ export default function Book() {
         });
         window.webkit.messageHandlers.globalMethod.postMessage(payload);
       }
+      setSuccessClubList(teeScheduleStore.successClubList);
     }
   };
 
@@ -169,6 +170,7 @@ export default function Book() {
       }
       // console.log(clubList)
       // console.log(scheduleList);
+      setSuccessClubList(clubList);
       teeScheduleStore.setSuccessClubList(clubList);
       teeScheduleStore.setSuccessList(scheduleList);
       ///----
@@ -201,7 +203,11 @@ export default function Book() {
       window.teeSearchTimeFinished = function(data){
         console.log("### teeSearchTimeFinished 호출됨", data);
         const jarr = JSON.parse(data);
-        console.log(jarr);
+        const jarrClubList = jarr.map(tee => tee.club);
+        const countClubList = schedule?.[yearMonthStr]?.[teeScheduleStore.date]?.club.map(tee=> tee)??[];
+        const failedClubList = countClubList.filter(club => !jarrClubList.includes(club));
+        setSuccessClubList(teeScheduleStore.successClubList.filter(club=>!failedClubList.includes(club)));
+
         let daySchedule = {};
         for (const info of jarr) {
           daySchedule[info.club_id] = {};
@@ -220,7 +226,7 @@ export default function Book() {
         // getDayScadules(clubList);
       };
     }
-  }, []);
+  }, [schedule]);
 
   /** Panel Component */
 
@@ -242,7 +248,7 @@ export default function Book() {
     <>
       <Panel handleSelectContainer={handleSelectContainer}/>
       <div className='pt-15'></div>
-      <MiniPanel successClubList={teeScheduleStore.successClubList}/>
+      <MiniPanel successClubList={successClubList}/>
 
       <div className='filter-wrap'>
         <div className='filter-container'>

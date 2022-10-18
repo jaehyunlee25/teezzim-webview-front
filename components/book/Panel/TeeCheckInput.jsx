@@ -23,13 +23,13 @@ const TeeCheckInput = observer(props => {
       command: command,
       data: { club: teeObj.eng, club_id: teeObj.id },
     }
-    console.log(checkedData);
     if (window.BRIDGE && window.BRIDGE.sendResponse) {
       window.BRIDGE.sendResponse(JSON.stringify(checkedData));
     } else if (window.webkit && window.webkit.messageHandlers ) {
       window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
     }
   }
+  
   const handleChecked = e => {
     if(props.registered && props.registered != true) {
       const params = { command: 'showToast', data: '먼저 로그인 정보를 입력하세요'};
