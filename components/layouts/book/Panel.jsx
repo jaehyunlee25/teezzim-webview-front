@@ -4,7 +4,7 @@ import SearchContainer from '@/components/book/Panel/SearchContainer';
 import TeeListArea from '@/components/book/Panel/TeeListArea';
 
 import useStores from '@/stores/useStores';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Counter from '@/components/book/Panel/Counter';
@@ -66,6 +66,16 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [savedReservationList, setSavedReservationList] = useState(null);
   const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
   const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
+
+  const checkedTeeIDList = useMemo(()=>{
+    const IDList = [];
+    for (const checkedTee of panelStore.checkedTeeList) {
+      const teeObj = JSON.parse(checkedTee);
+      IDList.push(teeObj.id);
+    }
+    return IDList;
+  }, [panelStore.checkedTeeList]);
+
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
@@ -304,7 +314,14 @@ const Panel = observer(({ handleSelectContainer }) => {
                     <TeeListArea
                       handleWarnPopup={handleWarnPopup}
                       registered
-                      list={panelStore.registeredTeeList.sort((a, b) =>
+                      list={panelStore.registeredTeeList.filter(tee=>checkedTeeIDList.includes(tee.id)).sort((a, b) =>
+                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                      )}
+                    />
+                    <TeeListArea
+                      handleWarnPopup={handleWarnPopup}
+                      registered
+                      list={panelStore.registeredTeeList.filter(tee=>!checkedTeeIDList.includes(tee.id)).sort((a, b) =>
                         a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
                       )}
                     />
