@@ -82,6 +82,7 @@ const Tab = observer(({ name, area }) => {
     <>
       <li>
         <ChipButton
+          name={name}
           status={status}
           color={panelStore.filter === area ? 'active' : 'default'}
           onClick={handleTabClick}

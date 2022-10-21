@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export default function ChipButton({
   children,
   radius,
@@ -6,6 +8,7 @@ export default function ChipButton({
   color = 'default',
   padding,
   status,
+  name,
   ...props
 }) {
   /* 
@@ -18,12 +21,23 @@ export default function ChipButton({
         padding(string) : 내부 padding 값
         status(string | number) : 상태 표시 하위 Chip에 들어갈 값
   */
+
+ const backgroundColor = useMemo(()=>{
+  if(name==='수도권') return '#01977a';
+  if(name==='강원도') return '#007be5';
+  if(name==='충청도') return '#a836e3';
+  if(name==='영남권') return '#f2bc5e';
+  if(name==='호남권') return '#ff992a';
+  if(name==='제주도') return '#41c7fa';
+  return 'var(--brand-primary)';
+ },[name]);
+
   if (color === 'dark') {
     tColor = 'var(--neutrals-white)';
     bColor = 'var(--neutrals-grey-8-text)';
   } else if (color === 'active') {
     tColor = 'var(--neutrals-white)';
-    bColor = 'var(--brand-primary)';
+    bColor = backgroundColor;
   }
 
   return (
