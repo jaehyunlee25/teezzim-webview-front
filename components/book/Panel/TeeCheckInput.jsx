@@ -61,6 +61,17 @@ const TeeCheckInput = observer(props => {
       }
     }
     isChecked ? sendCheckedData('removeChecked', value) : sendCheckedData('addChecked', value);
+
+    // checkList 저장 코드
+    let saveData = [];
+    for (const saveItem of panelStore.checkedTeeList){
+      const saveCtl = JSON.parse(saveItem);
+      if (saveCtl.state !== 1 || saveCtl.state !== 2){
+        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+      }
+    }
+    window.localStorage.setItem('checkList', JSON.stringify(saveData));
+
   };
   return (
     <>
