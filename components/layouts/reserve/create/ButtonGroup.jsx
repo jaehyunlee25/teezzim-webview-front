@@ -71,7 +71,7 @@ const ButtonGroup = observer(
         {panelStore.registeredKeys.includes(clubId) ? (
           <div className='component-wrap'>
             <ul className='btn-group btn-group__booking'>
-              <li>
+              {/* <li>
                 <button
                   type='button'
                   className='btn large primary roundbtn full'
@@ -79,7 +79,7 @@ const ButtonGroup = observer(
                 >
                   간편예약
                 </button>
-              </li>
+              </li> */}
               <li>
                 <HomepageLink
                   id={clubId}
