@@ -169,7 +169,11 @@ const DateButton = ({ date, count, className, onClick, clubList, ...others }) =>
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time dateTime={date ?? ''} onClick={count ? (e) => onClick(e, clubList) : null}>
+        <time
+          dateTime={date ?? ''}
+          // onClick={count ? (e) => onClick(e, clubList) : null}
+          onTouchEnd={count ? (e) => onClick(e, clubList) : null}
+        >
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>
