@@ -373,6 +373,7 @@ const Panel = observer(({ handleSelectContainer }) => {
           position: fixed;
           top: 0;
           height: 80%;
+          max-height: calc(100% - 160px);
           width: 100%;
           z-index: 200;
         }
