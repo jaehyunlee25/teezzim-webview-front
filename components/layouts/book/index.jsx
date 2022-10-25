@@ -50,8 +50,8 @@ export default function Book() {
   );
 
   /** Date Select */
-  const handleDate = async (e, clubList) => {
-    const { dateTime } = e.target;
+  const handleDate = async (dateTime, clubList) => {
+    // const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
     teeScheduleStore.setTeeSchedules({});

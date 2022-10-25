@@ -149,7 +149,7 @@ const Calendar = observer(
                   date={v}
                   clubList={schedule?.[yearMonth]?.[v]?.club ?? []}
                   count={schedule?.[yearMonth]?.[v]?.count ?? 0}
-                  onClick={v >= today ? handleDate : null}
+                  onClick={v >= today ? handleDate : ()=>{}}
                 />
               ))}
             </div>
@@ -168,12 +168,8 @@ const DateButton = ({ date, count, className, onClick, clubList, ...others }) =>
   const day = new Date(date).getUTCDay();
   return (
     <>
-      <button className={day === 0 ? 'sunday ' + classes : classes} {...others}>
-        <time
-          dateTime={date ?? ''}
-          // onClick={count ? (e) => onClick(e, clubList) : null}
-          onTouchEnd={count ? (e) => onClick(e, clubList) : null}
-        >
+      <button className={day === 0 ? 'sunday ' + classes : classes} {...others} onTouchEnd={count ? () => onClick(date ?? '', clubList) : (null)}>
+        <time dateTime={date ?? ''}>
           {dateText ?? <>&nbsp;</>}
         </time>
         <p className='number'>
