@@ -35,7 +35,7 @@ const Calendar = observer(
             club: club,
             count: count
           }
-        }));
+        }),{});
       }
 
       setSchedule(prevSchedule => ({

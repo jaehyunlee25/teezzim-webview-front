@@ -166,6 +166,7 @@ const Reserve = () => {
     }
   }
   function reqMyReserveApi(device_id) {
+    // 여기로 데이터 들어올 예정 기존 형태로 수정해서 setTest
     axios({
       method: 'post',
       url: `/teezzim/teeapi/v1/club/reservation`,
@@ -188,7 +189,8 @@ const Reserve = () => {
         /** 크롤링 완료 신호 APP->WEB 전송 */
         window.getMyReserveForApi = function (jsonStr) {
           console.log('getMyReserveForApi', jsonStr); // device_id 필요
-          const { device_id } = JSON.parse(jsonStr);
+          const myReserve = JSON.parse(jsonStr.replace(/\n/g, '<br/>'));
+          const { device_id } = myReserve;
           authStore.setDeviceId(device_id);
           reserveTabStore.deviceId = device_id;
           reqMyReserveApi(device_id);
@@ -308,6 +310,56 @@ const Reserve = () => {
   }
   // console.log("####", sortedData)
 
+  const test2 = {
+    game_date: '20220819',
+    game_time: '0616',
+    GolfClub: {
+      id: '1b01f7dc-ee3b-11ec-a93e-0242ac11000a',
+      name: '클럽모우',
+      address: '강원도 홍천군 서면 장락동길 111',
+      phone: '033-439-9000',
+      area: '강원도',
+      email: '',
+      homepage: 'http://www.clubmow.com/_mobile/index.asp',
+      corp_reg_number: '227-86-01869',
+      description: '3년연속소비자만족10대골프장',
+    },
+    GolfCourse: {
+      name: '마운틴',
+      description: '9홀',
+    },
+  }
+  const test1 = {
+    "GolfClub": {
+      "id": "fb6bccf0-f10b-11ec-a93e-0242ac11000a",
+      "name": "에버리스",
+      "address": "제주특별자치도 제주시 애월읍 평화로 1693-75",
+      "area": "제주도",
+      "phone": "064)795-5000",
+      "email": "",
+      "homepage": "https://www.shinangolf.com/club/everis",
+      "corp_reg_number": "133-81-30614",
+      "description": "제주의 자연을 담은\n휴양지형 고품격 골프리조트\n에버리스골프리조트는 178㎡에서 621㎡에 이르는 다양한 규모의 고급스러운 골프빌리지와 야외수영장까지 갖춘 휴양형 골프리조트로 가족과 친구는 물론 비즈니스 파트너와의 여행을 즐겁게 합니다.\n\n제주의 대자연이 속삭이는\n솔바람같은 이야기\n제주의 자연을 담은\n휴양지형 고품격 골프리조트\n동쪽으로 한라산, 서쪽으로 광활한 목초지와 바다, 아름다운 섬 비양도가 그림처럼 펼쳐지는 제주 천혜의 자연환경에 아름다운 조경까지 더해 제주의 자연과 라운딩의 즐거움을 함께 느끼는 최적의 골프코스를 선보입니다.",
+      "created_at": "2022-06-21T02:44:03.000Z",
+      "updated_at": "2022-06-21T02:44:03.000Z"
+    },
+    "Game": [
+      {
+        "game_date": "20221122",
+        "game_time": "0749",
+        "GolfCourse": {
+          "id": "fb6ef37e-f10b-11ec-a93e-0242ac11000a",
+          "golf_club_id": "fb6bccf0-f10b-11ec-a93e-0242ac11000a",
+          "name": "Saebyul",
+          "description": "9홀",
+          "created_at": "2022-06-21T02:44:03.000Z",
+          "updated_at": "2022-06-21T02:44:03.000Z"
+        }
+      }
+    ],
+    "command": "SUCCESS_OF_RESERVE_SEARCH",
+    "golf_club_id": "fb6bccf0-f10b-11ec-a93e-0242ac11000a"
+  }
   return (
     <>
       <PopUp
