@@ -5,7 +5,8 @@ class ReserveTabStore {
   selectedReserve = null;
   isFirstTabMove = true;
   deviceId = "";
-
+  myReserverData = [];
+  
   constructor() {
     makeObservable(this, {
       myReserveList: observable,

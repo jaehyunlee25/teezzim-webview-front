@@ -12,6 +12,7 @@ import Back from '/assets/images/Icon_Back.svg';
 import styles from '@/styles/Reserve.module.scss';
 import useStores from '@/stores/useStores';
 import { observer } from 'mobx-react-lite';
+import { toJS } from 'mobx'
 
 const ReserveInfo = observer(() => {
   const router = useRouter();
@@ -71,10 +72,9 @@ const ReserveInfo = observer(() => {
   });
   console.log('🚀 - test', test);
   let idx = 0;
-  if( test && test.data && router.query.id) {
-    idx = test.data.findIndex(item =>{
-      console.log(item);
-      return item.id == router.query.id
+  if( reserveTabStore.myReserveList && router.query.id) {
+    idx = toJS(reserveTabStore.myReserveList).findIndex(item =>{
+      return item.GolfClub.id == router.query.id
     });
   }
   
@@ -106,9 +106,9 @@ const ReserveInfo = observer(() => {
   // }, [reserveTabStore.selectedReserve]);
   
   const handleCancel = async () => {
-    const item = test.data[idx];
+    const item = toJS(reserveTabStore.myReserveList)[idx];
     const data = {
-      club: item.GolfClub.GolfClubEng.eng_id,
+      club: item.golf_eng_name,
       club_id: item.GolfClub.id,
       year: item.game_date.substring(0,4),
       month: item.game_date.substring(4,6),

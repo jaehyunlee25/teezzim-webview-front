@@ -60,7 +60,7 @@ const ReserveTap = (props) => {
   const handleReserveCancel = async index => {
     const item = reserve;
     const data = {
-      club: item.GolfClub.GolfClubEng.eng_id,
+      club: item.golf_eng_name,
       club_id: item.GolfClub.id,
       year: item.game_date.substring(0,4),
       month: item.game_date.substring(4,6),
@@ -87,15 +87,14 @@ const ReserveTap = (props) => {
 
   /* 상세보기 화살표 아이콘을 눌렀을 경우 */
   const handleDetailIconClick = e => {
-    console.log(reserve);
     reserveTabStore.setSelectReserve(reserve);
     router.push({
-      pathname: `/reserve/${reserve.id}`,
-      query: { tab: 'my_book' },
+      pathname: `/reserve/${reserve.GolfClub.id}`,
+      query: { tab: 'my_book', id:reserve.GolfClub.id },
     });
   };
 
-  // console.log("###2", reserve);
+  console.log("###2", reserve);
 
   return (
     <>
