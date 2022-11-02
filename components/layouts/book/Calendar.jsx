@@ -166,6 +166,9 @@ const DateButton = ({ date, count, className, onClick, clubList, ...others }) =>
   const classes = className ?? '';
   const dateText = classes === 'selected' ? `: ${date?.split('-')[2]}` : date?.split('-')[2];
   const day = new Date(date).getUTCDay();
+  console.log('dateText', dateText);
+  console.log('classes',classes);
+  console.log('count', count);
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others} onTouchEnd={count ? () => onClick(date ?? '', clubList) : (null)}>

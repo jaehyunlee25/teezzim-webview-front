@@ -244,6 +244,11 @@ export default function Book() {
     }
   };
 
+  console.log('now', now);
+  console.log('today', today);
+  console.log('yearMonthStr', yearMonthStr);
+  console.log('schedule',schedule)
+
   return (
     <>
       <Panel handleSelectContainer={handleSelectContainer}/>
