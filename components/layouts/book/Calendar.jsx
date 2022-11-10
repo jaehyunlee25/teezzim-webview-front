@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useCallback, useRef } from 'react';
 
 const Calendar = observer(
-  ({ date, handleDate, schedule, setSchedule, successList, setSuccessList, yearMonth, today, ...others }) => {
+  ({ date, handleDate, schedule, setSchedule, successList, successClubList, setSuccessClubList, yearMonth, today, ...others }) => {
     const { panelStore, authStore, teeScheduleStore } = useStores();
 
     const day = useMemo(() => getOffsetFirstDay(yearMonth), [yearMonth]);
@@ -59,6 +59,16 @@ const Calendar = observer(
       };
     }, [yearMonth, panelStore._panelHidden, panelStore._checkedTeeList.size, getSchedule, successList]);
 
+    useEffect(() => {
+      if (window) {
+        const prevPath = storage.getItem('prevPath');
+        if (prevPath) {
+          if (prevPath.includes('/reserve/create')) {
+            setSuccessClubList(successClubList);
+          }
+        }
+      }
+    }, []);
     // useEffect(() => {
     //   if (window) {
     //     const prevPath = storage.getItem('prevPath');

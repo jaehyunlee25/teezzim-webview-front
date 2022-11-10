@@ -365,6 +365,8 @@ export default function Book() {
               // cachedSchedule={cachedSchedule}
               // uncachedClubList={uncachedClubList}
               successList={teeScheduleStore.successList}
+              successClubList={teeScheduleStore.successClubList}
+              setSuccessClubList={setSuccessClubList}
               // setSuccessList={setSuccessList}
               setSchedule={setSchedule}
               yearMonth={yearMonthStr}
