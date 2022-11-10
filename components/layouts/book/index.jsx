@@ -276,6 +276,7 @@ export default function Book() {
                     tyear == yearMonth.year && tmonth === yearMonth.month
                   }
                   onClick={() => {
+                    setDate(null);
                     const [year, month] = getPrevYearMonth(
                       yearMonth.year,
                       yearMonth.month,
@@ -290,6 +291,7 @@ export default function Book() {
                   type='button'
                   className='btn-mon-next'
                   onClick={() => {
+                    setDate(null);
                     const [year, month] = getNextYearMonth(
                       yearMonth.year,
                       yearMonth.month,
