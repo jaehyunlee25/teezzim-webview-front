@@ -12,6 +12,11 @@ const nextConfig = {
         // destination: 'http://localhost:4000/teeapi/v1/:path*',
         destination: 'https://dev.mnemosyne.co.kr/teeapi/v1/:path*',
       },
+      {
+        source: '/api/webview/:path*',
+        // destination: 'http://localhost:4000/teeapi/v1/:path*',
+        destination: 'https://dev.mnemosyne.co.kr/api/webview/:path*',
+      },
     ];
   },
 };

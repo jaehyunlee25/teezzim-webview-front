@@ -24,12 +24,12 @@ const Panel = observer(({ handleSelectContainer }) => {
   const getTeeList = useCallback(async () => {
     const {
       status,
-      data: { resultCode, message, data },
-    } = await axios.get('/teezzim/teeapi/v1/club');
+      data: { resultCode, message, golfClubs },
+    } = await axios.post('/teezzim/api/webview/getGolfClubList');
     if (!mountRef.current) return;
     if (status === 200) {
-      if (resultCode === 1) {
-        panelStore.setTeeList(data);
+      if (resultCode === 200) {
+        panelStore.setTeeList(golfClubs);
         mountRef.current = false;
       } else {
         console.warn(`[error code : ${resultCode}] ${message}`);
@@ -315,14 +315,14 @@ const Panel = observer(({ handleSelectContainer }) => {
                       handleWarnPopup={handleWarnPopup}
                       registered
                       list={panelStore.registeredTeeList.filter(tee=>checkedTeeIDList.includes(tee.id)).sort((a, b) =>
-                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                        a.score > b.score ? -1 : a.score < b.score ? 1 : 0,
                       )}
                     />
                     <TeeListArea
                       handleWarnPopup={handleWarnPopup}
                       registered
                       list={panelStore.registeredTeeList.filter(tee=>!checkedTeeIDList.includes(tee.id)).sort((a, b) =>
-                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                        a.score > b.score ? -1 : a.score < b.score ? 1 : 0,
                       )}
                     />
                   </>
@@ -338,7 +338,7 @@ const Panel = observer(({ handleSelectContainer }) => {
                     <TeeListArea
                       handleWarnPopup={handleWarnPopup}
                       list={panelStore.unregisteredTeeList.sort((a, b) =>
-                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                        a.score > b.score ? -1 : a.score < b.score ? 1 : 0,
                       )}
                     />
                   </>
