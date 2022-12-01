@@ -20,7 +20,7 @@ const MiniPanel = observer(({successClubList}) => {
     if (!ref.current) return;
     setIsOpen(!isOpen);
     if(isOpen){
-      ref.current.style.maxHeight = '190px';
+      ref.current.style.maxHeight = '300px';
     } else {
       ref.current.style.maxHeight = '100px';
     }
