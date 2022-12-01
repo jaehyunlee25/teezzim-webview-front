@@ -59,7 +59,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta httpEquiv='Cache-Control' content='No-Cache' />
         <meta httpEquiv='Pragma' content='No-Cache' />
         <meta httpEquiv='Expires' content='-1' />
-        {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" /> */}
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
         <title>TeeZZim</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
