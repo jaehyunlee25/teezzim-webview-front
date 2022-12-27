@@ -66,13 +66,6 @@ const Panel = observer(({ handleSelectContainer }) => {
   }
 
   useEffect(() => {
-    const localCheckList = window.localStorage.getItem('checkList');
-      if (localCheckList) {
-        JSON.parse(localCheckList).forEach(tee => panelStore.addChecked(JSON.stringify(panelStore.teeListMap?.[tee.club_id])));
-      }
-  },[]);
-
-  useEffect(() => {
     mountRef.current = true;
     getTeeList().then(() => {
       const localCheckList = window.localStorage.getItem('checkList');
