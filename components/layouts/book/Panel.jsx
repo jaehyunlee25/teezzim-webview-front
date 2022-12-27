@@ -20,7 +20,22 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [warnState, setWarnState] = useState(1);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
+  const [savedReservationList, setSavedReservationList] = useState(null);
+  const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
+  const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
+
+  const checkedTeeIDList = useMemo(()=>{
+    const IDList = [];
+    for (const checkedTee of panelStore.checkedTeeList) {
+      const teeObj = JSON.parse(checkedTee);
+      IDList.push(teeObj.id);
+    }
+    return IDList;
+  }, [panelStore.checkedTeeList]);
+
   const mountRef = useRef(true);
+
   const getTeeList = useCallback(async () => {
     const {
       status,
@@ -49,6 +64,14 @@ const Panel = observer(({ handleSelectContainer }) => {
       setIsWarnPopup(false);
     }
   }
+
+  useEffect(() => {
+    const localCheckList = window.localStorage.getItem('checkList');
+      if (localCheckList) {
+        JSON.parse(localCheckList).forEach(tee => panelStore.addChecked(JSON.stringify(panelStore.teeListMap?.[tee.club_id])));
+      }
+  },[]);
+
   useEffect(() => {
     mountRef.current = true;
     getTeeList().then(() => {
@@ -61,21 +84,6 @@ const Panel = observer(({ handleSelectContainer }) => {
       mountRef.current = false;
     };
   }, [getTeeList]);
-
-  const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
-  const [savedReservationList, setSavedReservationList] = useState(null);
-  const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
-  const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
-
-  const checkedTeeIDList = useMemo(()=>{
-    const IDList = [];
-    for (const checkedTee of panelStore.checkedTeeList) {
-      const teeObj = JSON.parse(checkedTee);
-      IDList.push(teeObj.id);
-    }
-    return IDList;
-  }, [panelStore.checkedTeeList]);
-
 
   /** APP<->WEB 브릿지 함수용 */
   useEffect(() => {
