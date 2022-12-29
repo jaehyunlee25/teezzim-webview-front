@@ -23,7 +23,7 @@ class ErrorBoundary extends Component {
         <p className='error-text mb-50'>잠시후에 다시 시도하여주시기 바랍니다.</p>
       </div>
     }
-    return this.props.children;
+    return this.props.children ?? <></>;
   }
 }
 
