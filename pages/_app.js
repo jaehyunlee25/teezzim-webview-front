@@ -20,6 +20,7 @@ import { SWRConfig } from 'swr';
 import PageLayout from '@/components/layouts/PageLayout';
 import { useEffect } from 'react';
 import { sendResponse } from '@/lib/APIUtils';
+import ErrorBoundary from './ErrorBoundary';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -67,9 +68,11 @@ export default function MyApp({ Component, pageProps }) {
       <SWRConfig value={{ fetcher: url => fetch(url).then(res => res.json()) }}>
         <MobXStoresContext.Provider value={initStores}>
           <div id='app' className='wrap'>
-            <PageLayout>
-              <Component {...pageProps} />
-            </PageLayout>
+            <ErrorBoundary>
+              <PageLayout>
+                <Component {...pageProps} />
+              </PageLayout>
+              </ErrorBoundary>
           </div>
         </MobXStoresContext.Provider>
       </SWRConfig>
