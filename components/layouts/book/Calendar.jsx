@@ -1,9 +1,7 @@
 import { getTotalDate, getOffsetFirstDay } from '@/lib/DateUtils';
 import useStores from '@/stores/useStores';
-import axios from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useCallback, useRef } from 'react';
-import { toJS } from 'mobx';
 
 const Calendar = observer(
   ({ date, handleDate, schedule, setSchedule, successList, successClubList, setSuccessClubList, yearMonth, today, ...others }) => {
@@ -33,9 +31,6 @@ const Calendar = observer(
           }
         }),{});
       }
-
-      console.log('getSchedule 실행됨');
-      console.log('scheduleList',toJS(scheduleList));
 
       setSchedule(prevSchedule => ({
         ...prevSchedule,
