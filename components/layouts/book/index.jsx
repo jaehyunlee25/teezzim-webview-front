@@ -78,6 +78,10 @@ export default function Book() {
 
   const handleSelectContainer = useCallback(async(e) => {
     setSchedule({});
+    setSuccessClubList([]);
+    teeScheduleStore.setSuccessClubList([]);
+    teeScheduleStore.setSuccessList([]);
+
     const selectedLength = panelStore.checkedTeeList.size;
     const { id } = e.target;
     if (!id) return;
@@ -146,46 +150,19 @@ export default function Book() {
         console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
       }
     }
-      
-    window.teeSearchFinished = function (data) {
-      console.log("### teeSearchFinished 호출됨", data);
-      ///----
-      const jarr = JSON.parse(data);
-      let scheduleList = [];
-      let clubList = [];
-      for (const info of jarr) {
-        if(!clubList.includes(info.club)) clubList.push(info.club);
-        for (const dt of info.content) {
-          const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
-          if (idx < 0) {
-            scheduleList.push({ date: dt, count: 1, club: [info.club] });
-          } else { // 이미 해당 날짜가 있으면
-            // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
-            if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0){
-              scheduleList[idx].club.push(info.club);
-              scheduleList[idx].count = scheduleList[idx].club.length;
-            }
-          }
-        }
-      }
-      // console.log(clubList)
-      // console.log(scheduleList);
-      setSuccessClubList(clubList);
-      teeScheduleStore.setSuccessClubList(clubList);
-      teeScheduleStore.setSuccessList(scheduleList);
-      ///----
-      // setSuccessList(data);
-      router.push({
-        href: '/home',
-        query: {
-          ...others,
-          subTab: 'tabContent01',
-          container: id,
-          prev: 'home',
-        },
-      });
-      panelStore.setPanelHidden(true);
-    }
+    
+    router.push({
+      href: '/home',
+      query: {
+        ...others,
+        subTab: 'tabContent01',
+        container: id,
+        prev: 'home',
+      },
+    });
+    panelStore.setPanelHidden(true);
+
+    
   });
 
   useEffect(() => {
@@ -198,6 +175,37 @@ export default function Book() {
         const { device_id } = JSON.parse(deviceId);
         authStore.setDeviceId(device_id);
       };
+
+      window.teeSearchFinished = function (data) {
+        console.log("### teeSearchFinished 호출됨", data);
+        ///----
+        const jarr = JSON.parse(data);
+        let scheduleList = [];
+        let clubList = [];
+        for (const info of jarr) {
+          if(!clubList.includes(info.club)) clubList.push(info.club);
+          for (const dt of info.content) {
+            const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
+            if (idx < 0) {
+              scheduleList.push({ date: dt, count: 1, club: [info.club] });
+            } else { // 이미 해당 날짜가 있으면
+              // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
+              if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0){
+                scheduleList[idx].club.push(info.club);
+                scheduleList[idx].count = scheduleList[idx].club.length;
+              }
+            }
+          }
+        }
+        // console.log(clubList)
+        // console.log(scheduleList);
+        setSuccessClubList([...successClubList, clubList[0]]);
+        teeScheduleStore.setSuccessClubList([...teeScheduleStore.successClubList, clubList[0]]);
+        teeScheduleStore.setSuccessList([...teeScheduleStore.successList, scheduleList[0]]);
+        ///----
+        // setSuccessList(data);
+      }
+      
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
       window.teeSearchTimeFinished = function(data){
@@ -244,16 +252,11 @@ export default function Book() {
     }
   };
 
-  console.log('now', now);
-  console.log('today', today);
-  console.log('yearMonthStr', yearMonthStr);
-  console.log('schedule',schedule)
-
   return (
     <>
       <Panel handleSelectContainer={handleSelectContainer}/>
       <div className='pt-15'></div>
-      <MiniPanel successClubList={successClubList}/>
+      <MiniPanel successClubList={teeScheduleStore.successClubList}/>
 
       <div className='filter-wrap'>
         <div className='filter-container'>

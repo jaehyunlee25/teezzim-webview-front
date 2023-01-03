@@ -3,6 +3,7 @@ import useStores from '@/stores/useStores';
 import axios from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useCallback, useRef } from 'react';
+import { toJS } from 'mobx';
 
 const Calendar = observer(
   ({ date, handleDate, schedule, setSchedule, successList, successClubList, setSuccessClubList, yearMonth, today, ...others }) => {
@@ -17,14 +18,9 @@ const Calendar = observer(
     }, [yearMonth]);
     const storage = globalThis?.sessionStorage;
     const mountRef = useRef(true);
+    
     const getSchedule = useCallback(async (scheduleList) => {
       if (!mountRef.current) return;
-
-      // const clubList = panelStore.filterCheckedTeeList.map(tee=>tee.id);
-      // const res = await axios.post('/teezzim/teeapi/v1/schedule/date', {
-      //   device_id: authStore.deviceId,
-      //   club_list: club_list ? club_list.split(',') : clubList,
-      // }).catch(err => console.log(err));
 
       let curSchedule = {};
 
@@ -32,11 +28,14 @@ const Calendar = observer(
         curSchedule = scheduleList.reduce((acc, { date, count, club }) => ({
           ...acc,
           [date]: {
-            club: club,
-            count: count
+            club: acc?.[date] ? [...acc[date].club, club] : club,
+            count: acc?.[date] ? acc[date].count + count : count,
           }
         }),{});
       }
+
+      console.log('getSchedule 실행됨');
+      console.log('scheduleList',toJS(scheduleList));
 
       setSchedule(prevSchedule => ({
         ...prevSchedule,
@@ -69,64 +68,6 @@ const Calendar = observer(
         }
       }
     }, []);
-    // useEffect(() => {
-    //   if (window) {
-    //     const prevPath = storage.getItem('prevPath');
-    //     if (prevPath) {
-    //       if (prevPath.includes('/reserve/create')) {
-    //         teeScheduleStore.setDate(0);
-    //         teeScheduleStore.setCalenderUpdate();
-    //         // const ctl = Array.from(panelStore.checkedTeeList);
-    //         let data = [];
-    //         for (const item of panelStore.filterCheckedTeeList) {
-    //           // const ctl = JSON.parse(item);
-    //           const ctl = item;
-    //           if (ctl.state !== 1 || ctl.state !== 2) {
-    //             data.push({ club: ctl.eng, club_id: ctl.id });
-    //             const timeKey = 'search-' + ctl.id;
-    //             const nowTime = (new Date()).getTime();
-    //             window.localStorage.setItem(timeKey, nowTime);
-    //           }
-    //         }
-    //         if (window.BRIDGE && window.BRIDGE.requestSearch) {
-    //           window.BRIDGE.requestSearch(JSON.stringify(data));
-    //         } else if (window.webkit && window.webkit.messageHandlers) {
-    //           const payload = JSON.stringify({
-    //             command: 'requestSearch',
-    //             data: JSON.stringify(data)
-    //           });
-    //           window.webkit.messageHandlers.globalMethod.postMessage(payload);
-    //         } else {
-    //           console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
-    //         }
-    //       }
-    //     }
-    //     // console.log("### teeSearchFinished 바인딩됨");
-    //     /** APP->WEB */
-    //     window.teeSearchFinished = function (data) {
-    //       // console.log("### teeSearchFinished 호출됨", data);
-    //       ///----
-    //       const jarr = JSON.parse(data);
-    //       let scheduleList = [];
-    //       for (const info of jarr) {
-    //         for (const dt of info.content) {
-    //           const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
-    //           if (idx < 0) {
-    //             scheduleList.push({ date: dt, count: 1, club: [info.club] });
-    //           } else { // 이미 해당 날짜가 있으면
-    //             // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
-    //             if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0) {
-    //               scheduleList[idx].club.push(info.club);
-    //               scheduleList[idx].count = scheduleList[idx].club.length;
-    //             }
-    //           }
-    //         }
-    //       }
-    //       // setSuccessList(scheduleList);
-    //       getSchedule(scheduleList);
-    //     };
-    //   }
-    // }, []);
 
     return (
       <>
@@ -176,9 +117,7 @@ const DateButton = ({ date, count, className, onClick, clubList, ...others }) =>
   const classes = className ?? '';
   const dateText = classes === 'selected' ? `: ${date?.split('-')[2]}` : date?.split('-')[2];
   const day = new Date(date).getUTCDay();
-  console.log('dateText', dateText);
-  console.log('classes',classes);
-  console.log('count', count);
+
   return (
     <>
       <button className={day === 0 ? 'sunday ' + classes : classes} {...others} onTouchEnd={count ? () => onClick(date ?? '', clubList) : (null)}>

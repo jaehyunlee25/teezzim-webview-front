@@ -357,7 +357,7 @@ const Panel = observer(({ handleSelectContainer }) => {
                 실시간 검색
               </li>
               <li className='button'>자동검색</li>
-              <li className='button' onClick={() => window.BRIDGE.functionTest()}>이벤트검색</li>
+              <li className='button'>이벤트검색</li>
               {/* <li id='wait' className='button' onClick={handleSelectContainer}>
                 예약대기
               </li>
