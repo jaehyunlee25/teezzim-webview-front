@@ -83,6 +83,10 @@ class TeeScheduleStore {
     return this._successClubList;
   }
 
+  cleanTeeSchedules() {
+    this._teeSchedules = {};
+  }
+
   setDate(date) {
     this._date = date;
   }

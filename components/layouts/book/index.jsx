@@ -55,7 +55,7 @@ export default function Book() {
     // const { dateTime } = e.target;
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
-    teeScheduleStore.setTeeSchedules({});
+    teeScheduleStore.cleanTeeSchedules();
     // console.log(dateTime);
     // if (container !== 'book') return;
     if (container === 'book') {
@@ -166,18 +166,16 @@ export default function Book() {
       };
 
       window.teeSearchFinished = function (data) {
-        if(!panelStore.panelHidden) {
-          router.push({
-            href: '/home',
-            query: {
-              ...others,
-              subTab: 'tabContent01',
-              container: containerID,
-              prev: 'home',
-            },
-          });
-          panelStore.setPanelHidden(true);
-        }
+        router.push({
+          href: '/home',
+          query: {
+            ...others,
+            subTab: 'tabContent01',
+            container: containerID,
+            prev: 'home',
+          },
+        });
+        panelStore.setPanelHidden(true);
         console.log("### teeSearchFinished 호출됨", data);
         ///----
         const jarr = JSON.parse(data);

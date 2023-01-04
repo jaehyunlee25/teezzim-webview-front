@@ -29,7 +29,7 @@ const Calendar = observer(
             club: acc?.[date] ? [...acc[date].club, club] : club,
             count: acc?.[date] ? acc[date].count + count : count,
           }
-        }),{});
+        }), curSchedule);
       }
 
       setSchedule(prevSchedule => ({
