@@ -30,6 +30,7 @@ export default function Book() {
   const [schedule, setSchedule] = useState({});
   // const [successList, setSuccessList] = useState([]);
   const [successClubList, setSuccessClubList] = useState([]);
+  const [containerID, setContainerID] = useState('');
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -86,6 +87,7 @@ export default function Book() {
     const { id } = e.target;
     if (!id) return;
     if (id !== 'book' && id !== 'wait' && id !== 'alarm') return;
+    setContainerID(id);
 
     teeScheduleStore.setDate(0);
     if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
@@ -150,19 +152,6 @@ export default function Book() {
         console.warn('이 기능은 앱에서만 동작합니다.' + JSON.stringify(data));
       }
     }
-    
-    router.push({
-      href: '/home',
-      query: {
-        ...others,
-        subTab: 'tabContent01',
-        container: id,
-        prev: 'home',
-      },
-    });
-    panelStore.setPanelHidden(true);
-
-    
   });
 
   useEffect(() => {
@@ -177,6 +166,18 @@ export default function Book() {
       };
 
       window.teeSearchFinished = function (data) {
+        if(!panelStore.panelHidden) {
+          router.push({
+            href: '/home',
+            query: {
+              ...others,
+              subTab: 'tabContent01',
+              container: containerID,
+              prev: 'home',
+            },
+          });
+          panelStore.setPanelHidden(true);
+        }
         console.log("### teeSearchFinished 호출됨", data);
         ///----
         const jarr = JSON.parse(data);
@@ -199,13 +200,13 @@ export default function Book() {
         }
         // console.log(clubList)
         // console.log(scheduleList);
-        setSuccessClubList([...successClubList, clubList[0]]);
-        teeScheduleStore.setSuccessClubList([...teeScheduleStore.successClubList, clubList[0]]);
-        teeScheduleStore.setSuccessList([...teeScheduleStore.successList, scheduleList[0]]);
+        setSuccessClubList(successClubList.concat(clubList));
+        teeScheduleStore.setSuccessClubList(teeScheduleStore.successClubList.concat(clubList));
+        teeScheduleStore.setSuccessList(teeScheduleStore.successList.concat(scheduleList));
         ///----
         // setSuccessList(data);
       }
-      
+
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
       window.teeSearchTimeFinished = function(data){
@@ -229,8 +230,7 @@ export default function Book() {
             }
           }
         }
-        console.log(daySchedule);
-        teeScheduleStore.setTeeSchedules(daySchedule);
+        teeScheduleStore.setTeeSchedules(Object.assign(teeScheduleStore.teeSchedules, daySchedule));
         // getDayScadules(clubList);
       };
     }
