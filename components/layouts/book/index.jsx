@@ -210,6 +210,16 @@ export default function Book() {
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
       window.teeSearchTimeFinished = function(data){
+        router.push({
+          href: '/home',
+          query: {
+            ...others,
+            subTab: 'tabContent01',
+            container: containerID,
+            prev: 'home',
+          },
+        });
+        panelStore.setPanelHidden(true);
         // console.log("### teeSearchTimeFinished 호출됨", data);
         const jarr = JSON.parse(data);
         const jarrClubList = jarr.map(tee => tee.club);
