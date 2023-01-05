@@ -56,6 +56,8 @@ export default function Book() {
     setDate(dateTime);
     teeScheduleStore.setDate(dateTime);
     teeScheduleStore.cleanTeeSchedules();
+    setSuccessClubList([]);
+    teeScheduleStore.setSuccessClubList([]);
     // console.log(dateTime);
     // if (container !== 'book') return;
     if (container === 'book') {
@@ -208,12 +210,12 @@ export default function Book() {
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
       window.teeSearchTimeFinished = function(data){
-        console.log("### teeSearchTimeFinished 호출됨", data);
+        // console.log("### teeSearchTimeFinished 호출됨", data);
         const jarr = JSON.parse(data);
         const jarrClubList = jarr.map(tee => tee.club);
-        const countClubList = schedule?.[yearMonthStr]?.[teeScheduleStore.date]?.club.map(tee=> tee)??[];
-        const failedClubList = countClubList.filter(club => !jarrClubList.includes(club));
-        setSuccessClubList(teeScheduleStore.successClubList.filter(club=>!failedClubList.includes(club)));
+      
+        setSuccessClubList(successClubList.concat(jarrClubList));
+        teeScheduleStore.setSuccessClubList(teeScheduleStore.successClubList.concat(jarrClubList));
 
         let daySchedule = {};
         for (const info of jarr) {
