@@ -388,8 +388,7 @@ const Panel = observer(({ handleSelectContainer, isLogin, setIsLogin }) => {
             <Counter type='checked' />
             <ul className='button-list'>
               <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : (isLogin ? handleSelectContainer : handleLogin)}>
-                {/* {isLogin ? '검색' : '로그인'} */}
-                로그인/검색
+                {isLogin ? '검색' : '로그인/검색'}
               </li>
               <li className='button'>자동검색</li>
               <li className='button'>이벤트검색</li>

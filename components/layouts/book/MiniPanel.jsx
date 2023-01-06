@@ -29,6 +29,9 @@ const MiniPanel = observer(({ successClubList, setIsLogin }) => {
   useEffect(() => {
     if (panelStore.panelHidden) {
       setIsOpen(true);
+      ref.current.style.maxHeight = '100px';
+    } else {
+      setIsLogin(false);
     }
   }, [panelStore.panelHidden]);
 
@@ -42,7 +45,7 @@ const MiniPanel = observer(({ successClubList, setIsLogin }) => {
             <div className="allim_reservation">
               <h1 className='head-headline text-white' onClick={() => {
                 panelStore.setPanelHidden(false);
-                setIsLogin(false);
+                // setIsLogin(false);
               }}>
                 {panelName()}
                 <div className='arrow-icon' />
