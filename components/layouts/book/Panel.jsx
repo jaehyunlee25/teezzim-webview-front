@@ -25,6 +25,8 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
   const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
 
+  const [isLogin, setIsLogin] = useState(false);
+
   const checkedTeeIDList = useMemo(()=>{
     const IDList = [];
     for (const checkedTee of panelStore.checkedTeeList) {
@@ -53,6 +55,19 @@ const Panel = observer(({ handleSelectContainer }) => {
       console.warn(`[error code : ${status}]`);
     }
   }, [panelStore]);
+
+  const handleLogin = () => {
+    if (window.BRIDGE && window.BRIDGE.sendResponse) {
+      window.BRIDGE.sendResponse(JSON.stringify({
+        command: 'request_login',
+      }));
+    } else if (window.webkit && window.webkit.messageHandlers) {
+      // TODO data 확인 필요 - ios
+      window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify({
+        command: 'request_login',
+      }));
+    }
+  }
 
   const handleWarnPopup = (state) => {
     if (state === 1) {
@@ -164,6 +179,10 @@ const Panel = observer(({ handleSelectContainer }) => {
               // ... 반복
             ]
           */
+        };
+
+        window.loginFinished = function () {
+          setIsLogin(true);
         };
 
         /** 예약하기 탭 열림완료 WEB->APP 전송 */
@@ -353,8 +372,8 @@ const Panel = observer(({ handleSelectContainer }) => {
           <div className='bookingwrap'>
             <Counter type='checked' />
             <ul className='button-list'>
-              <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : handleSelectContainer}>
-                실시간 검색
+              <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : (isLogin ? handleSelectContainer : handleLogin)}>
+                {isLogin ? '검색' : '로그인'}
               </li>
               <li className='button'>자동검색</li>
               <li className='button'>이벤트검색</li>
