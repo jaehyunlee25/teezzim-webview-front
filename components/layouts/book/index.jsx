@@ -31,6 +31,7 @@ export default function Book() {
   // const [successList, setSuccessList] = useState([]);
   const [successClubList, setSuccessClubList] = useState([]);
   const [containerID, setContainerID] = useState('');
+  const [isLogin, setIsLogin] = useState(false);
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -38,14 +39,12 @@ export default function Book() {
     now.getMonth() + 1, // returns 0 - 11
     now.getDate(),
   ]; // 오늘 기준의 연도, 달, 날
-  const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${
-    tdate < 10 ? '0' + tdate : tdate
-  }`; // YYYY-MM-DD 형식으로 출력한 오늘 날짜
+  const today = `${tyear}-${tmonth < 10 ? '0' + tmonth : tmonth}-${tdate < 10 ? '0' + tdate : tdate
+    }`; // YYYY-MM-DD 형식으로 출력한 오늘 날짜
   const [yearMonth, setYearMonth] = useState({ year: tyear, month: tmonth }); // 달력에 출력할
   const yearMonthStr = useMemo(
     () =>
-      `${yearMonth.year}-${
-        yearMonth.month < 10 ? '0' + yearMonth.month : yearMonth.month
+      `${yearMonth.year}-${yearMonth.month < 10 ? '0' + yearMonth.month : yearMonth.month
       }`,
     [yearMonth],
   );
@@ -68,7 +67,7 @@ export default function Book() {
       const params = { command: 'resquestSearchTime', data: JSON.stringify(data) }; // TODO 여기 오타 어쩌지...?
       if (window.BRIDGE && window.BRIDGE.globalMethod) {
         window.BRIDGE.globalMethod(JSON.stringify(params));
-      } else if (window.webkit && window.webkit.messageHandlers ) {
+      } else if (window.webkit && window.webkit.messageHandlers) {
         const payload = JSON.stringify({
           command: 'requestSearchTime',
           data: JSON.stringify(data)
@@ -79,7 +78,7 @@ export default function Book() {
     }
   };
 
-  const handleSelectContainer = useCallback(async(e) => {
+  const handleSelectContainer = useCallback(async (e) => {
     setSchedule({});
     setSuccessClubList([]);
     teeScheduleStore.setSuccessClubList([]);
@@ -92,8 +91,8 @@ export default function Book() {
     setContainerID(id);
 
     teeScheduleStore.setDate(0);
-    if (id === 'wait' || id === 'alarm' ) { // 준비중 팝업 호출
-      const params = { command: 'showPopupWait', data: ''};
+    if (id === 'wait' || id === 'alarm') { // 준비중 팝업 호출
+      const params = { command: 'showPopupWait', data: '' };
       // if (window.BRIDGE && window.BRIDGE.globalMethod) {
       //   window.BRIDGE.globalMethod(JSON.stringify(params));
       // } else if (window.webkit && window.webkit.messageHandlers ) {
@@ -122,20 +121,20 @@ export default function Book() {
 
     // checkList 저장 코드
     let saveData = [];
-    for (const saveItem of panelStore.checkedTeeList){
+    for (const saveItem of panelStore.checkedTeeList) {
       const saveCtl = JSON.parse(saveItem);
-      if (saveCtl.state !== 1 || saveCtl.state !== 2){
+      if (saveCtl.state !== 1 || saveCtl.state !== 2) {
         saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
       }
     }
     window.localStorage.setItem('checkList', JSON.stringify(saveData));
 
     // cache 스케쥴 조회
-    if (id === 'book'){
+    if (id === 'book') {
       let data = [];
       for (const item of panelStore.filterCheckedTeeList) {
         const ctl = item;
-        if (ctl.state !== 1 || ctl.state !== 2){
+        if (ctl.state !== 1 || ctl.state !== 2) {
           data.push({ club: ctl.eng, club_id: ctl.id });
           const timeKey = 'search-' + ctl.id;
           const nowTime = (new Date()).getTime();
@@ -144,7 +143,7 @@ export default function Book() {
       }
       if (window.BRIDGE && window.BRIDGE.requestSearch) {
         window.BRIDGE.requestSearch(JSON.stringify(data));
-      } else if (window.webkit && window.webkit.messageHandlers ) {
+      } else if (window.webkit && window.webkit.messageHandlers) {
         const payload = JSON.stringify({
           command: 'requestSearch',
           data: JSON.stringify(data),
@@ -157,8 +156,8 @@ export default function Book() {
   });
 
   useEffect(() => {
-    if(window){
-      const params = { command: 'getDeviceId'};
+    if (window) {
+      const params = { command: 'getDeviceId' };
 
       if (window.BRIDGE && window.BRIDGE.globalMethod) window.BRIDGE.globalMethod(JSON.stringify(params));
 
@@ -184,14 +183,14 @@ export default function Book() {
         let scheduleList = [];
         let clubList = [];
         for (const info of jarr) {
-          if(!clubList.includes(info.club)) clubList.push(info.club);
+          if (!clubList.includes(info.club)) clubList.push(info.club);
           for (const dt of info.content) {
             const idx = scheduleList.findIndex((sItem) => sItem.date == dt);
             if (idx < 0) {
               scheduleList.push({ date: dt, count: 1, club: [info.club] });
             } else { // 이미 해당 날짜가 있으면
               // const idx2 = scheduleList[idx].club.findIndex((c) => c == info.club);
-              if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0){
+              if (scheduleList[idx].club.findIndex((c) => c == info.club) < 0) {
                 scheduleList[idx].club.push(info.club);
                 scheduleList[idx].count = scheduleList[idx].club.length;
               }
@@ -209,7 +208,7 @@ export default function Book() {
 
       // console.log("### teeSearchTimeFinished 바인딩됨");
       /** APP->WEB */
-      window.teeSearchTimeFinished = function(data){
+      window.teeSearchTimeFinished = function (data) {
         router.push({
           href: '/home',
           query: {
@@ -223,7 +222,7 @@ export default function Book() {
         // console.log("### teeSearchTimeFinished 호출됨", data);
         const jarr = JSON.parse(data);
         const jarrClubList = jarr.map(tee => tee.club);
-      
+
         setSuccessClubList(successClubList.concat(jarrClubList));
         teeScheduleStore.setSuccessClubList(teeScheduleStore.successClubList.concat(jarrClubList));
 
@@ -233,7 +232,7 @@ export default function Book() {
           for (const row of info.content) {
             row.hour = row.time.substring(0, 2);
             row.time = row.time + ":00";
-            if( daySchedule[info.club_id].hasOwnProperty(row.golf_course_name) ){
+            if (daySchedule[info.club_id].hasOwnProperty(row.golf_course_name)) {
               daySchedule[info.club_id][row.golf_course_name].push(row);
             } else { // 중복된 코스가 없으면
               daySchedule[info.club_id][row.golf_course_name] = [row];
@@ -264,9 +263,9 @@ export default function Book() {
 
   return (
     <>
-      <Panel handleSelectContainer={handleSelectContainer}/>
+      <Panel handleSelectContainer={handleSelectContainer} isLogin={isLogin} setIsLogin={setIsLogin} />
       <div className='pt-15'></div>
-      <MiniPanel successClubList={teeScheduleStore.successClubList}/>
+      <MiniPanel successClubList={teeScheduleStore.successClubList} setIsLogin={setIsLogin} />
 
       <div className='filter-wrap'>
         <div className='filter-container'>
@@ -328,7 +327,7 @@ export default function Book() {
                       pathname: '/home',
                       query: { subTab: 'tabContent01', container, ...others },
                     }}
-                    // as='/home'
+                  // as='/home'
                   >
                     <a
                       id='tabNav01'
@@ -356,7 +355,7 @@ export default function Book() {
                         ...others,
                       },
                     }}
-                    // as='/home'
+                  // as='/home'
                   >
                     <a
                       id='tabNav02'

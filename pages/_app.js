@@ -26,7 +26,8 @@ import Survey from './Survey';
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [isSurvey, setIsSurvey] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => storePathValues, [router.asPath]);
   useEffect(() => {
     if(window){
@@ -34,6 +35,7 @@ export default function MyApp({ Component, pageProps }) {
       if(surveyData){
         setIsSurvey(true);
       } 
+      setIsLoading(true);
       window.getNativeRequest = function (parameter) {
         sendResponse(parameter);
       };
@@ -79,6 +81,9 @@ export default function MyApp({ Component, pageProps }) {
           <div id='app' className='wrap'>
             <ErrorBoundary>
               {
+                !isLoading ?
+                <></>
+                :
                 isSurvey ?
                   <PageLayout>
                     <Component {...pageProps} />

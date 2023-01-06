@@ -11,7 +11,7 @@ import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 import PopUp from '@/components/common/PopUp';
 
-const Panel = observer(({ handleSelectContainer }) => {
+const Panel = observer(({ handleSelectContainer, isLogin, setIsLogin }) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
@@ -26,9 +26,9 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [savedWaitReservationList, setSaveWaitReservationList] = useState(null);
   const [savedOpenAlarmList, setSavedOpenAlarmList] = useState(null);
 
-  const [isLogin, setIsLogin] = useState(false);
 
-  const checkedTeeIDList = useMemo(()=>{
+
+  const checkedTeeIDList = useMemo(() => {
     const IDList = [];
     for (const checkedTee of panelStore.checkedTeeList) {
       const teeObj = JSON.parse(checkedTee);
@@ -79,7 +79,7 @@ const Panel = observer(({ handleSelectContainer }) => {
       setWarnState(state);
       setIsWarnPopup(false);
     }
-    if (state === 'warning'){
+    if (state === 'warning') {
       setWarnState('warning');
       setWarnText(text);
       setIsWarnPopup(false);
@@ -234,9 +234,9 @@ const Panel = observer(({ handleSelectContainer }) => {
     }
   });
 
-  useEffect(()=>{
-    if(window){
-      window.getCheckedTeeList = function() {
+  useEffect(() => {
+    if (window) {
+      window.getCheckedTeeList = function () {
         const checkedTeeList = [];
         for (const checkedTee of panelStore.checkedTeeList) {
           const teeObj = JSON.parse(checkedTee);
@@ -263,7 +263,7 @@ const Panel = observer(({ handleSelectContainer }) => {
         }
       }
     }
-  },[]);
+  }, []);
 
   return (
     <>
@@ -326,8 +326,8 @@ const Panel = observer(({ handleSelectContainer }) => {
             {
               warnState === 'warning' &&
               <strong>
-                <span className='text-surface2'>골프장 오류</span>
-                  <p className='mb-5 mt-5'>{warnText}</p><br />
+                <span className='text-surface2'>알아두세요</span>
+                <p className='mb-5 mt-5'>{warnText}</p>
               </strong>
             }
           </div>
@@ -349,14 +349,14 @@ const Panel = observer(({ handleSelectContainer }) => {
                     <TeeListArea
                       handleWarnPopup={handleWarnPopup}
                       registered
-                      list={panelStore.registeredTeeList.filter(tee=>checkedTeeIDList.includes(tee.id)).sort((a, b) =>
+                      list={panelStore.registeredTeeList.filter(tee => checkedTeeIDList.includes(tee.id)).sort((a, b) =>
                         a.score > b.score ? -1 : a.score < b.score ? 1 : 0,
                       )}
                     />
                     <TeeListArea
                       handleWarnPopup={handleWarnPopup}
                       registered
-                      list={panelStore.registeredTeeList.filter(tee=>!checkedTeeIDList.includes(tee.id)).sort((a, b) =>
+                      list={panelStore.registeredTeeList.filter(tee => !checkedTeeIDList.includes(tee.id)).sort((a, b) =>
                         a.score > b.score ? -1 : a.score < b.score ? 1 : 0,
                       )}
                     />
@@ -388,7 +388,8 @@ const Panel = observer(({ handleSelectContainer }) => {
             <Counter type='checked' />
             <ul className='button-list'>
               <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : (isLogin ? handleSelectContainer : handleLogin)}>
-                {isLogin ? '검색' : '로그인'}
+                {/* {isLogin ? '검색' : '로그인'} */}
+                로그인/검색
               </li>
               <li className='button'>자동검색</li>
               <li className='button'>이벤트검색</li>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const MiniPanel = observer(({successClubList}) => {
+const MiniPanel = observer(({ successClubList, setIsLogin }) => {
   const router = useRouter();
   const { container } = router.query;
   const { panelStore } = useStores();
@@ -19,18 +19,18 @@ const MiniPanel = observer(({successClubList}) => {
   const handlePanel = () => {
     if (!ref.current) return;
     setIsOpen(!isOpen);
-    if(isOpen){
+    if (isOpen) {
       ref.current.style.maxHeight = '300px';
     } else {
       ref.current.style.maxHeight = '100px';
     }
   }
 
-  useEffect(()=>{
-    if(panelStore.panelHidden){
+  useEffect(() => {
+    if (panelStore.panelHidden) {
       setIsOpen(true);
     }
-  },[panelStore.panelHidden]);
+  }, [panelStore.panelHidden]);
 
   return (
     <>
@@ -40,7 +40,10 @@ const MiniPanel = observer(({successClubList}) => {
         <div ref={ref} className='rollsheet-container' onClick={() => handlePanel()}>
           <div className='rollsheet'>
             <div className="allim_reservation">
-              <h1 className='head-headline text-white' onClick={() => panelStore.setPanelHidden(false)}>
+              <h1 className='head-headline text-white' onClick={() => {
+                panelStore.setPanelHidden(false);
+                setIsLogin(false);
+              }}>
                 {panelName()}
                 <div className='arrow-icon' />
               </h1>
@@ -57,7 +60,7 @@ const MiniPanel = observer(({successClubList}) => {
               <ul className='text-wrap'>
                 {
                   [...panelStore.filterCheckedTeeList]?.map((v, i) => (
-                    <li key={i} className={successClubList?.includes(v.eng) ? 'text-sub':'empty-text-sub'}>
+                    <li key={i} className={successClubList?.includes(v.eng) ? 'text-sub' : 'empty-text-sub'}>
                       &#183; {v.name}
                     </li>
                   ))
@@ -69,9 +72,9 @@ const MiniPanel = observer(({successClubList}) => {
           <div className='arrow-wrap'>
             {
               isOpen ?
-              <div className='down-arrow' />
-              :
-              <div className='up-arrow' />
+                <div className='down-arrow' />
+                :
+                <div className='up-arrow' />
             }
           </div>
         </div>
