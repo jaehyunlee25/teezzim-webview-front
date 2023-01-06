@@ -17,6 +17,11 @@ const nextConfig = {
         // destination: 'http://localhost:4000/teeapi/v1/:path*',
         destination: 'https://dev.mnemosyne.co.kr/api/webview/:path*',
       },
+      {
+        source: '/api/crawler/:path*',
+        // destination: 'http://localhost:4000/teeapi/v1/:path*',
+        destination: 'https://dev.mnemosyne.co.kr/api/crawler/:path*',
+      },
     ];
   },
 };

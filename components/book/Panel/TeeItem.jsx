@@ -80,7 +80,7 @@ export function TeeItem({ registered, handleWarnPopup, type = 'home', ...tee }) 
     if(tee.state === 3){
       return 'blue';
     }
-    if(!registered && tee.state === 4){
+    if(tee.state === 4){
       return 'turquoise';
     }
     return '';

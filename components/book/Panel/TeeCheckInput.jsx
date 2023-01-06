@@ -1,4 +1,5 @@
 import useStores from '@/stores/useStores';
+import axios from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useMemo } from 'react';
 
@@ -30,7 +31,7 @@ const TeeCheckInput = observer(props => {
     }
   }
   
-  const handleChecked = e => {
+  const handleChecked = async (e) => {
     if(props.registered && props.registered != true) {
       const params = { command: 'showToast', data: '먼저 로그인 정보를 입력하세요'};
       if (window.BRIDGE && window.BRIDGE.globalMethod) {
@@ -45,6 +46,9 @@ const TeeCheckInput = observer(props => {
 
     if (!value) return;
     if(!isChecked){
+      const res = await axios.post('/teezzim/api/crawler/getWarning', { golf_club_id: id });
+      console.log('res', res.data);
+
       if (props.state === 1 || props.state === 2) {
         props.handleWarnPopup(props.state);
         return;

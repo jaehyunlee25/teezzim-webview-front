@@ -9,28 +9,37 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
   const [popupHidden, setPopupHidden] = useState(true);
 
   const removeCheckedList = () => {
-    const value = JSON.stringify(panelStore.teeListMap?.[modalStore.golfInfo.clubId]);
-    panelStore.removeChecked(value);
-    const teeObj = JSON.parse(value);
-    const checkedData = {
-      command: 'removeChecked',
-      data: { club: teeObj.eng, club_id: teeObj.id },
-    }
-    if (window.BRIDGE && window.BRIDGE.sendResponse) {
-      window.BRIDGE.sendResponse(JSON.stringify(checkedData));
-    } else if (window.webkit && window.webkit.messageHandlers ) {
-      window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
+    const checkedTeeIDList = [];
+
+    for (const checkedItem of panelStore.checkedTeeList){
+      const saveCtl = JSON.parse(checkedItem);
+      checkedTeeIDList.push(saveCtl.id);
     }
 
-    // checkList 저장 코드
-    let saveData = [];
-    for (const saveItem of panelStore.checkedTeeList){
-      const saveCtl = JSON.parse(saveItem);
-      if (saveCtl.state !== 1 || saveCtl.state !== 2){
-        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+    if(checkedTeeIDList.includes(modalStore.golfInfo.clubId)){
+      const value = JSON.stringify(panelStore.teeListMap?.[modalStore.golfInfo.clubId]);
+      panelStore.removeChecked(value);
+      const teeObj = JSON.parse(value);
+      const checkedData = {
+        command: 'removeChecked',
+        data: { club: teeObj.eng, club_id: teeObj.id },
       }
+      if (window.BRIDGE && window.BRIDGE.sendResponse) {
+        window.BRIDGE.sendResponse(JSON.stringify(checkedData));
+      } else if (window.webkit && window.webkit.messageHandlers ) {
+        window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
+      }
+  
+      // checkList 저장 코드
+      let saveData = [];
+      for (const saveItem of panelStore.checkedTeeList){
+        const saveCtl = JSON.parse(saveItem);
+        if (saveCtl.state !== 1 || saveCtl.state !== 2){
+          saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+        }
+      }
+      window.localStorage.setItem('checkList', JSON.stringify(saveData));
     }
-    window.localStorage.setItem('checkList', JSON.stringify(saveData));
   }
 
   const removeLoginInfo = e => {
