@@ -21,6 +21,16 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
     } else if (window.webkit && window.webkit.messageHandlers ) {
       window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
     }
+
+    // checkList 저장 코드
+    let saveData = [];
+    for (const saveItem of panelStore.checkedTeeList){
+      const saveCtl = JSON.parse(saveItem);
+      if (saveCtl.state !== 1 || saveCtl.state !== 2){
+        saveData.push({ club: saveCtl.eng, club_id: saveCtl.id });
+      }
+    }
+    window.localStorage.setItem('checkList', JSON.stringify(saveData));
   }
 
   const removeLoginInfo = e => {
