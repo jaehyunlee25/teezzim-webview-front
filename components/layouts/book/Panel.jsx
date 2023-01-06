@@ -18,6 +18,7 @@ const Panel = observer(({ handleSelectContainer }) => {
   const [isHidePopup, setIsHidePopup] = useState(true);
   const [isWarnPopup, setIsWarnPopup] = useState(true);
   const [warnState, setWarnState] = useState(1);
+  const [warnText, setWarnText] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [isInitSignalSendApp, setIsInitSignal] = useState(false); // 이 메뉴로 이동했음을 App에 알렸는지 여부
@@ -69,13 +70,18 @@ const Panel = observer(({ handleSelectContainer }) => {
     }
   }
 
-  const handleWarnPopup = (state) => {
+  const handleWarnPopup = (state, text) => {
     if (state === 1) {
       setWarnState(state);
       setIsWarnPopup(false);
     }
     if (state === 2) {
       setWarnState(state);
+      setIsWarnPopup(false);
+    }
+    if (state === 'warning'){
+      setWarnState('warning');
+      setWarnText(text);
       setIsWarnPopup(false);
     }
   }
@@ -292,9 +298,11 @@ const Panel = observer(({ handleSelectContainer }) => {
           wi
           onButtonClick={e => {
             setIsWarnPopup(true);
+            setWarnText('');
           }}
           cancelButtonClick={e => {
             setIsWarnPopup(true);
+            setWarnText('');
           }}
         >
           <div className='warn-icon' />
@@ -313,6 +321,13 @@ const Panel = observer(({ handleSelectContainer }) => {
                 <span className='text-surface2'>골프장 오류</span>
                 <p className='mb-5 mt-5'>해당 클럽의 홈페이지에 일시적인 접속장애가 있습니다.</p>
                 잠시후에 다시 시도 해보세요.<br />
+              </strong>
+            }
+            {
+              warnState === 'warning' &&
+              <strong>
+                <span className='text-surface2'>골프장 오류</span>
+                  <p className='mb-5 mt-5'>{warnText}</p><br />
               </strong>
             }
           </div>

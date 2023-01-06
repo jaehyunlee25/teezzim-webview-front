@@ -47,7 +47,11 @@ const TeeCheckInput = observer(props => {
     if (!value) return;
     if(!isChecked){
       const res = await axios.post('/teezzim/api/crawler/getWarning', { golf_club_id: id });
-      console.log('res', res.data);
+      const warning = res.data.data[0].warning;
+
+      if(warning !== ''){
+        props.handleWarnPopup('warning', warning);
+      }
 
       if (props.state === 1 || props.state === 2) {
         props.handleWarnPopup(props.state);
