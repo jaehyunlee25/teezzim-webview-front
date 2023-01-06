@@ -18,17 +18,26 @@ import reserveTabStore from '@/stores/reserveTabStore';
 import { useRouter } from 'next/router';
 import { SWRConfig } from 'swr';
 import PageLayout from '@/components/layouts/PageLayout';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { sendResponse } from '@/lib/APIUtils';
 import ErrorBoundary from './ErrorBoundary';
+import Survey from './Survey';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const [isSurvey, setIsSurvey] = useState(false);
+  
   useEffect(() => storePathValues, [router.asPath]);
   useEffect(() => {
-    window.getNativeRequest = function (parameter) {
-      sendResponse(parameter);
-    };
+    if(window){
+      const surveyData = window.localStorage.getItem('isSurvey');
+      if(surveyData){
+        setIsSurvey(true);
+      } 
+      window.getNativeRequest = function (parameter) {
+        sendResponse(parameter);
+      };
+    }
   }, []);
 
   function storePathValues() {
@@ -60,7 +69,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta httpEquiv='Cache-Control' content='No-Cache' />
         <meta httpEquiv='Pragma' content='No-Cache' />
         <meta httpEquiv='Expires' content='-1' />
-        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" /> */}
         <title>TeeZZim</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
@@ -69,10 +78,15 @@ export default function MyApp({ Component, pageProps }) {
         <MobXStoresContext.Provider value={initStores}>
           <div id='app' className='wrap'>
             <ErrorBoundary>
-              <PageLayout>
-                <Component {...pageProps} />
-              </PageLayout>
-              </ErrorBoundary>
+              {
+                isSurvey ?
+                  <PageLayout>
+                    <Component {...pageProps} />
+                  </PageLayout>
+                  :
+                  <Survey />
+              }
+            </ErrorBoundary>
           </div>
         </MobXStoresContext.Provider>
       </SWRConfig>

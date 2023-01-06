@@ -175,16 +175,25 @@ textarea,
 select {
   font-family: SFPro;
   font-size: 16px;
-  border-radius: 0;
+  border-radius: 10px;
   border: none;
-  background: 0 0;
   -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;
-  outline: 0;
   text-decoration: none;
   cursor: pointer;
   -webkit-text-size-adjust: none;
+  appearance: none;
+  outline: none;
+  font-size: 15px;
+  height: 40px;
+  padding: 0 10px;
+  width: 100%;
+  text-overflow: ellipsis;
+  background: #f2f2f2;
+}
+select option[value=""][disabled] {
+	display: none;
+  font-size: 10px;
 }
 
 input,
@@ -198,14 +207,14 @@ input[type="radio"] {
   vertical-align: middle;
 }
 
-select::-ms-expand {
-  display: none;
-}
+// select::-ms-expand {
+//   display: none;
+// }
 
 a,
 button,
 input,
-select,
+// select,
 textarea {
   font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma, Dotum,
     sans-serif, Gulim, "굴림", sans-serif;

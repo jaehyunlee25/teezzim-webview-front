@@ -214,19 +214,19 @@ li {
 }
 
 input,
-select,
+// select,
 button {
   border: 0;
   background: transparent;
 }
 
 input,
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -o-appearance: none;
-  -ms-appearance: none;
-}
+// select {
+//   appearance: none;
+//   -webkit-appearance: none;
+//   -o-appearance: none;
+//   -ms-appearance: none;
+// }
 
 input {
   &::-webkit-input-placeholder,
@@ -400,7 +400,7 @@ html {
 a,
 button,
 input,
-select,
+// select,
 textarea {
   font-family: -apple-system, Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "BaseLine", Tahoma, Dotum,
     sans-serif, Gulim, "굴림", sans-serif;
@@ -599,6 +599,10 @@ input {
 
   &.col-5 {
     width: 41.66666667%;
+  }
+
+  &.col-55 {
+    width: 48%;
   }
 
   &.col-6 {
@@ -1549,6 +1553,18 @@ input {
   background-color: var(--neutrals-white);
 }
 
+.bg-disable {
+  background-color: #cacaca;
+}
+
+.bg-active {
+  background-color: #39b7b0;
+}
+
+.bg-inactive {
+  background-color: #f2f2f2;
+}
+
 .bg-grey1 {
   background-color: var(--neutrals-grey-1);
 }
@@ -2151,6 +2167,16 @@ input {
       padding: 0 40px;
     }
   }
+  &.small-roundbtn {
+    height: 40px; 
+    border-radius: 15px;
+    align-items: center;
+  }
+  &.medium-roundbtn {
+    height: 50px; 
+    border-radius: 15px;
+    align-items: center;
+  }
   &.roundbtn {
     height: 70px; 
     border-radius: 15px;
@@ -2488,7 +2514,67 @@ input {
     opacity: 1;
   }
 }
-
+.survey-container {
+  display: flex;
+  flex: 1;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+.survey-icon {
+  content: '';
+  width: 55px;
+  height: 55px;
+  display: inline-block;
+  background-image: url('../assets/images/survey.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.survey-desc {
+  font-size: 13px;
+}
+.survey-wrap {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 40px;
+}
+.survey-title {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.select-wrap {
+  position: relative;
+}
+.down-btn {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  right: 10px;
+  top: 17.5px;
+  display: inline-block;
+  background-image: url('../assets/images/btn_down.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.gender-btn-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.survey-agree-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.survey-agree-text {
+  font-size: 15px;
+  margin-left: 5px;
+}
 .error-container {
   display: flex;
   flex: 1;

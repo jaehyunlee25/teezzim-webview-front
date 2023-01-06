@@ -83,6 +83,7 @@ const TeeCheckInput = observer(props => {
             type='checkbox'
             name={props.name}
             checked={isChecked}
+            readOnly
             // onChange={handleChecked}
           />
           <label htmlFor={props.id}></label>

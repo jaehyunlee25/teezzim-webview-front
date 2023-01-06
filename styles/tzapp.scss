@@ -366,7 +366,7 @@
     border-bottom: 2px solid #d4d4d1;
 
     .desc-list .desc-item {
-      > .tit {
+      >.tit {
         font-size: 14px;
         line-height: 1.36;
         line-height: 19px;
@@ -377,7 +377,7 @@
     }
   }
 
-  .Buttonwrap > span {
+  .Buttonwrap>span {
     display: inline-block;
     width: 50%;
     height: 48px;
@@ -426,105 +426,120 @@
     height: 96px;
   }
 }
+
 .call_popup {
   text-align: center;
   line-height: 1.3;
   font-size: 20px;
 }
+
 .detail_nav_wrap {
   margin: 40px 0;
 }
+
 .detail_nav {
   display: flex;
   flex: 1;
   align-items: center;
   padding: 8px 0;
 }
+
 .weather_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/weather.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .traffic_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/traffic.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .menu_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/menu.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .restaurants_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/restaurants.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .call_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/call.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .phone_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/phone.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .event_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/event.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .default_icon {
   width: 40px;
   height: 40px;
   display: inline-block;
   background-image: url('../assets/images/default.png');
   background-repeat: no-repeat;
-  background-size: 100%;  
+  background-size: 100%;
 }
+
 .right_arrow_icon {
-  width: 20px; 
-  height: 20px; 
+  width: 20px;
+  height: 20px;
   margin: 10px;
   display: inline-block;
-  background-image: url('../assets/images/right_arrow.png'); 
-  background-repeat: no-repeat; 
+  background-image: url('../assets/images/right_arrow.png');
+  background-repeat: no-repeat;
   background-size: 50%;
 }
+
 .nav_title {
   font-size: 17px;
   margin-left: 25px;
   flex: 1;
   text-align: left;
 }
+
 .input_box {
   position: relative;
   width: 100%;
   margin: 0 auto;
   border-radius: 4px;
 }
+
 .login_box {
   position: relative;
   width: 100%;
@@ -603,12 +618,13 @@
   border-radius: 8px;
   width: 80px;
 }
+
 .bi-eye {
   content: '';
   position: relative;
   width: 15px;
   height: 15px;
-  background-image: url('../assets/images/Icon_Show.png'); 
+  background-image: url('../assets/images/Icon_Show.png');
   background-repeat: no-repeat;
   background-size: 100%;
   margin-right: 5px;
@@ -619,22 +635,25 @@
   position: relative;
   width: 15px;
   height: 15px;
-  background-image: url('../assets/images/Icon_Hide.png'); 
+  background-image: url('../assets/images/Icon_Hide.png');
   background-repeat: no-repeat;
   background-size: 100%;
   margin-right: 5px;
 }
+
 .verify_wrap {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 15px;
   margin-bottom: 15px;
+
   span {
     flex: 1;
     text-align: center;
   }
 }
+
 .verify_btn {
   background-color: #414141;
   align-items: center;
@@ -644,10 +663,12 @@
   width: 80px;
   margin-right: 8px;
   text-align: center;
+
   span {
     color: #fff;
   }
 }
+
 .sign-in-wrap {
   display: flex;
   flex-direction: row;
@@ -656,11 +677,13 @@
   justify-content: center;
   margin-top: 45px;
   margin-bottom: 16px;
+
   span {
     margin-right: 5px;
     border-bottom: 1px solid #000;
   }
 }
+
 .sign-in-icon {
   width: 10px;
   height: 10px;
@@ -669,18 +692,21 @@
   background-repeat: no-repeat;
   background-size: 45%;
 }
+
 .bubble-wrap {
   position: relative;
   display: flex;
   width: 100%;
   justify-content: center;
 }
+
 .bubble {
   border-radius: 16px;
   background-color: #f1bc5e;
   padding: 13px 20px;
   font-size: 14px;
 }
+
 .tail {
   position: absolute;
   top: -10px;
@@ -693,6 +719,7 @@
   background-repeat: no-repeat;
   background-size: 100%;
 }
+
 .btn_submit.on {
   background: #148564;
   color: #fff;
@@ -745,7 +772,7 @@
   .title-top {
     padding: 16px 0;
 
-    > p {
+    >p {
       font-family: NanumGothic;
       font-size: 16px;
       font-weight: bold;
@@ -895,7 +922,8 @@
 
 /* Default */
 
-.bul-list > {
+.bul-list> {
+
   li,
   .bul {
     display: table;
@@ -920,7 +948,8 @@
 
 /* 특수문자 */
 
-.bul-dot > {
+.bul-dot> {
+
   li::before,
   .bul::before {
     content: '·';
@@ -928,7 +957,7 @@
   }
 }
 
-.bul-list > li {
+.bul-list>li {
   margin-top: 8px;
   margin-top: 0.5rem;
   font-size: 14px;
@@ -942,8 +971,7 @@
 
 /*골프장 리스트 선택 list_Golfarea*/
 
-.list_Areawrap {
-}
+.list_Areawrap {}
 
 .list_Areawrap_inner {
   width: 100%;
@@ -964,7 +992,7 @@
     font-weight: 600;
     line-height: 38px;
 
-    > b {
+    >b {
       padding-left: 4px;
     }
   }
@@ -996,16 +1024,19 @@
       /* Chrome, Safari, Opera*/
     }
   }
-  
+
   .red {
     background-color: #ffd6d6;
   }
+
   .yellow {
     background-color: #fbf0db;
   }
+
   .blue {
     background-color: #d0ddff;
   }
+
   .turquoise {
     background-color: #e2fff9;
   }
@@ -1073,7 +1104,7 @@
   text-align: center;
   z-index: 300;
 
-  > span {
+  >span {
     display: block;
     text-align: left;
     font-size: 12px;
@@ -1324,15 +1355,13 @@
 
     &.down {
       text-indent: -9999px;
-      background: #fff url(../assets/images/Icon_Import.svg) center center
-        no-repeat;
+      background: #fff url(../assets/images/Icon_Import.svg) center center no-repeat;
       left: 16px;
     }
 
     &.down_off {
       text-indent: -9999px;
-      background: #f0f0ef url(../assets/images/Icon_Import_off.svg) center
-        center no-repeat;
+      background: #f0f0ef url(../assets/images/Icon_Import_off.svg) center center no-repeat;
       left: 16px;
     }
 
@@ -1453,8 +1482,7 @@
     display: inline-block;
     text-indent: -9999px;
     margin-right: 10px;
-    background: #ff5353 url(../assets/images/Icon_trash.svg) center center
-      no-repeat;
+    background: #ff5353 url(../assets/images/Icon_trash.svg) center center no-repeat;
     box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.06),
       0 1px 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.14);
   }
@@ -1590,8 +1618,7 @@
   }
 }
 
-.mainwrap {
-}
+.mainwrap {}
 
 .main-bg {
   width: 100%;
@@ -1654,7 +1681,7 @@
   padding: 44px 2%;
   width: 96%;
 
-  > div {
+  >div {
     display: inline-block;
     margin: 0 auto;
     text-align: center;
@@ -1740,12 +1767,10 @@
     position: absolute;
     top: -4px;
     left: 32px;
-    background: #fff url(../assets/images/main/Icon_Previous-Outline.svg) center
-      center;
+    background: #fff url(../assets/images/main/Icon_Previous-Outline.svg) center center;
 
     &.on {
-      background: url(../assets/images/main/Icon_Previous-Outline.svg) center
-        center;
+      background: url(../assets/images/main/Icon_Previous-Outline.svg) center center;
     }
   }
 
@@ -1755,8 +1780,7 @@
     right: 32px;
 
     &.on {
-      background: #148564 url(../assets/images/main/Icon_Next-Outline.svg)
-        center center;
+      background: #148564 url(../assets/images/main/Icon_Next-Outline.svg) center center;
     }
   }
 
@@ -1807,8 +1831,7 @@
     display: inline-block;
     width: 25px;
     height: 25px;
-    background: url(../assets/images/Icon_Previous-Outline.svg) center center
-      no-repeat;
+    background: url(../assets/images/Icon_Previous-Outline.svg) center center no-repeat;
     position: absolute;
     top: 9px;
     left: 16px;
@@ -1864,21 +1887,18 @@
 }
 
 .swiper-button-next:after {
-  background: url(../assets/images/Icon_Next-Outline.svg) center center
-    no-repeat;
+  background: url(../assets/images/Icon_Next-Outline.svg) center center no-repeat;
 }
 
 .swiper-button-prev:after {
-  background: url(../assets/images/Icon_Previous-Outline.svg) center center
-    no-repeat;
+  background: url(../assets/images/Icon_Previous-Outline.svg) center center no-repeat;
 }
 
 .swiper-button-img {
   display: inline-block;
   width: 40px;
   height: 40px;
-  background: #323233 url(../assets/images/Icon_Add-photo.svg) center center
-    no-repeat;
+  background: #323233 url(../assets/images/Icon_Add-photo.svg) center center no-repeat;
   position: absolute;
   right: 16px;
   bottom: 38px;
@@ -1898,7 +1918,7 @@
   bottom: 38px !important;
 }
 
-.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-horizontal>.swiper-pagination-bullets,
 .swiper-pagination-bullets.swiper-pagination-horizontal,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {
@@ -1970,8 +1990,7 @@
     border-radius: 8px;
     border: solid 2px rgba(255, 255, 255, 0.07);
     box-sizing: border-box;
-    background: rgba(73, 76, 79, 0.2) url(../assets/images/Icon_Plus.svg) center
-      center no-repeat;
+    background: rgba(73, 76, 79, 0.2) url(../assets/images/Icon_Plus.svg) center center no-repeat;
 
     &.large {
       height: 226px;
@@ -2044,62 +2063,67 @@
     flex-direction: row;
     border-bottom: 1px solid #ddd;
   }
+
   .my_icon {
     content: '';
     position: relative;
     width: 20px;
     height: 20px;
-    background-image: url('../assets/images/btm-ic01.png'); 
+    background-image: url('../assets/images/btm-ic01.png');
     background-repeat: no-repeat;
     background-size: 100%;
     margin-left: 10px;
     margin-right: 20px;
   }
+
   .lock_icon {
     content: '';
     position: relative;
     width: 20px;
     height: 20px;
-    background-image: url('../assets/images/btm-ic02.png'); 
+    background-image: url('../assets/images/btm-ic02.png');
     background-repeat: no-repeat;
     background-size: 100%;
     margin-left: 10px;
     margin-right: 20px;
   }
+
   .alarm_icon {
     content: '';
     position: relative;
     width: 20px;
     height: 20px;
-    background-image: url('../assets/images/btm-ic03.png'); 
+    background-image: url('../assets/images/btm-ic03.png');
     background-repeat: no-repeat;
     background-size: 100%;
     margin-left: 10px;
     margin-right: 20px;
   }
+
   .backup_icon {
     content: '';
     position: relative;
     width: 20px;
     height: 20px;
-    background-image: url('../assets/images/btm-ic04.png'); 
+    background-image: url('../assets/images/btm-ic04.png');
     background-repeat: no-repeat;
     background-size: 100%;
     margin-left: 10px;
     margin-right: 20px;
   }
+
   .link_icon {
     content: '';
     position: relative;
     width: 20px;
     height: 20px;
-    background-image: url('../assets/images/btm-ic05.png'); 
+    background-image: url('../assets/images/btm-ic05.png');
     background-repeat: no-repeat;
     background-size: 100%;
     margin-left: 10px;
     margin-right: 20px;
   }
-  
+
   // ul {
   //   margin-top: 14px;
 
@@ -2385,10 +2409,11 @@
 .checkbox {
   height: 40px;
   position: relative;
+
   input[type='checkbox'] {
     display: none;
 
-    + label {
+    +label {
       display: block;
       width: 16px;
       height: 16px;
@@ -2407,7 +2432,7 @@
     content: '';
   }
 
-  input[type='checkbox']:checked + label {
+  input[type='checkbox']:checked+label {
     &:before {
       background: #fff;
     }
@@ -2421,6 +2446,50 @@
       height: 20px;
       background: url(../assets/images/Checkbox.svg) #148564 no-repeat center;
       border-radius: 20px;
+    }
+  }
+}
+
+.agree-checkbox {
+  height: 40px;
+  position: relative;
+
+  input[type='checkbox'] {
+    display: none;
+
+    +label {
+      content: '';
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-image: url('../assets/images/check_off.png');
+    }
+  }
+
+  :after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+
+  input[type='checkbox']:checked+label {
+    &:before {
+      background: #fff;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 0px;
+      width: 25px;
+      height: 25px;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-image: url('../assets/images/check_on.png');
     }
   }
 }
@@ -2454,8 +2523,7 @@
     0 2px 4px -1px var(--alpha-black-20);
 }
 
-.btn_large {
-}
+.btn_large {}
 
 /*아이콘*/
 
@@ -2467,6 +2535,7 @@
   margin-left: 0 !important;
   text-indent: -9999px;
 }
+
 .icon-bell {
   width: 24px;
   height: 29px;
@@ -2668,10 +2737,10 @@ div.spinner {
   }
 
   &.w160 {
-    display: inline-block; 
-    min-width: 160px !important; 
-    height: auto; 
-    border-radius: 20px; 
+    display: inline-block;
+    min-width: 160px !important;
+    height: auto;
+    border-radius: 20px;
     padding: 10px 20px;
   }
 }
