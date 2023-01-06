@@ -5,8 +5,23 @@ import { useState } from 'react';
 import IMG_Golf_01 from '@/assets/images/IMG_Golf_01.png'; // 임시
 
 const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
-  const { modalStore, authStore } = useStores();
+  const { modalStore, authStore, panelStore } = useStores();
   const [popupHidden, setPopupHidden] = useState(true);
+
+  const removeCheckedList = () => {
+    const value = JSON.stringify(panelStore.teeListMap?.[modalStore.golfInfo.clubId]);
+    panelStore.removeChecked(value);
+    const teeObj = JSON.parse(value);
+    const checkedData = {
+      command: 'removeChecked',
+      data: { club: teeObj.eng, club_id: teeObj.id },
+    }
+    if (window.BRIDGE && window.BRIDGE.sendResponse) {
+      window.BRIDGE.sendResponse(JSON.stringify(checkedData));
+    } else if (window.webkit && window.webkit.messageHandlers ) {
+      window.webkit.messageHandlers.sendResponse.postMessage(JSON.stringify(checkedData));
+    }
+  }
 
   const removeLoginInfo = e => {
     if (window.BRIDGE && window.BRIDGE.removeLoginInfo) {
@@ -104,6 +119,7 @@ const ReLoginModalComponent = observer(({ cb, errCb, handleClose }) => {
               className='fl bg-surface1 text-white'
               onClick={() => {
                 setPopupHidden(true);
+                removeCheckedList();
                 removeLoginInfo();
                 handleClose();
               }}
