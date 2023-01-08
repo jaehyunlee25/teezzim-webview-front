@@ -80,6 +80,9 @@ const TeeCheckInput = observer(props => {
     }
     window.localStorage.setItem('checkList', JSON.stringify(saveData));
 
+    if(panelStore.isClubLogin){
+      panelStore.setIsClubLogin(false);
+    }
   };
   return (
     <>

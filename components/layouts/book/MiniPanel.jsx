@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import useStores from '@/stores/useStores';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const MiniPanel = observer(({ successClubList, setIsLogin }) => {
+const MiniPanel = observer(({ successClubList }) => {
   const router = useRouter();
   const { container } = router.query;
   const { panelStore } = useStores();
@@ -31,7 +31,7 @@ const MiniPanel = observer(({ successClubList, setIsLogin }) => {
       setIsOpen(true);
       ref.current.style.maxHeight = '100px';
     } else {
-      setIsLogin(false);
+      panelStore.setIsClubLogin(false);
     }
   }, [panelStore.panelHidden]);
 
@@ -45,7 +45,7 @@ const MiniPanel = observer(({ successClubList, setIsLogin }) => {
             <div className="allim_reservation">
               <h1 className='head-headline text-white' onClick={() => {
                 panelStore.setPanelHidden(false);
-                // setIsLogin(false);
+                // s(false);
               }}>
                 {panelName()}
                 <div className='arrow-icon' />

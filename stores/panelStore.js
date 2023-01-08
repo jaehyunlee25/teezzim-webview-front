@@ -7,6 +7,7 @@ class PanelStore {
   _checkedTeeList = new Set(); // 체크박스를 클릭한 Tee List
   _filter = null; // 패널 상단 지역 필터
   _panelHidden = false; // 패널 숨김 여부
+  _isClubLogin = false;
 
   constructor() {
     makeObservable(
@@ -17,6 +18,7 @@ class PanelStore {
         _checkedTeeList: observable,
         _filter: observable,
         _panelHidden: observable,
+        _isClubLogin: observable,
 
         teeList: computed,
         registeredTeeList: computed,
@@ -28,6 +30,7 @@ class PanelStore {
         filterList: computed,
         teeListMap: computed,
         panelHidden: computed,
+        isClubLogin: computed,
 
         setTeeList: action,
         setRegisteredKeys: action,
@@ -35,6 +38,7 @@ class PanelStore {
         addChecked: action,
         removeChecked: action,
         setPanelHidden: action,
+        setIsClubLogin: action,
       },
       { autoBind: true },
     );
@@ -122,6 +126,10 @@ class PanelStore {
     return this._panelHidden;
   }
 
+  get isClubLogin() {
+    return this._isClubLogin;
+  }
+
   setTeeList(teeList) {
     this._teeList = teeList;
   }
@@ -148,6 +156,10 @@ class PanelStore {
 
   setPanelHidden(hidden) {
     this._panelHidden = hidden;
+  }
+
+  setIsClubLogin(boolean) {
+    this._isClubLogin = boolean;
   }
 }
 

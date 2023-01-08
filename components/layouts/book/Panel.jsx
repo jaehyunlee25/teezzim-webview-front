@@ -11,7 +11,7 @@ import Counter from '@/components/book/Panel/Counter';
 import { observer } from 'mobx-react-lite';
 import PopUp from '@/components/common/PopUp';
 
-const Panel = observer(({ handleSelectContainer, isLogin, setIsLogin }) => {
+const Panel = observer(({ handleSelectContainer}) => {
   const router = useRouter();
   const { ...others } = router?.query;
   const { panelStore, authStore, toastStore, teeScheduleStore } = useStores();
@@ -188,7 +188,7 @@ const Panel = observer(({ handleSelectContainer, isLogin, setIsLogin }) => {
         };
 
         window.loginFinished = function () {
-          setIsLogin(true);
+          panelStore.setIsClubLogin(true);
         };
 
         /** 예약하기 탭 열림완료 WEB->APP 전송 */
@@ -387,8 +387,8 @@ const Panel = observer(({ handleSelectContainer, isLogin, setIsLogin }) => {
           <div className='bookingwrap'>
             <Counter type='checked' />
             <ul className='button-list'>
-              <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : (isLogin ? handleSelectContainer : handleLogin)}>
-                {isLogin ? '검색' : '로그인/검색'}
+              <li id='book' className={isDisabled ? 'button-disabled' : 'button'} onClick={isDisabled ? () => { } : (panelStore.isClubLogin ? handleSelectContainer : handleLogin)}>
+                {panelStore.isClubLogin ? '검색' : '로그인/검색'}
               </li>
               <li className='button'>자동검색</li>
               <li className='button'>이벤트검색</li>

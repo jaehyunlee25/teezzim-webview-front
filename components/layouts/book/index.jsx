@@ -31,7 +31,6 @@ export default function Book() {
   // const [successList, setSuccessList] = useState([]);
   const [successClubList, setSuccessClubList] = useState([]);
   const [containerID, setContainerID] = useState('');
-  const [isLogin, setIsLogin] = useState(false);
 
   const now = getTodayKST(); // 오늘 날짜 객체
   const [tyear, tmonth, tdate] = [
@@ -263,9 +262,9 @@ export default function Book() {
 
   return (
     <>
-      <Panel handleSelectContainer={handleSelectContainer} isLogin={isLogin} setIsLogin={setIsLogin} />
+      <Panel handleSelectContainer={handleSelectContainer} />
       <div className='pt-15'></div>
-      <MiniPanel successClubList={teeScheduleStore.successClubList} setIsLogin={setIsLogin} />
+      <MiniPanel successClubList={teeScheduleStore.successClubList} />
 
       <div className='filter-wrap'>
         <div className='filter-container'>
